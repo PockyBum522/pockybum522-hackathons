@@ -20,4 +20,3 @@ Further improvements would use NLP to recognize key events in the conversation, 
 ### 2022-TadHack-JMA-JDS Notes
 
 * Trouble getting set up with Jambonz API in python/documentation errors led to us running their demo in Node.js and working backwards from there. Documentation errors were reported to Jambonz so they could be fixed.
-
