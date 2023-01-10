@@ -23,6 +23,10 @@ Further improvements would use NLP to recognize key events in the conversation, 
 
 * Trouble getting set up with Jambonz API in python/documentation errors led to us running their demo in Node.js and working backwards from there. Documentation errors were reported to Jambonz so they could be fixed.
 
+## 2021-TadHackMini-JMA-JDS
+
+This demo shows an application that allows users with tablets to collaborate with each other as if they were sitting around a shared piece of paper. This enables quick note taking that everyone can work on or add to, or marking up an image or drawing to quickly sketch and show the other users something you're trying to convey.
+
 ## 2021-TadHack-JMA-JDS
 
 This demo shows an application that can take user input via SMS and offer to help the user in a museum. Assistance offered could be instructions on how to find something, more detailed information about an exhibit, or signing up for a tour.
