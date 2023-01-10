@@ -1,0 +1,5 @@
+curl -d '{"test": "test"}' -X POST https://public-apps.jambonz.us/hello-world
+// the json parameters don't matter because this webhook doesn't actually do anything except return a message (at least as far as I could tell)
+
+curl -d '{"test": "test"}' -X POST https://public-apps.jambonz.us/dial-time
+// this one probably actually accepts a JSON post but I don't know what I'm supposed to POST to it
