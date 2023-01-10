@@ -1,0 +1,32 @@
+{
+  "name": "sms_museum_assistant",
+  "version": "0.0.1",
+  "description": "Node server for tadhack 2021 demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PockyBum522/sms_museum_assistant.git"
+  },
+  "keywords": [
+    "tadhack"
+  ],
+  "author": "Jared and David",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PockyBum522/sms_museum_assistant/issues"
+  },
+  "homepage": "https://github.com/PockyBum522/sms_museum_assistant#readme",
+  "dependencies": {
+    "ajr": "^1.0.1",
+    "ajv": "^8.6.3",
+    "axios": "^0.21.4",
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "request": "^2.88.2",
+    "telnyx": "^1.22.0"
+  }
+}

@@ -5,7 +5,8 @@ Hackathon projects; multiple years, events, and multiple languages.
 
 | Directory                                                                                               | Language | Description                                                                                 | Team                                                                |
 | ------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [2022-TadHack-JMA-JDS](https://github.com/PockyBum522/Hackathons#2022-TadHack-JMA-JDS)                  | Python   | Simple Jambonz api to take a phone call and pipe it into Google speech recognition API.     | Jared M. Ashcraft (@jaredmashcraft) / David Sikes (@pockybum522)    |
+| [2022-TadHack-JMA-JDS](https://github.com/PockyBum522/Hackathons#2022-TadHack-JMA-JDS)                  | Python   | Uses Jambonz api to take a phone call and pipe it into Google speech recognition API.       | Jared M. Ashcraft (@jaredmashcraft) / David Sikes (@pockybum522)    |
+| [2021-TadHack-JMA-JDS](https://github.com/PockyBum522/Hackathons#2021-TadHack-JMA-JDS)                  | Node.js  | A museum concierge that responds to inquiries for help via SMS                              | Jared M. Ashcraft (@jaredmashcraft) / David Sikes (@pockybum522)    |
 
 (See below for details)
 
@@ -20,3 +21,11 @@ Further improvements would use NLP to recognize key events in the conversation, 
 ### 2022-TadHack-JMA-JDS Notes
 
 * Trouble getting set up with Jambonz API in python/documentation errors led to us running their demo in Node.js and working backwards from there. Documentation errors were reported to Jambonz so they could be fixed.
+
+## 2021-TadHack-JMA-JDS
+
+This demo shows an application that can take user input via SMS and offer to help the user in a museum. Assistance offered could be instructions on how to find something, more detailed information about an exhibit, or signing up for a tour.
+
+### 2021-TadHack-JMA-JDS Notes
+
+* This was my first time using Node.js, and I learned a lot.
