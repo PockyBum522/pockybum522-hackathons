@@ -1,0 +1,79 @@
+﻿<Window x:Class="TelePaperProject.MainWindow"
+        x:Name="TelePaperMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TelePaper"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1620"
+        Left="0" Top="20">
+    
+    <Grid>
+        <DockPanel x:Name="root">
+            <Canvas>
+                <Canvas.Resources>
+                  <!--Define an array containing the InkEditingMode Values.-->
+                  <x:Array x:Key="MyEditingModes" x:Type="{x:Type InkCanvasEditingMode}">
+                    <x:Static Member="InkCanvasEditingMode.Ink"/>
+                    <x:Static Member="InkCanvasEditingMode.EraseByStroke"/>
+                  </x:Array>
+
+                  <!--Define an array containing some DrawingAttributes.-->
+                  <x:Array x:Key="MyDrawingAttributes" 
+                           x:Type="{x:Type DrawingAttributes}">
+                      
+                      <DrawingAttributes Color="Black" FitToCurve="true" 
+                                         Width="3" Height="3"/>
+                  </x:Array>
+
+                  <!--Create a DataTemplate to display the DrawingAttributes shown above-->
+                  <DataTemplate DataType="{x:Type DrawingAttributes}" >
+                    <Border Width="80" Height="2">
+                      <Border.Background >
+                        <SolidColorBrush Color="{Binding Path=Color}"/>
+                      </Border.Background>
+                    </Border>
+                  </DataTemplate>
+                </Canvas.Resources>
+
+                <!--Bind the first InkCavas' DefaultDrawingAtributes to a Listbox, called lbDrawingAttributes, 
+                    and its EditingMode to a ListBox called lbEditingMode.-->
+                <InkCanvas Name="InkCanvas01" 
+                           Canvas.Top="0" Canvas.Left="0" 
+                           Height="1080" Width="1920"
+                           DefaultDrawingAttributes="{Binding ElementName=lbDrawingAttributes, Path=SelectedItem}"
+                           EditingMode="{Binding ElementName=lbEditingMode, Path=SelectedItem}" 
+                           Strokes="{Binding CanvasOneStrokes, Mode=TwoWay}"
+                           StrokeCollected="InkCanvas01_OnStrokeCollected"
+                           StrokeErased="InkCanvas01_OnStrokeErased">
+                    
+                    <InkCanvas.Background>
+                        <ImageBrush ImageSource="images/canvas-drawing/note-paper.jpg"></ImageBrush>
+                    </InkCanvas.Background>
+                </InkCanvas>
+
+                <!--Bind the Strokes, DefaultDrawingAtributes, and, EditingMode properties of
+                    the second InkCavas the first InkCanvas.-->
+                
+                <!--Use the array, MyEditingModes, to populate a ListBox-->
+                <ListBox Name="lbEditingMode" 
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Canvas.Top="10" Canvas.Left="10" 
+                         Height="50" Width="100"
+                         ItemsSource="{StaticResource MyEditingModes}" />
+
+                <!--Use the array, MyDrawingAttributes, to populate a ListBox-->
+                <ListBox Name="lbDrawingAttributes" 
+                         Visibility="Hidden"
+                         Canvas.Top="150" Canvas.Left="450" 
+                         Height="100" Width="100"
+                         ItemsSource="{StaticResource MyDrawingAttributes}" />
+            </Canvas>
+            
+      </DockPanel>
+        
+        
+    </Grid>
+</Window>
