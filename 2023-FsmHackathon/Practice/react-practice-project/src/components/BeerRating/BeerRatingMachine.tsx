@@ -14,6 +14,7 @@ const getRandomBeer = assign({
 // });
 
 const machine = createMachine({
+  tsTypes: {} as import("./BeerRatingMachine.typegen").Typegen0,
   id: 'cerveza maquinaaaa',
   schema: {
     context: {} as 
@@ -25,6 +26,10 @@ const machine = createMachine({
       | { type: 'BUTTON_PRESSED' }
       | { type: 'RATING_SENT'; rating: number }
 
+  },
+  context: {
+    beers: [],
+    beerState: []
   },
   initial: 'unloaded',
   states: {
