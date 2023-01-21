@@ -7,19 +7,26 @@ const getRandomBeer = assign({
   }
 });
 
-const rateBeer = assign({
-  currentBeer: (context:any, event) => {
-    
-  }
-});
+// const rateBeer = assign({
+//   currentBeer: (context:any, event) => {
+//     context.currentBeer[1] = event.data.rating;
+//   }
+// });
 
 const machine = createMachine({
   id: 'cerveza maquinaaaa',
-  initial: 'unloaded',
-  context: {
-    beers: [['Pilsner', 0.0], ['Weihenstephaner', 0.0], ['Julius Echter', 0.0], ['Sapporo', 0.0], ['Kirin', 0.0]],
-    currentBeer: []
+  schema: {
+    context: {} as 
+        { beers: any } 
+      | { currentBeer: any },
+    events: {} as
+      | { type: 'APP_START' }
+      | { type: 'APP_LOADED' }
+      | { type: 'BUTTON_PRESSED' }
+      | { type: 'RATING_SENT'; rating: number }
+
   },
+  initial: 'unloaded',
   states: {
     unloaded: {
       on: {
@@ -45,14 +52,18 @@ const machine = createMachine({
           actions: 'getRandomBeer',
         },
         RATING_SENT: {
-          actions: 
+          actions: 'rateBeer'
         }
       }
     }
   },
 },
 {
-  actions: { getRandomBeer, rateBeer },
+  actions: { 
+    getRandomBeer: (context, event) => {
+      console.log(event.rating);
+    } 
+  },
 });
 
 /* 
