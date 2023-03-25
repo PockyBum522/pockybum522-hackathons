@@ -31,10 +31,10 @@ public class HttpServer
     public static async Task HandleIncomingConnections()
     {
        
-        bool runServer = true;
+        var runServer = true;
 
-        _listener.Prefixes.Add(url);
-        _listener.Start();
+        _listener?.Prefixes.Add(url);
+        _listener?.Start();
         
         Console.WriteLine("Listening for connections on {0}", url);
 
@@ -43,34 +43,38 @@ public class HttpServer
         while (runServer)
         {
             // Will wait here until we hear from a connection
-            HttpListenerContext ctx = await _listener.GetContextAsync();
+            var task = _listener?.GetContextAsync();
+
+            if (task is null) return;
+            
+            var ctx = await task;
 
             // Peel out the requests and response objects
-            HttpListenerRequest req = ctx.Request;
-            HttpListenerResponse resp = ctx.Response;
-
+            var req = ctx.Request;
+            var resp = ctx.Response;
+            
             // Print out some info about the request
             Console.WriteLine("Request #: {0}", ++_requestCount);
-            Console.WriteLine(req.Url.ToString());
+            Console.WriteLine(req.Url?.ToString());
             Console.WriteLine(req.HttpMethod);
             Console.WriteLine(req.UserHostName);
             Console.WriteLine(req.UserAgent);
             Console.WriteLine();
 
             // If `shutdown` url requested w/ POST, then shutdown the server after serving the page
-            if ((req.HttpMethod == "POST") && (req.Url.AbsolutePath == "/shutdown"))
+            if ((req.HttpMethod == "POST") && (req.Url?.AbsolutePath == "/shutdown"))
             {
                 Console.WriteLine("Shutdown requested");
                 runServer = false;
             }
 
             // Make sure we don't increment the page views counter if `favicon.ico` is requested
-            if (req.Url.AbsolutePath != "/favicon.ico")
+            if (req.Url?.AbsolutePath != "/favicon.ico")
                 _pageViews += 1;
 
             // Write the response info
-            string disableSubmit = !runServer ? "disabled" : "";
-            byte[] data = Encoding.UTF8.GetBytes(String.Format(_pageData, _pageViews, disableSubmit));
+            var disableSubmit = !runServer ? "disabled" : "";
+            var data = Encoding.UTF8.GetBytes(String.Format(_pageData, _pageViews, disableSubmit));
             resp.ContentType = "text/html";
             resp.ContentEncoding = Encoding.UTF8;
             resp.ContentLength64 = data.LongLength;
