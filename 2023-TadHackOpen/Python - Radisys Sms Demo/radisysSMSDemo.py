@@ -8,9 +8,9 @@ app = Flask(__name__)
 
 _json_string = '''
 {
-	"From": "+12762586340",
-	"To": "+14076322207",
-	"Eml": "<?xml version='1.0' encoding='UTF-8'?><Response><Say>This is Demo</Say></Response>"
+    "From": "+12762586340",
+    "To": "+14076322207",
+    "Eml": "<?xml version='1.0' encoding='UTF-8'?><Response><Say>This is Demo</Say></Response>"
 }
 '''
 
@@ -23,7 +23,7 @@ class JsonPoster:
   def post_json_async(self, raw_json: str):
     headers = {
       "Content-Type": "application/json",
-	  "apikey": apikey
+      "apikey": apikey
     }
     response = requests.post("https://apigateway.engagedigital.ai/api/v1/accounts/"+account_id+"/call", data=raw_json, headers=headers)
     return response
@@ -33,7 +33,7 @@ class JsonPoster:
 def accelerometer_detect_change(x, y, z):
   if request.method == 'GET':
     print(x, y, z)
-	'''
+    '''
     if x == '2':  
       print("x is 2")
       json_poster = JsonPoster()
