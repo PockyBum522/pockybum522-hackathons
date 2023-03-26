@@ -1,12 +1,15 @@
 ﻿using System.Net;
 using System.Text;
+using CSharpPostJsonTests;
+using Newtonsoft.Json;
+using Formatting = System.Xml.Formatting;
 
 namespace TestWebserver;
 
 public class HttpServer
 {
     private readonly HttpListener _listener = new();
-    private readonly string _url;
+    private string _url;
     
     public HttpServer(string url)
     {
@@ -33,6 +36,16 @@ public class HttpServer
     // <input type="submit" value="Shutdown">
     // </form>
     
+    private static string _jsonString =>
+        """
+        {
+            "From": "+12762586340",
+            "To": "+14076322207",
+            "Eml": "<?xml version='1.0' encoding='UTF-8'?><Response><Say>Your notification alarm for the inside trashcan has been activated. I repeat, Your notification alarm for the inside trashcan has been activated. I repeat, Your notification alarm for the inside trashcan has been activated. I repeat, Your notification alarm for the inside trashcan has been activated.</Say></Response>"
+        }
+        """;
+
+    
     public async Task HandleIncomingConnections()
     {
         var runServer = true;
@@ -41,6 +54,8 @@ public class HttpServer
         _listener.Start();
         
         Console.WriteLine("Listening for connections on {0}", _url);
+
+        var counterForThreshold = 0;
         
         // While a user hasn't visited the `shutdown` url, keep on handling requests
         while (runServer)
@@ -74,6 +89,60 @@ public class HttpServer
             // Make sure we don't increment the page views counter if `favicon.ico` is requested
             if (req.Url?.AbsolutePath != "/favicon.ico")
                 _pageViews += 1;
+
+            var queriedUrl = req.Url?.AbsolutePath;
+
+            if (queriedUrl.Contains("/detect"))
+            {
+                queriedUrl = queriedUrl.Replace("http://192.168.137.1:8000/detect/", "");
+                queriedUrl = queriedUrl.Replace("/detect/", "");
+
+                Console.WriteLine($"QueriedUrl: {queriedUrl}");
+
+                var accelValues = queriedUrl.Split("/");
+
+                var xVal = accelValues[0];
+                var yVal = accelValues[1];
+                var zVal = accelValues[2];
+
+                Console.WriteLine($"x: {xVal}, y: {yVal}, z: {zVal}");
+
+                var floatYVal = float.Parse(yVal);
+
+            
+                if (floatYVal > .5)
+                {
+                    
+                    counterForThreshold++;
+                }
+                else
+                {
+                    if (counterForThreshold > 0)
+                    {
+                        counterForThreshold--;
+                    }
+                }
+
+                Console.WriteLine($"Counter for threshold: {counterForThreshold}");
+            
+                if (counterForThreshold > 10)
+                {
+                    var jsonPoster = new JsonPoster();
+    
+                    var httpResponse = await jsonPoster.PostJsonAsync(_jsonString);
+
+                    var httpResponseContent = await httpResponse.Content.ReadAsStringAsync();
+
+                    var deserializedJson = JsonConvert.DeserializeObject(httpResponseContent);
+    
+                    var prettyJson = JsonConvert.SerializeObject(deserializedJson, (Newtonsoft.Json.Formatting)Formatting.Indented);
+    
+                    Console.WriteLine(prettyJson);
+                    
+                    Thread.Sleep(99999999);
+                }
+            }
+                
 
             // Write the response info
             var disableSubmit = !runServer ? "disabled" : "";
