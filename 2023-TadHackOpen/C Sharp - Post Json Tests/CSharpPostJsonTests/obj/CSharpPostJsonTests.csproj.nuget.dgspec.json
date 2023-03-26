@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\CSharpPostJsonTests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj": {}
+    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Post Json Tests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj": {}
   },
   "projects": {
-    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\CSharpPostJsonTests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj": {
+    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Post Json Tests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\CSharpPostJsonTests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj",
+        "projectUniqueName": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Post Json Tests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj",
         "projectName": "CSharpPostJsonTests",
-        "projectPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\CSharpPostJsonTests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj",
+        "projectPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Post Json Tests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj",
         "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
-        "outputPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\CSharpPostJsonTests\\CSharpPostJsonTests\\obj\\",
+        "outputPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Post Json Tests\\CSharpPostJsonTests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config"

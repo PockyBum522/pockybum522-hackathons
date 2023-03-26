@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "a0N1Galmw7RM7fRgO92HbWwWWJETz541le4UOBgzIXfF9KOUm1QojN4F70OO/zY2dl7bzuZivk2MMKw2YZiXJg==",
+  "dgSpecHash": "6QGSQ0GOr7pIKGmN430YUq9FS6l4jXcd4mw485sZ9kBxhrr49GEK54J94GRnNbQIjF7lNnGJwOBAmHWcOqmSXg==",
   "success": true,
-  "projectFilePath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\CSharpPostJsonTests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj",
+  "projectFilePath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Post Json Tests\\CSharpPostJsonTests\\CSharpPostJsonTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\David\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
