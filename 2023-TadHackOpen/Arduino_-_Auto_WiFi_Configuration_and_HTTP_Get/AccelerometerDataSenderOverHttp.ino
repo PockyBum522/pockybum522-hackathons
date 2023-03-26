@@ -70,9 +70,9 @@ char* getBuiltUrl(float xValue, float yValue, float zValue)
 
   String concatenatedString = 
     String("http://192.168.1.78:8000") +
-    String("/xg/") + stringX + 
-    String("/yg/") + stringY + 
-    String("/zg/") + stringZ + 
+    String("/") + stringX + 
+    String("/") + stringY + 
+    String("/") + stringZ + 
     String("/"); // Concatenate the strings
 
   concatenatedString.toCharArray(resultBuffer, bufferSize); // Copy the concatenated string to the result buffer

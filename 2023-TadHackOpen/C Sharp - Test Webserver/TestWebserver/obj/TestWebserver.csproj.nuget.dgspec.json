@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\TestWebserver\\TestWebserver\\TestWebserver.csproj": {}
+    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Test Webserver\\TestWebserver\\TestWebserver.csproj": {}
   },
   "projects": {
-    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\TestWebserver\\TestWebserver\\TestWebserver.csproj": {
+    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Test Webserver\\TestWebserver\\TestWebserver.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\TestWebserver\\TestWebserver\\TestWebserver.csproj",
+        "projectUniqueName": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Test Webserver\\TestWebserver\\TestWebserver.csproj",
         "projectName": "TestWebserver",
-        "projectPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\TestWebserver\\TestWebserver\\TestWebserver.csproj",
+        "projectPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Test Webserver\\TestWebserver\\TestWebserver.csproj",
         "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
-        "outputPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\TestWebserver\\TestWebserver\\obj\\",
+        "outputPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-TadHackOpen\\C Sharp - Test Webserver\\TestWebserver\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config"
