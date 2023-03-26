@@ -5,39 +5,42 @@ namespace TestWebserver;
 
 public class HttpServer
 {
-    private static HttpListener? _listener = new();
+    private readonly HttpListener _listener = new();
+    private readonly string _url;
+    
+    public HttpServer(string url)
+    {
+        _url = url;
+    }
+    
+    private int _pageViews = 0;
+    private int _requestCount = 0;
         
-    private static string url = "http://192.168.137.1:8000/";
-        
-    private static int _pageViews = 0;
-    private static int _requestCount = 0;
-        
-    private static string _pageData =>
-                            $"""
-                                <!DOCTYPE>
-                                        <html>
-                                            <head>
-                                                <title>HttpListener Example</title>
-                                            </head>
-                                            <body>
-                                                <p>Page Views: {_requestCount}</p>
-                                                
-                                            </body>
-                                </html>
-                            """;
+    private string PageData =>
+        $"""
+            <!DOCTYPE>
+                <html>
+                    <head>
+                        <title>HttpListener Example</title>
+                    </head>
+                    <body>
+                        <p>Page Views: {_requestCount}</p>
+                    </body>
+                </html>
+        """;
+    
     //     <form method="post" action="shutdown">
     // <input type="submit" value="Shutdown">
     // </form>
-    public static async Task HandleIncomingConnections()
+    
+    public async Task HandleIncomingConnections()
     {
-       
         var runServer = true;
 
-        _listener?.Prefixes.Add(url);
-        _listener?.Start();
+        _listener.Prefixes.Add(_url);
+        _listener.Start();
         
-        Console.WriteLine("Listening for connections on {0}", url);
-
+        Console.WriteLine("Listening for connections on {0}", _url);
         
         // While a user hasn't visited the `shutdown` url, keep on handling requests
         while (runServer)
@@ -74,7 +77,7 @@ public class HttpServer
 
             // Write the response info
             var disableSubmit = !runServer ? "disabled" : "";
-            var data = Encoding.UTF8.GetBytes(String.Format(_pageData, _pageViews, disableSubmit));
+            var data = Encoding.UTF8.GetBytes(String.Format(PageData, _pageViews, disableSubmit));
             resp.ContentType = "text/html";
             resp.ContentEncoding = Encoding.UTF8;
             resp.ContentLength64 = data.LongLength;
