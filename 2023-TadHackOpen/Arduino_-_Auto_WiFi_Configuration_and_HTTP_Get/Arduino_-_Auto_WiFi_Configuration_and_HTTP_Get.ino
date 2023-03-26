@@ -15,15 +15,29 @@
 #include <HTTPClient.h>
 #include <WebServer.h>
 #include <WiFi.h>
+#include <Wire.h>
 
 #define LED_BUILTIN 2
 
-const char* SSID = "";
-const char* PASSWORD = "";
-
-const char* SERVER_URL = "http://192.168.1.78:8000";
+// Comment this out if you don't want debug serial messages
+#define DEBUG_MODE_ON
+//#define DEBUG_SHOW_LOOP
 
 AutoConnect autoConnect;
+AutoConnectConfig autoConnectConfig;
+
+// ADXL335 analog output pins connected to the ESP32
+const int xPin = A0; // x-axis of the accelerometer
+const int yPin = A3; // y-axis
+const int zPin = A4; // z-axis
+
+// ADXL335 voltage reference and sensitivity
+const float vRef = 3.3; // VREF (voltage reference) value for the ADXL335, usually 3.3V
+const float sensitivity = 0.3; // Sensitivity of the ADXL335 in V/g (volts per g)
+
+// Timing variables
+unsigned long previousMillis = 0;
+unsigned long currentMillis = 0;
 
 void setup() 
 {
@@ -31,140 +45,24 @@ void setup()
 
   pinMode(LED_BUILTIN, OUTPUT);
 
-  autoConnect.onDetect(onDetect);
-  if (autoConnect.begin()) 
-  {
-    WebServer& webServer = autoConnect.host();
-    webServer.on("/", handleRoot);
-    webServer.on("/io", handleIO);
-    Serial.println("Good!");
-  }
-  else 
-  {
-    Serial.println("Bad!");
-  }
+  #ifdef DEBUG_MODE_ON
+    delay(3000); // Give user a chance to open serial monitor
+  #endif  
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(SSID, PASSWORD);
+  #ifndef DEBUG_MODE_ON
+    setupAutoConnect();
+  #endif
 
-  Serial.print("Connecting");
-
-  while (WiFi.status() != WL_CONNECTED) 
-  {
-    delay(1000);
-    Serial.print(".");
-  }
-
-  Serial.print("Connected to ");
-  Serial.print(SSID);
-  Serial.print(" with ");
-  Serial.print(WiFi.localIP().toString());
-  Serial.println("!");
+  Serial.println(F("Initialization done..."));
 }
 
 void loop() 
 {
+  currentMillis = millis(); // Get the current elapsed time
+
   autoConnect.handleClient();
-
-  if (WiFi.status() == WL_IDLE_STATUS) 
-  {
-    Serial.println(F("WiFi.status() == WL_IDLE_STATUS, so about to restart ESP."));
-
-    delay(100);
-
-    ESP.restart();
-  }
   
-  HTTPClient httpClient;
-  httpClient.begin(SERVER_URL);
-  
-  if (httpClient.GET() > 0) 
-  {
-    Serial.println("httpClient.getString(): ");
-    Serial.println(httpClient.getString());
-  }
-  
-  httpClient.end();
-  
-  delay(5000);
-}
+  sendAccelerometerDataViaHttpGet();
 
-void sendRedirect(String uri) 
-{
-  WebServer& webServer = autoConnect.host();
-
-  webServer.sendHeader("Location", uri, true);
-  webServer.send(302, "test/plain");
-  
-  webServer.client().stop();
-}
-
-bool onDetect(IPAddress& ipAddress) 
-{
-  Serial.println(ipAddress.toString());
-
-  return true;
-}
-
-void handleRoot() 
-{
-  String html = PSTR(
-    "<html>"
-    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-    "<style type=\"text/css\">"
-    "body {"
-    "-webkit-appearance: none;"
-    "-moz-appearance: none;"
-    "font-family: \"Arial\", sans-serif"
-    "text-align: center;"
-    "}"
-    ".menu > a: link {"
-    "position: absolute;"
-    "display: inline-block;"
-    "right: 12px;"
-    "padding: 0 6px;"
-    "text-decoration: none;"
-    "}"
-    ".button {"
-    "display: inline-block;"
-    "border-radius: 7px;"
-    "background: #73ad21"
-    "margin: 0 10px 0 10px;"
-    "padding: 10px 20px 10px 20px;"
-    "text-decoration: none;"
-    "color: #000000;"
-    "}"
-    "</style>"
-    "<head>"
-    "</head>"
-    "<body>"
-    "<div class=\"menu\">" AUTOCONNECT_LINK(BAR_32) "</div>"
-    "LED_BUILTIN<br>"
-    "IO("
-  );
-
-  html += String(LED_BUILTIN);
-  html += String(F(") : <span style=\"font-weight: bold; color: "));
-  html += digitalRead(LED_BUILTIN) ? String("Tomato\"HIGH") : String("SlateBlue\">LOW");
-  html += String(F("</span>"));
-  html += String(F("<p><a class=\"button\" href=\"/io?value=low\">LOW</a><a class=\"button\" href=\"/io?value=high\">HIGH</a></p>"));
-  html += String(F("</body></html>"));
-
-  autoConnect.host().send(200, "text/html", html);
-}
-
-void handleIO() 
-{
-  WebServer& webServer = autoConnect.host();
-  
-  if (webServer.arg("value") == "low") 
-  {
-    digitalWrite(LED_BUILTIN, LOW);
-  } 
-  else if (webServer.arg("value") == "high") 
-  {
-    digitalWrite(LED_BUILTIN, HIGH);
-  }
-
-  sendRedirect("/");
+  printLoopingMessageAndCurrentMillis();
 }
