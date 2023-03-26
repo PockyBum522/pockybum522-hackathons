@@ -7,6 +7,7 @@ void setupAutoConnect()
   autoConnectConfig.apid = "New Phi Device";
   autoConnectConfig.psk  = "12345678";
 
+
   autoConnect.config(autoConnectConfig);
   autoConnect.onDetect(onDetect);
   

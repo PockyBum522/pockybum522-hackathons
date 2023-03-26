@@ -69,12 +69,11 @@ char* getBuiltUrl(float xValue, float yValue, float zValue)
   String stringZ = String(zValue, 2); // Convert the third float to a string with 2 decimal places
 
   String concatenatedString = 
-    String("http://192.168.1.78:8000") +
-    String("/") + stringX + 
+    String("http://192.168.137.1:8000") +
+    String("/detect/") + stringX + 
     String("/") + stringY + 
-    String("/") + stringZ + 
-    String("/"); // Concatenate the strings
-
+    String("/") + stringZ;
+    
   concatenatedString.toCharArray(resultBuffer, bufferSize); // Copy the concatenated string to the result buffer
 
   return resultBuffer;

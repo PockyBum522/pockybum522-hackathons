@@ -11,7 +11,7 @@
     6:  WL_DISCONNECTED 
 */
 
-#include <AutoConnectCore.h>
+#include <AutoConnect.h>
 #include <HTTPClient.h>
 #include <WebServer.h>
 #include <WiFi.h>
@@ -50,9 +50,9 @@ void setup()
     delay(3000); // Give user a chance to open serial monitor
   #endif  
 
-  #ifndef DEBUG_MODE_ON
+  // #ifndef DEBUG_MODE_ON
     setupAutoConnect();
-  #endif
+  // #endif
 
   Serial.println(F("Initialization done..."));
 }
