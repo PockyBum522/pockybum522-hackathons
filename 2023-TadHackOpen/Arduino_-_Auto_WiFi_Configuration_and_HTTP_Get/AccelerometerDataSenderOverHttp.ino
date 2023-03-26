@@ -47,7 +47,15 @@ void sendAccelerometerDataViaHttpGet()
     #endif        
 
     // And then make the call
-    // printHttpClientGetResult(builtUrl);
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      printHttpClientGetResult(builtUrl);
+    }    
+    else
+    {
+      Serial.print("Wifi status: ");
+      Serial.println(WiFi.status());
+    }
   }
 }
 

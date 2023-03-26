@@ -19,12 +19,13 @@
 
 #define LED_BUILTIN 2
 
-// Comment this out if you don't want debug serial messages
+// Comment this out if you don't want debug serial messages. Also might disable AutoConnect setup. Look in setup() to see if it does.
 #define DEBUG_MODE_ON
 //#define DEBUG_SHOW_LOOP
 
 AutoConnect autoConnect;
 AutoConnectConfig autoConnectConfig;
+HTTPClient httpClient;
 
 // ADXL335 analog output pins connected to the ESP32
 const int xPin = A0; // x-axis of the accelerometer
