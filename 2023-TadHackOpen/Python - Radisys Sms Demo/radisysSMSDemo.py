@@ -1,37 +1,53 @@
-from flask import Flask
+from flask import Flask, abort, request
+import sys
+import requests
 import json
+from apikey import apikey
+from account_id import account_id
 
 app = Flask(__name__)
 
+_json_string = '''
+{
+	"From": "+12762586340",
+	"To": "+14076322207",
+	"Eml": "<?xml version='1.0' encoding='UTF-8'?><Response><Say>This is Demo</Say></Response>"
+}
+'''
+
+
+class JsonPoster:
+  def post_json_async(self, raw_json: str):
+    headers = {
+#"Content-Type": "application/json",
+	  "apikey": apikey
+    }
+    response = requests.post("https://apigateway.engagedigital.ai/api/v1/accounts/"+account_id+"/call", data=raw_json, headers=headers)
+    return response
+
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+  return "<p>Hello, World!</p>"
 
-@app.route('/calluser/<phone_number>', methods=['POST'])
+
+@app.route('/detect/<x>/<y>/<z>', methods=['GET'])
+def accelerometer_detect_change(x, y, z):
+  if request.method == 'GET':
+    print('This is error output', file=sys.stderr)
+    if x == 2:  
+      print("x is 2")
+      json_poster = JsonPoster()
+      response = json_poster.post_json_async(_json_string)
+      deserialized_json = json.loads(response.text)
+      pretty_json = json.dumps(deserialized_json, indent=2)
+      print(response.text)
+    return str(x) + str(y) + str(z)
+  else:
+    abort(405)
+
 def call(phone_number):
-    if request.method == 'POST':
-	payload_raw_string = { 
-	    "From": "+0910142",
-	    "To": "+1" + phone_number,
-	    "ApplicationID": "VDT-ID",
-	    "StatusCallback": "",
-	    "StatusCallbackMethod": "POST":
-	    "StatusCallbackEvent": "initiated, ringing, answered, completed",
-	    "Type": "voice",
-	    "Bridge": "none" 
-	}
+  return response.text
 
-	payload_json = json.dumps(x)
-	 
-
-    else:
-	# error 405 method not allowed
-    
-
-    
-	    
-
-"""
-Account ID: AC-e815a968-966e-4387-a175-b62ebd6ce36a"
-API Key:
-eyJ4NXQiOiJZamd5TW1GalkyRXpNVEZtWTJNMU9HRmtaalV3TnpnMVpEVmhZVGRtTnpkaU9HUmhNR1kzWmc9PSIsImtpZCI6ImFwaV9rZXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWRpc3lzQGNhcmJvbi5zdXBlciIsImFwcGxpY2F0aW9uIjp7Im93bmVyIjoicmFkaXN5cyIsInRpZXJRdW90YVR5cGUiOm51bGwsInRpZXIiOiJVbmxpbWl0ZWQiLCJuYW1lIjoicnN5cy0xMDAwNi10YWRoYWNrMjMuY29tIiwiaWQiOjE3MSwidXVpZCI6IjFlNmRkZGQ2LTc1MTMtNDYzZC1iNzM2LWIxN2RhZDgwMDQwZiJ9LCJpc3MiOiJodHRwczpcL1wvYXBpbS5lbmdhZ2VkaWdpdGFsLmFpOjQ0M1wvb2F1dGgyXC90b2tlbiIsInRpZXJJbmZvIjp7IlVubGltaXRlZCI6eyJ0aWVyUXVvdGFUeXBlIjoicmVxdWVzdENvdW50Iiwic3RvcE9uUXVvdGFSZWFjaCI6dHJ1ZSwic3Bpa2VBcnJlc3RMaW1pdCI6MCwic3Bpa2VBcnJlc3RVbml0IjpudWxsfX0sImtleXR5cGUiOiJQUk9EVUNUSU9OIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoiQ2FsbEFQSVByb2R1Y3QiLCJjb250ZXh0IjoiXC9hcGlcL3YxIiwicHVibGlzaGVyIjoicmFkaXN5cyIsInZlcnNpb24iOiIxLjAuMCIsInN1YnNjcmlwdGlvblRpZXIiOiJVbmxpbWl0ZWQifV0sImlhdCI6MTY3OTQxMzk3NSwianRpIjoiZDIyMTljNzQtZGY0Mi00ZmU3LWE1NzMtN2M4YjViZjQ4ZWViIn0=.lWNO2_wSgP58dC1dnA22d-41oakm0v-zbSnqE_JtPhdQ0TWUji1C_McssA6kOF32OiODOBcRYp8bZfK-Dv7a8bZ7ljQbWKPBbn2XGq1-sltdKF2tat2yvqVO4Lg7Xqu9Wd8F2pHiHAboz2vnorAP7uYFHbzebTCgsB1inXb4XB12QWaUsr4H7VelWgg3iR_BRk--gLm3viT0zZ9nVyd3EcPtD1zA6HY59_wkaX6oh6C-JvPJP_Iw9_JWouTnAUoRO-0lt47hBPKCLVsOD5UH8ivoVmYvD4_-_O2xJ3pnaQi3yKjnVQNIj2-s0NFspgNwNE4mU1tIGKX05Mds1qlg_Q=="
+if __name__ == "__main__": 
+  print("before app.run")
+  app.run(host='0.0.0.0', debug=True)
