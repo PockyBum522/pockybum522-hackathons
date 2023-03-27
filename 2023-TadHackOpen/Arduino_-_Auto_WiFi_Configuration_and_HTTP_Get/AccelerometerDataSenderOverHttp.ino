@@ -37,7 +37,7 @@ void sendAccelerometerDataViaHttpGet(String serverBaseUrlWithPort)
 
     // Build the url with converted data
     // char builtUrl[50] = getBuiltUrl(abs(xG), abs(yG), abs(zG));
-    char* builtUrl = getBuiltUrl(abs(xG), abs(yG), abs(zG));
+    char* builtUrl = getBuiltUrl(serverBaseUrlWithPort, abs(xG), abs(yG), abs(zG));
 
     #ifdef DEBUG_MODE_ON
       Serial.println();
@@ -59,7 +59,7 @@ void sendAccelerometerDataViaHttpGet(String serverBaseUrlWithPort)
   }
 }
 
-char* getBuiltUrl(float xValue, float yValue, float zValue) 
+char* getBuiltUrl(String serverBaseUrlWithPort, float xValue, float yValue, float zValue) 
 {
   const int bufferSize = 100; // Adjust the buffer size if needed
   static char resultBuffer[bufferSize];

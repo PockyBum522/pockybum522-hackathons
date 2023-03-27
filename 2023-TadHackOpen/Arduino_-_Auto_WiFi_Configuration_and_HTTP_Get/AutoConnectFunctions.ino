@@ -10,7 +10,9 @@ void sendRedirect(String uri)
 
 bool onDetect(IPAddress& ipAddress) 
 {
-  Serial.println(ipAddress.toString());
+  Serial.print("Autoconnect now ready at: http://");
+  Serial.print(ipAddress.toString());
+  Serial.println("/_ac");
 
   return true;
 }
