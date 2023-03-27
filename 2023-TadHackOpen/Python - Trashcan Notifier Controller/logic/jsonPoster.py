@@ -1,8 +1,8 @@
 import json
 import requests
 
-from resources.account_id import account_id
-from resources.apikey import apikey
+from resources.accountId import account_id
+from resources.apiKey import apikey
 
 
 class JsonPoster:

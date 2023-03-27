@@ -1,13 +1,8 @@
-import sys
-import requests
-import json
+import os
+import werkzeug
 
-from flask import Flask, abort, request, Response
-from urllib3 import response
-from resources.apikey import apikey
-from resources.account_id import account_id
-
-app = Flask(__name__)
+from flask import Flask
+from logic.flaskProductionServerWarningDisabler import flask_warning_suppressor
 
 if __name__ == "__main__":
 
@@ -15,12 +10,11 @@ if __name__ == "__main__":
     print(" * Starting trashcan notification controller...")
     print("")
 
-    app.run(host='0.0.0.0', debug=True)
+    # noinspection SpellCheckingInspection
+    os.environ["PYTHONUNBUFFERED"] = "false"
 
-notify_jared_json = '''
-{
-    "From": "+12762586340",
-    "To": "+14076322207",
-    "Eml": "<?xml version='1.0' encoding='UTF-8'?><Response><Say>Your inside trash can is full and is not closed completely. I repeat, your inside trash can is full and is not closed completely. I repeat,  your inside trash can is full and is not closed completely. I repeat,  your inside trash can is full and is not closed completely.</Say></Response>"
-}
-'''
+    werkzeug.serving._ansi_style = flask_warning_suppressor(werkzeug.serving._ansi_style)
+
+    app = Flask(__name__)
+
+    app.run(host='0.0.0.0', port='5000', debug=True)
