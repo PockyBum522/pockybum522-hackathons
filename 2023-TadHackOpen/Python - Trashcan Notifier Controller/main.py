@@ -1,57 +1,26 @@
-from flask import Flask, abort, request, Response
 import sys
 import requests
 import json
 
+from flask import Flask, abort, request, Response
 from urllib3 import response
+from resources.apikey import apikey
+from resources.account_id import account_id
 
-from apikey import apikey
-from account_id import account_id
 app = Flask(__name__)
 
-_json_string = '''
+if __name__ == "__main__":
+
+    print("")
+    print(" * Starting trashcan notification controller...")
+    print("")
+
+    app.run(host='0.0.0.0', debug=True)
+
+notify_jared_json = '''
 {
     "From": "+12762586340",
     "To": "+14076322207",
-    "Eml": "<?xml version='1.0' encoding='UTF-8'?><Response><Say>This is Demo</Say></Response>"
+    "Eml": "<?xml version='1.0' encoding='UTF-8'?><Response><Say>Your inside trash can is full and is not closed completely. I repeat, your inside trash can is full and is not closed completely. I repeat,  your inside trash can is full and is not closed completely. I repeat,  your inside trash can is full and is not closed completely.</Say></Response>"
 }
 '''
-
-@app.route("/")
-def hello_world():
-  return "<p>Hello, World!</p>"
-
-
-class JsonPoster:
-  def post_json_async(self, raw_json: str):
-    headers = {
-      "Content-Type": "application/json",
-      "apikey": apikey
-    }
-    response = requests.post("https://apigateway.engagedigital.ai/api/v1/accounts/"+account_id+"/call", data=raw_json, headers=headers)
-    return response
-
-
-@app.route('/detect/<x>/<y>/<z>', methods=['GET'])
-def accelerometer_detect_change(x, y, z):
-  if request.method == 'GET':
-    print(x, y, z)
-    '''
-    if x == '2':  
-      print("x is 2")
-      json_poster = JsonPoster()
-      response = json_poster.post_json_async(_json_string)
-      deserialized_json = json.loads(response.text)
-      pretty_json = json.dumps(deserialized_json, indent=2)
-      return response.text'''
-#return str(x) + str(y) + str(z)
-  else:
-    abort(405)
-  return ""
-
-def call(phone_number):
-  return response.text
-
-if __name__ == "__main__": 
-  print("before app.run")
-  app.run(host='0.0.0.0', debug=True)
