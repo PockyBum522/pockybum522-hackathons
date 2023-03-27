@@ -1,4 +1,4 @@
-void sendAccelerometerDataViaHttpGet()
+void sendAccelerometerDataViaHttpGet(String serverBaseUrlWithPort)
 {
   if (currentMillis - previousMillis >= 500)
   { 
@@ -69,8 +69,9 @@ char* getBuiltUrl(float xValue, float yValue, float zValue)
   String stringZ = String(zValue, 2); // Convert the third float to a string with 2 decimal places
 
   String concatenatedString = 
-    String("http://192.168.137.1:8000") +
-    String("/detect/") + stringX + 
+    serverBaseUrlWithPort +
+    String("/detect") +
+    String("/") + stringX + 
     String("/") + stringY + 
     String("/") + stringZ;
     
