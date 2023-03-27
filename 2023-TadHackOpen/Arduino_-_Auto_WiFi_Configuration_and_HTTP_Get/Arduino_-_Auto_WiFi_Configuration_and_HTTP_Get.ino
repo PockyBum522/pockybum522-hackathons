@@ -20,8 +20,8 @@
 #define LED_BUILTIN 2
 
 // Comment this out if you don't want debug serial messages. Also might disable AutoConnect setup. Look in setup() to see if it does.
-#define DEBUG_MODE_ON
-//#define DEBUG_SHOW_LOOP
+// #define DEBUG_MODE_ON
+// #define DEBUG_SHOW_LOOP
 
 AutoConnect autoConnect;
 AutoConnectConfig autoConnectConfig;
@@ -39,6 +39,8 @@ const float sensitivity = 0.3; // Sensitivity of the ADXL335 in V/g (volts per g
 // Timing variables
 unsigned long previousMillis = 0;
 unsigned long currentMillis = 0;
+
+const String serverBaseWithPort = "http://192.168.1.78:5000";
 
 void setup() 
 {
@@ -63,7 +65,7 @@ void loop()
 
   autoConnect.handleClient();
   
-  sendAccelerometerDataViaHttpGet();
+  sendAccelerometerDataViaHttpGet(serverBaseWithPort);
 
   printLoopingMessageAndCurrentMillis();
 }
