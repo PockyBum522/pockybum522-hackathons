@@ -8,15 +8,6 @@ void sendRedirect(String uri)
   webServer.client().stop();
 }
 
-bool onDetect(IPAddress& ipAddress) 
-{
-  Serial.print("Autoconnect now ready at: http://");
-  Serial.print(ipAddress.toString());
-  Serial.println("/_ac");
-
-  return true;
-}
-
 void handleRoot() 
 {
   String html = PSTR(

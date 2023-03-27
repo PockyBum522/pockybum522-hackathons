@@ -7,9 +7,26 @@ void setupAutoConnect()
   autoConnectConfig.apid = "New Phi Device";
   autoConnectConfig.psk  = "12345678";
 
+  // On boot, attempts to connect to known networks. Fallback is to start the portal/ad hoc wifi
+  autoConnectConfig.autoReconnect = true;
+  
+  // If disconnected from wifi, ESP will reset
+  autoConnectConfig.autoReset = true;
+  
+  // Enable OTA
+  autoConnectConfig.ota = AC_OTA_BUILTIN;
+
+  // When connecting to known networks, strongest RSSI is the priority
+  autoConnectConfig.principle = AC_PRINCIPLE_RSSI;
+  
+  // Auto reconnect every 30s. But...I'm assuming autoReset takes priority over this?
+  autoConnectConfig.reconnectInterval = 1;
+
+  // Set title on home screen
+  autoConnectConfig.title = "New Phi Device";
+
 
   autoConnect.config(autoConnectConfig);
-  autoConnect.onDetect(onDetect);
   
   if (autoConnect.begin()) 
   {
