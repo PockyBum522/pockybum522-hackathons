@@ -1,26 +1,18 @@
 void setupAutoConnect()
 {
-  #ifdef DEBUG_MODE_ON
-    Serial.println(F("Setting up AutoConnect..."));
-  #endif
-
+  Serial.println(F("Setting up AutoConnect..."));
+  
   autoConnectConfig.apid = "New Phi Device";
   autoConnectConfig.psk  = "12345678";
+
+  // When connecting to known networks, strongest RSSI is the priority
+  autoConnectConfig.principle = AC_PRINCIPLE_RSSI;
 
   // On boot, attempts to connect to known networks. Fallback is to start the portal/ad hoc wifi
   autoConnectConfig.autoReconnect = true;
   
-  // If disconnected from wifi, ESP will not reset
-  autoConnectConfig.autoReset = false;
-  
   // Enable OTA
-  autoConnectConfig.ota = AC_OTA_BUILTIN;
-
-  // When connecting to known networks, strongest RSSI is the priority
-  autoConnectConfig.principle = AC_PRINCIPLE_RSSI;
-  
-  // Auto reconnect every 30s
-  autoConnectConfig.reconnectInterval = 1;
+  //autoConnectConfig.ota = AC_OTA_BUILTIN;
 
   // Set title on home screen
   autoConnectConfig.title = "New Phi Device";

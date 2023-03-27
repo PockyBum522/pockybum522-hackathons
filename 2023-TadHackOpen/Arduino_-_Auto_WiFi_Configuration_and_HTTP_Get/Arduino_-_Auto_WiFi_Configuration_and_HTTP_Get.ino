@@ -20,8 +20,8 @@
 #define LED_BUILTIN 2
 
 // Comment this out if you don't want debug serial messages. Also might disable AutoConnect setup. Look in setup() to see if it does.
-#define DEBUG_MODE_ON
-#define DEBUG_SHOW_LOOP
+// #define DEBUG_MODE_ON
+// #define DEBUG_SHOW_LOOP
 
 AutoConnect autoConnect;
 AutoConnectConfig autoConnectConfig;
@@ -48,10 +48,8 @@ void setup()
 
   pinMode(LED_BUILTIN, OUTPUT);
 
-  #ifdef DEBUG_MODE_ON
-    delay(3000); // Give user a chance to open serial monitor
-  #endif  
-
+  delay(3000); // Give user a chance to open serial monitor
+  
   setupAutoConnect();
 
   Serial.println(F("Initialization done..."));
@@ -64,9 +62,6 @@ void loop()
   autoConnect.handleClient();
   
   printLoopingMessageAndCurrentMillis();
-
-  // Don't run beyond here unless we're connected
-  if (!WiFi.status() == WL_CONNECTED) return;
 
   sendAccelerometerDataViaHttpGet(serverBaseWithPort);  
 }

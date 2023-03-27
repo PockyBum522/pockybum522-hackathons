@@ -1,6 +1,6 @@
 void sendAccelerometerDataViaHttpGet(String serverBaseUrlWithPort)
 {
-  if (currentMillis - previousMillis >= 500)
+  if (currentMillis - previousMillis >= 1000)
   { 
     previousMillis = currentMillis; // Update the previousMillis variable
 
@@ -22,18 +22,18 @@ void sendAccelerometerDataViaHttpGet(String serverBaseUrlWithPort)
     yG += .56;
     zG -= .75;
 
-    #ifdef DEBUG_MODE_ON
-      // Send the X, Y, and Z values over Serial
-      Serial.print(F("Raw values from accelerometer; X: "));
-      Serial.print(xG);
-      Serial.print("g,\tY: ");
-      Serial.print(yG);
-      Serial.print("g,\tZ: ");
-      Serial.print(zG);
-      Serial.println("g");
+    // #ifdef DEBUG_MODE_ON
+    //   // Send the X, Y, and Z values over Serial
+    //   Serial.print(F("Raw values from accelerometer; X: "));
+    //   Serial.print(xG);
+    //   Serial.print("g,\tY: ");
+    //   Serial.print(yG);
+    //   Serial.print("g,\tZ: ");
+    //   Serial.print(zG);
+    //   Serial.println("g");
 
-      Serial.println(F("About to build URL from these..."));
-    #endif
+    //   Serial.println(F("About to build URL from these..."));
+    // #endif
 
     // Build the url with converted data
     // char builtUrl[50] = getBuiltUrl(abs(xG), abs(yG), abs(zG));
