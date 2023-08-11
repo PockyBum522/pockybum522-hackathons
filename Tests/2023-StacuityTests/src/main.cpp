@@ -41,6 +41,11 @@ const char gprsPass[] = "";
   TinyGsm modem(debugger);
 #else
 TinyGsm modem(SerialAT);
+
+void sdCardSetup();
+
+void beginModemConnection();
+
 #endif
 
 // LilyGO T-SIM7000G Pinout
@@ -90,27 +95,18 @@ void setup(){
 
     modemPowerOn();
 
-    Serial.println("========SDCard Detect.======");
-    SPI.begin(SD_SCLK, SD_MISO, SD_MOSI);
-    if (!SD.begin(SD_CS)) {
-        Serial.println("SDCard MOUNT FAIL");
-    } else {
-        uint32_t cardSize = SD.cardSize() / (1024 * 1024);
-        String str = "SDCard Size: " + String(cardSize) + "MB";
-        Serial.println(str);
+    sdCardSetup();
+
+    beginModemConnection();
+
+    for (int i = 0; i < 20; i++)
+    {
+        delay(500);
+        yield();
     }
-    Serial.println("===========================");
-
-    SerialAT.begin(UART_BAUD, SERIAL_8N1, PIN_RX, PIN_TX);
-
-
-    Serial.println("/**********************************************************/");
-    Serial.println("To initialize the network test, please make sure your LTE ");
-    Serial.println("antenna has been connected to the SIM interface on the board.");
-    Serial.println("/**********************************************************/\n\n");
-
-    delay(10000);
 }
+
+
 
 void loop(){
     String res;
@@ -157,11 +153,6 @@ void loop(){
 
     String modemInfo = modem.getModemInfo();
     Serial.println("Modem Info: " + modemInfo);
-
-    // Unlock your SIM card with a PIN if needed
-    if ( GSM_PIN && modem.getSimStatus() != 3 ) {
-        modem.simUnlock(GSM_PIN);
-    }
 
     for (int i = 0; i <= 4; i++) {
         uint8_t network[] = {
@@ -219,4 +210,26 @@ void loop(){
             SerialAT.write(SerialMon.read());
         }
     }
+}
+
+void sdCardSetup() {
+    Serial.println("========SDCard Detect.======");
+    SPI.begin(SD_SCLK, SD_MISO, SD_MOSI);
+    if (!SD.begin(SD_CS)) {
+        Serial.println("SDCard MOUNT FAIL");
+    } else {
+        uint32_t cardSize = SD.cardSize() / (1024 * 1024);
+        String str = "SDCard Size: " + String(cardSize) + "MB";
+        Serial.println(str);
+    }
+    Serial.println("===========================");
+}
+
+void beginModemConnection() {
+    SerialAT.begin(UART_BAUD, SERIAL_8N1, PIN_RX, PIN_TX);
+
+    Serial.println("/**********************************************************/");
+    Serial.println("To initialize the network test, please make sure your LTE ");
+    Serial.println("antenna has been connected to the SIM interface on the board.");
+    Serial.println("/**********************************************************/\n\n");
 }
