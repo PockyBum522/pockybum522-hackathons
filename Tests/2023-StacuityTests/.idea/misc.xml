@@ -3,6 +3,7 @@
   <component name="CidrRootsConfiguration">
     <sourceRoots>
       <file path="$PROJECT_DIR$/src/libraries" />
+      <file path="$PROJECT_DIR$/src/secrets" />
     </sourceRoots>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
