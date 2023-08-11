@@ -1,109 +1,48 @@
 #include <Arduino.h>
+#include "libraries/Hardware/ModemManager.h"
+#include "libraries/Hardware/SdCardManager.h"
+#include <elapsedMillis.h>
 
-#define TINY_GSM_MODEM_SIM7000
-#define TINY_GSM_RX_BUFFER 1024 // Set RX buffer to 1Kb
-
-#define SerialAT Serial1
-
-// See all AT commands, if wanted
-// #define DUMP_AT_COMMANDS
-
-// set GSM PIN, if any
-#define GSM_PIN ""
-
-// Your GPRS credentials, if any
-const char apn[]  = "";     //SET TO YOUR APN
-const char gprsUser[] = "";
-const char gprsPass[] = "";
-
-#include <TinyGsmClient.h>
-#include <SPI.h>
-#include <SD.h>
-#include <Ticker.h>
-
-#ifdef DUMP_AT_COMMANDS
-#include <StreamDebugger.h>
-  StreamDebugger debugger(SerialAT, SerialMon);
-  TinyGsm modem(debugger);
-#else
-  
-TinyGsm modem(SerialAT);
-
-void sdCardSetup();
-
-void beginModemConnection();
-
-#endif
-
-// LilyGO T-SIM7000G Pinout
-#define UART_BAUD           115200
-#define PIN_TX              27
-#define PIN_RX              26
-#define PWR_PIN             4
-
-#define SD_MISO             2
-#define SD_MOSI             15
-#define SD_SCLK             14
-#define SD_CS               13
 #define LED_PIN             12
 
-void modemPowerOn()
-{
-    pinMode(PWR_PIN, OUTPUT);
-
-    digitalWrite(PWR_PIN, LOW);
-    delay(1000);
-    digitalWrite(PWR_PIN, HIGH);
-}
-
-void modemPowerOff()
-{
-    pinMode(PWR_PIN, OUTPUT);
-
-    digitalWrite(PWR_PIN, LOW);
-    delay(1500);
-    digitalWrite(PWR_PIN, HIGH);
-}
-
-void modemRestart()
-{
-    modemPowerOff();
-    delay(1000);
-    modemPowerOn();
-}
+elapsedMillis modemInitializationDelay;
 
 void setup()
 {
     Serial.begin(115200);
 
-    delay(10);
-
     // Set LED OFF
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
 
-    modemPowerOn();
+    ModemManager::modemPowerOn();
 
-    sdCardSetup();
+    SdCardManager::sdCardSetup();
 
-    beginModemConnection();
+    ModemManager::beginModemConnection();
 
-    for (int i = 0; i < 20; i++)
-    {
-        delay(500);
-        yield();
-    }
+    Serial.println("Initialization done! Waiting ten seconds for modem init before continuing...");
 }
 
 void loop()
 {
+    // Don't start doing anything in loop() until 10 seconds in, giving the modem time to come up
+    if (modemInitializationDelay < 10000) return;
+
     String res;
 
     Serial.println("========INIT========");
 
-    if (!modem.init()) {
-        modemRestart();
-        delay(2000);
+    if (!modem.init())
+    {
+        ModemManager::modemRestart();
+
+        for (int i = 0; i < 4; i++)
+        {
+            delay(500);
+            yield();
+        }
+
         Serial.println("Failed to restart modem, attempting to continue without restarting");
         return;
     }
@@ -111,6 +50,7 @@ void loop()
     Serial.println("========SIMCOMATI======");
     modem.sendAT("+SIMCOMATI");
     modem.waitResponse(1000L, res);
+
     res.replace(GSM_NL "OK" GSM_NL, "");
     Serial.println(res);
     res = "";
@@ -198,26 +138,4 @@ void loop()
             SerialAT.write(Serial.read());
         }
     }
-}
-
-void sdCardSetup() {
-    Serial.println("========SDCard Detect.======");
-    SPI.begin(SD_SCLK, SD_MISO, SD_MOSI);
-    if (!SD.begin(SD_CS)) {
-        Serial.println("SDCard MOUNT FAIL");
-    } else {
-        uint32_t cardSize = SD.cardSize() / (1024 * 1024);
-        String str = "SDCard Size: " + String(cardSize) + "MB";
-        Serial.println(str);
-    }
-    Serial.println("===========================");
-}
-
-void beginModemConnection() {
-    SerialAT.begin(UART_BAUD, SERIAL_8N1, PIN_RX, PIN_TX);
-
-    Serial.println("/**********************************************************/");
-    Serial.println("To initialize the network test, please make sure your LTE ");
-    Serial.println("antenna has been connected to the SIM interface on the board.");
-    Serial.println("/**********************************************************/\n\n");
 }
