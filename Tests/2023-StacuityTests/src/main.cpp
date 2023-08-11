@@ -1,23 +1,9 @@
-/*
-  Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/lilygo-t-sim7000g-esp32-lte-gprs-gps/
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files.
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-*/
-
-// Original code: https://github.com/Xinyuan-LilyGO/LilyGO-T-SIM7000G/blob/master/examples/Arduino_NetworkTest/Arduino_NetworkTest.ino
-
 #include <Arduino.h>
+
 #define TINY_GSM_MODEM_SIM7000
 #define TINY_GSM_RX_BUFFER 1024 // Set RX buffer to 1Kb
 
 #define SerialAT Serial1
-// Set serial for debug console (to the Serial Monitor, default speed 115200)
-#define SerialMon Serial
 
 // See all AT commands, if wanted
 // #define DUMP_AT_COMMANDS
@@ -40,6 +26,7 @@ const char gprsPass[] = "";
   StreamDebugger debugger(SerialAT, SerialMon);
   TinyGsm modem(debugger);
 #else
+  
 TinyGsm modem(SerialAT);
 
 void sdCardSetup();
@@ -50,7 +37,6 @@ void beginModemConnection();
 
 // LilyGO T-SIM7000G Pinout
 #define UART_BAUD           115200
-#define PIN_DTR             25
 #define PIN_TX              27
 #define PIN_RX              26
 #define PWR_PIN             4
@@ -61,31 +47,34 @@ void beginModemConnection();
 #define SD_CS               13
 #define LED_PIN             12
 
-
-void modemPowerOn(){
+void modemPowerOn()
+{
     pinMode(PWR_PIN, OUTPUT);
+
     digitalWrite(PWR_PIN, LOW);
     delay(1000);
     digitalWrite(PWR_PIN, HIGH);
 }
 
-void modemPowerOff(){
+void modemPowerOff()
+{
     pinMode(PWR_PIN, OUTPUT);
+
     digitalWrite(PWR_PIN, LOW);
     delay(1500);
     digitalWrite(PWR_PIN, HIGH);
 }
 
-
-void modemRestart(){
+void modemRestart()
+{
     modemPowerOff();
     delay(1000);
     modemPowerOn();
 }
 
-void setup(){
-    // Set console baud rate
-    SerialMon.begin(115200);
+void setup()
+{
+    Serial.begin(115200);
 
     delay(10);
 
@@ -106,9 +95,8 @@ void setup(){
     }
 }
 
-
-
-void loop(){
+void loop()
+{
     String res;
 
     Serial.println("========INIT========");
@@ -204,10 +192,10 @@ void loop(){
 
     while (1) {
         while (SerialAT.available()) {
-            SerialMon.write(SerialAT.read());
+            Serial.write(SerialAT.read());
         }
-        while (SerialMon.available()) {
-            SerialAT.write(SerialMon.read());
+        while (Serial.available()) {
+            SerialAT.write(Serial.read());
         }
     }
 }
