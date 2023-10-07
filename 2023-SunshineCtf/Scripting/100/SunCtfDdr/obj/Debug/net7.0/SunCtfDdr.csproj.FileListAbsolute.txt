@@ -1,0 +1,38 @@
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.exe
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.deps.json
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.runtimeconfig.json
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.dll
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.pdb
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\WindowsInput.dll
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.csproj.AssemblyReference.cache
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.AssemblyInfoInputs.cache
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.AssemblyInfo.cs
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.csproj.CoreCompileInputs.cache
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.csproj.CopyComplete
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.dll
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\refint\SunCtfDdr.dll
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.pdb
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.genruntimeconfig.cache
+C:\Users\David\RiderProjects\SunCtfDdr\obj\Debug\net7.0\ref\SunCtfDdr.dll
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\Clipboard.dll
+C:\Users\David\RiderProjects\SunCtfDdr\bin\Debug\net7.0\NodaTime.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.exe
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.deps.json
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.runtimeconfig.json
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\SunCtfDdr.pdb
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\Clipboard.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\WindowsInput.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\bin\Debug\net7.0\NodaTime.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.csproj.AssemblyReference.cache
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.GeneratedMSBuildEditorConfig.editorconfig
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.AssemblyInfoInputs.cache
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.AssemblyInfo.cs
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.csproj.CoreCompileInputs.cache
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.csproj.CopyComplete
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\refint\SunCtfDdr.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.pdb
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\SunCtfDdr.genruntimeconfig.cache
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-SunshineCtf\Scripting\100\SunCtfDdr\obj\Debug\net7.0\ref\SunCtfDdr.dll
