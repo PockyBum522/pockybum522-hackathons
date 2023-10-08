@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Clipboard.CSharp" Version="0.2.1" />
+        <PackageReference Include="FftSharp" Version="2.1.0" />
+        <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="NAudio" Version="1.10.0" />
+        <PackageReference Include="ScottPlot" Version="4.1.63" />
+        <PackageReference Include="ScottPlot.WinForms" Version="4.1.63" />
+        <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    </ItemGroup>
+
+</Project>

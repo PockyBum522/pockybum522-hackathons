@@ -1,0 +1,99 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-SunshineCtf\\Scripting\\421\\SimonProgrammer1\\SunCtfSimonProgrammer1.csproj": {}
+  },
+  "projects": {
+    "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-SunshineCtf\\Scripting\\421\\SimonProgrammer1\\SunCtfSimonProgrammer1.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-SunshineCtf\\Scripting\\421\\SimonProgrammer1\\SunCtfSimonProgrammer1.csproj",
+        "projectName": "SunCtfSimonProgrammer1",
+        "projectPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-SunshineCtf\\Scripting\\421\\SimonProgrammer1\\SunCtfSimonProgrammer1.csproj",
+        "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
+        "outputPath": "D:\\source\\repos\\PockyBum522 Github\\pockybum522-hackathons\\2023-SunshineCtf\\Scripting\\421\\SimonProgrammer1\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0-windows"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0-windows7.0": {
+            "targetAlias": "net7.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0-windows7.0": {
+          "targetAlias": "net7.0-windows",
+          "dependencies": {
+            "Clipboard.CSharp": {
+              "target": "Package",
+              "version": "[0.2.1, )"
+            },
+            "FftSharp": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "InputSimulatorCore": {
+              "target": "Package",
+              "version": "[1.0.5, )"
+            },
+            "Microsoft.CSharp": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "NAudio": {
+              "target": "Package",
+              "version": "[1.10.0, )"
+            },
+            "ScottPlot": {
+              "target": "Package",
+              "version": "[4.1.63, )"
+            },
+            "ScottPlot.WinForms": {
+              "target": "Package",
+              "version": "[4.1.63, )"
+            },
+            "System.Data.DataSetExtensions": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

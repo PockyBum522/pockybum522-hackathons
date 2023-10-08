@@ -1,0 +1,258 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "SunCtfSimonProgrammer1/1.0.0": {
+        "dependencies": {
+          "Clipboard.CSharp": "0.2.1",
+          "FftSharp": "2.1.0",
+          "InputSimulatorCore": "1.0.5",
+          "Microsoft.CSharp": "4.7.0",
+          "NAudio": "1.10.0",
+          "ScottPlot": "4.1.63",
+          "ScottPlot.WinForms": "4.1.63",
+          "System.Data.DataSetExtensions": "4.5.0",
+          "System.Drawing.Common": "7.0.0"
+        },
+        "runtime": {
+          "SunCtfSimonProgrammer1.dll": {}
+        }
+      },
+      "Clipboard.CSharp/0.2.1": {
+        "dependencies": {
+          "NodaTime": "3.1.9"
+        },
+        "runtime": {
+          "lib/net7.0/Clipboard.dll": {
+            "assemblyVersion": "0.2.1.0",
+            "fileVersion": "0.2.1.0"
+          }
+        }
+      },
+      "FftSharp/2.1.0": {
+        "runtime": {
+          "lib/net6.0/FftSharp.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "InputSimulatorCore/1.0.5": {
+        "runtime": {
+          "lib/netstandard2.0/WindowsInput.dll": {
+            "assemblyVersion": "1.0.5.0",
+            "fileVersion": "1.0.5.0"
+          }
+        }
+      },
+      "Microsoft.CSharp/4.7.0": {},
+      "Microsoft.NETCore.Platforms/3.1.0": {},
+      "Microsoft.Win32.Registry/4.7.0": {
+        "dependencies": {
+          "System.Security.AccessControl": "4.7.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        }
+      },
+      "Microsoft.Win32.SystemEvents/7.0.0": {},
+      "NAudio/1.10.0": {
+        "dependencies": {
+          "Microsoft.Win32.Registry": "4.7.0",
+          "System.Resources.Extensions": "4.7.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/NAudio.dll": {
+            "assemblyVersion": "1.10.0.0",
+            "fileVersion": "1.10.0.0"
+          }
+        }
+      },
+      "NodaTime/3.1.9": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.7.1"
+        },
+        "runtime": {
+          "lib/net6.0/NodaTime.dll": {
+            "assemblyVersion": "3.1.9.0",
+            "fileVersion": "3.1.9.0"
+          }
+        }
+      },
+      "ScottPlot/4.1.63": {
+        "dependencies": {
+          "System.Drawing.Common": "7.0.0",
+          "System.Numerics.Vectors": "4.5.0"
+        },
+        "runtime": {
+          "lib/net6.0/ScottPlot.dll": {
+            "assemblyVersion": "4.1.63.0",
+            "fileVersion": "4.1.63.0"
+          }
+        }
+      },
+      "ScottPlot.WinForms/4.1.63": {
+        "dependencies": {
+          "ScottPlot": "4.1.63"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/ScottPlot.WinForms.dll": {
+            "assemblyVersion": "4.1.63.0",
+            "fileVersion": "4.1.63.0"
+          }
+        }
+      },
+      "System.Data.DataSetExtensions/4.5.0": {},
+      "System.Drawing.Common/7.0.0": {
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "7.0.0"
+        }
+      },
+      "System.Numerics.Vectors/4.5.0": {},
+      "System.Resources.Extensions/4.7.0": {},
+      "System.Runtime.CompilerServices.Unsafe/4.7.1": {},
+      "System.Security.AccessControl/4.7.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "3.1.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        }
+      },
+      "System.Security.Principal.Windows/4.7.0": {}
+    }
+  },
+  "libraries": {
+    "SunCtfSimonProgrammer1/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Clipboard.CSharp/0.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UEu7p0oH5YkXaz/TXc1nAdHukJNTOGV/FXxHi9f7wNI+xJIHizVRHZA5noOIZpSXU5SQxr6v+nze/EQucBug3Q==",
+      "path": "clipboard.csharp/0.2.1",
+      "hashPath": "clipboard.csharp.0.2.1.nupkg.sha512"
+    },
+    "FftSharp/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SXjcF9LR7DG5qe6SlH+VhGUZ4Sp3X1T86KA/9Ra3RaFoWITRmsvt9e57Yi8Fkaza/2r/153e+AfjdNVr1x9Ypw==",
+      "path": "fftsharp/2.1.0",
+      "hashPath": "fftsharp.2.1.0.nupkg.sha512"
+    },
+    "InputSimulatorCore/1.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mLYv9geqp8gG0HjvmbhL5+0v8LmGBgawOS3FHRtK0tGYp0VWfLe8lhYYXUH+vZP1Su+0v0HJQjBx5Jy2wbtYBQ==",
+      "path": "inputsimulatorcore/1.0.5",
+      "hashPath": "inputsimulatorcore.1.0.5.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
+      "path": "microsoft.csharp/4.7.0",
+      "hashPath": "microsoft.csharp.4.7.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Platforms/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
+      "path": "microsoft.netcore.platforms/3.1.0",
+      "hashPath": "microsoft.netcore.platforms.3.1.0.nupkg.sha512"
+    },
+    "Microsoft.Win32.Registry/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KSrRMb5vNi0CWSGG1++id2ZOs/1QhRqROt+qgbEAdQuGjGrFcl4AOl4/exGPUYz2wUnU42nvJqon1T3U0kPXLA==",
+      "path": "microsoft.win32.registry/4.7.0",
+      "hashPath": "microsoft.win32.registry.4.7.0.nupkg.sha512"
+    },
+    "Microsoft.Win32.SystemEvents/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2nXPrhdAyAzir0gLl8Yy8S5Mnm/uBSQQA7jEsILOS1MTyS7DbmV1NgViMtvV1sfCD1ebITpNwb1NIinKeJgUVQ==",
+      "path": "microsoft.win32.systemevents/7.0.0",
+      "hashPath": "microsoft.win32.systemevents.7.0.0.nupkg.sha512"
+    },
+    "NAudio/1.10.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-y6VvwSPfJhElUllkzE2FHXHAADYFGLwMPt048KlPyuUXcq4E0VEi+4hWrFd+lBsrb+Q5DvPA9w86oRTvKRO9UQ==",
+      "path": "naudio/1.10.0",
+      "hashPath": "naudio.1.10.0.nupkg.sha512"
+    },
+    "NodaTime/3.1.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EzjwDOtsETlXWBDE6qvTQqc3guP+9xrAOf9j1mHL++UD4VeZay+dbCPNnXyZhoQMkKAOZ/+hIOtz7STl0Rkknw==",
+      "path": "nodatime/3.1.9",
+      "hashPath": "nodatime.3.1.9.nupkg.sha512"
+    },
+    "ScottPlot/4.1.63": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ph9TskhXC31lySsZLDRzo5g1ujG1GnMDM/xPFeU6ntP2c58WEvf0nP7Pe5hAT7E5t7kwM0SAn0rsAqK6++PP5w==",
+      "path": "scottplot/4.1.63",
+      "hashPath": "scottplot.4.1.63.nupkg.sha512"
+    },
+    "ScottPlot.WinForms/4.1.63": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ldi7Rs9UpchKIFG+hLQ4WWUaSMEHxFZWIZt+fbJ0Tgmy9YMWIqBwbnqZt+2Mq3a4ZawZof0T3nMj6WMYwCK6ew==",
+      "path": "scottplot.winforms/4.1.63",
+      "hashPath": "scottplot.winforms.4.1.63.nupkg.sha512"
+    },
+    "System.Data.DataSetExtensions/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-221clPs1445HkTBZPL+K9sDBdJRB8UN8rgjO3ztB0CQ26z//fmJXtlsr6whGatscsKGBrhJl5bwJuKSA8mwFOw==",
+      "path": "system.data.datasetextensions/4.5.0",
+      "hashPath": "system.data.datasetextensions.4.5.0.nupkg.sha512"
+    },
+    "System.Drawing.Common/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KIX+oBU38pxkKPxvLcLfIkOV5Ien8ReN78wro7OF5/erwcmortzeFx+iBswlh2Vz6gVne0khocQudGwaO1Ey6A==",
+      "path": "system.drawing.common/7.0.0",
+      "hashPath": "system.drawing.common.7.0.0.nupkg.sha512"
+    },
+    "System.Numerics.Vectors/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QQTlPTl06J/iiDbJCiepZ4H//BVraReU4O4EoRw1U02H5TLUIT7xn3GnDp9AXPSlJUDyFs4uWjWafNX6WrAojQ==",
+      "path": "system.numerics.vectors/4.5.0",
+      "hashPath": "system.numerics.vectors.4.5.0.nupkg.sha512"
+    },
+    "System.Resources.Extensions/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Efd5jls31pR1MkEl/IlT/lOzG0nGRCoYnHctZTq597+absekOXaP53yUlv5U4DfcfImSAAupWVpTW1tE54lF7A==",
+      "path": "system.resources.extensions/4.7.0",
+      "hashPath": "system.resources.extensions.4.7.0.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zOHkQmzPCn5zm/BH+cxC1XbUS3P4Yoi3xzW7eRgVpDR2tPGSzyMZ17Ig1iRkfJuY0nhxkQQde8pgePNiA7z7TQ==",
+      "path": "system.runtime.compilerservices.unsafe/4.7.1",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512"
+    },
+    "System.Security.AccessControl/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JECvTt5aFF3WT3gHpfofL2MNNP6v84sxtXxpqhLBCcDRzqsPBmHhQ6shv4DwwN2tRlzsUxtb3G9M3763rbXKDg==",
+      "path": "system.security.accesscontrol/4.7.0",
+      "hashPath": "system.security.accesscontrol.4.7.0.nupkg.sha512"
+    },
+    "System.Security.Principal.Windows/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
+      "path": "system.security.principal.windows/4.7.0",
+      "hashPath": "system.security.principal.windows.4.7.0.nupkg.sha512"
+    }
+  }
+}
