@@ -1,11 +1,21 @@
 #ifndef STACUITY_MQTT_GPS_TRACKING_HTTPCONNECTION_H
 #define STACUITY_MQTT_GPS_TRACKING_HTTPCONNECTION_H
 
+//const char server[]   = "vsh.pp.ua";
+//const char resource[] = "/TinyGSM/logo.txt";
+//const int  port       = 80;
+
+const char server[]   = "edge.stacuity.io";
+const char resource[] = "/ep/id";
+const int  port       = 80;
+
+//curl --request GET \
+//     --url http://edge.stacuity.io/ep/id
 
 // Server details
-const char server[]   = "vsh.pp.ua";
-const char resource[] = "/TinyGSM/logo.txt";
-const int  port       = 80;
+//const char server[]   = "edge.stacuity.io";
+//const char resource[] = "/ep/kv";
+//const int  port       = 80;
 
 HttpClient    http(client, server, port);
 
