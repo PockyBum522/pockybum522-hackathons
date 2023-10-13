@@ -37,7 +37,7 @@ void loop()
         ModemManager::printGprsConnectionInfoToSerial();
     }
 
-    if (millis() > 70000)
+    if (millis() > 60000)
     {
         HttpConnection::makeGetRequest();
 

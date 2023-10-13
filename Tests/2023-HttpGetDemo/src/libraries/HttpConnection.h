@@ -6,7 +6,7 @@
 //const int  port       = 80;
 
 const char server[]   = "edge.stacuity.io";
-const char resource[] = "/ep/id";
+const char resource[] = "/ep/kv";
 const int  port       = 80;
 
 //curl --request GET \
