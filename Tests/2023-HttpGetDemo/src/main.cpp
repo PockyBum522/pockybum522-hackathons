@@ -9,6 +9,8 @@ elapsedMillis modemInitializationDelay;
 
 #define LED_PIN     12
 
+bool runOnceFlag = false;
+
 void setup()
 {
     Serial.begin(115200);
@@ -30,21 +32,31 @@ void loop()
 
     ModemManager::printGprsConnectionInfoToSerial();
 
-    HttpConnection::makeGetRequest();
-
-    ModemManager::disconnectGprs();
-
-    // These are probably messed up and should be thoroughly checked for bugs and issues when enabled
-    // GpsManager::initializeGps();
-    // GpsManager::printGpsDataForever();
-    // GpsManager::powerOffGps();
-
-    ModemManager::powerOffModem();
-
-    // Halt
-    while (true)
+    if (millis() > 60000 &&
+    !runOnceFlag)
     {
-        delay(400);
-        yield();
+        runOnceFlag = true;
+
+        HttpConnection::makeGetRequest();
+
+//        ModemManager::disconnectGprs();
+//
+//        // These are probably messed up and should be thoroughly checked for bugs and issues when enabled
+//        // GpsManager::initializeGps();
+//        // GpsManager::printGpsDataForever();
+//        // GpsManager::powerOffGps();
+//
+//        ModemManager::powerOffModem();
+
+        // Halt
+        while (true)
+        {
+            delay(400);
+            yield();
+        }
+
+
     }
+
+
 }
