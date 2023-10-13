@@ -9,7 +9,7 @@ elapsedMillis modemInitializationDelay;
 
 #define LED_PIN     12
 
-bool runOnceFlag = false;
+bool initModemFlag = false;
 
 void setup()
 {
@@ -28,15 +28,17 @@ void setup()
 
 void loop()
 {
-    ModemManager::restartModemAndConnect();
-
-    ModemManager::printGprsConnectionInfoToSerial();
-
-    if (millis() > 60000 &&
-    !runOnceFlag)
+    if (!initModemFlag)
     {
-        runOnceFlag = true;
+        initModemFlag = true;
 
+        ModemManager::restartModemAndConnect();
+
+        ModemManager::printGprsConnectionInfoToSerial();
+    }
+
+    if (millis() > 70000)
+    {
         HttpConnection::makeGetRequest();
 
 //        ModemManager::disconnectGprs();
