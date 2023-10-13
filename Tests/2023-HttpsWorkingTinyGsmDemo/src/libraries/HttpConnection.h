@@ -2,17 +2,17 @@
 #define STACUITY_MQTT_GPS_TRACKING_HTTPCONNECTION_H
 
 // Insecure server details
-//const char server[]   = "vsh.pp.ua";
-//const char resource[] = "/TinyGSM/logo.txt";
-//const int  port       = 80;
-//
+const char server[]   = "vsh.pp.ua";
+const char resource[] = "/TinyGSM/logo.txt";
+const int  port       = 443;
+
 //HttpClient    http(client, server, port);
 
 
 // Https server details
-const char server[]   = "api.stacuity.com";
-const char resource[] = "/api/v1/endpoints/b257522a-4d83-4f3e-8954-71d296bbf7c1/keyvalues";
-const int  port       = 443;
+//const char server[]   = "api.stacuity.com";
+//const char resource[] = "/api/v1/endpoints/b257522a-4d83-4f3e-8954-71d296bbf7c1/keyvalues";
+//const int  port       = 443;
 
 #define LOGGING  // <- Logging is for the HTTP library
 
