@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DezgoStableDiffusionTest", "DezgoStableDiffusionTest\DezgoStableDiffusionTest.csproj", "{810B6122-9C68-43F6-923E-4D653CFB1344}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{810B6122-9C68-43F6-923E-4D653CFB1344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{810B6122-9C68-43F6-923E-4D653CFB1344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{810B6122-9C68-43F6-923E-4D653CFB1344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{810B6122-9C68-43F6-923E-4D653CFB1344}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

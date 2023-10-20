@@ -1,0 +1,15 @@
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\bin\Debug\net7.0\DezgoStableDiffusionTest.exe
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\bin\Debug\net7.0\DezgoStableDiffusionTest.deps.json
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\bin\Debug\net7.0\DezgoStableDiffusionTest.runtimeconfig.json
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\bin\Debug\net7.0\DezgoStableDiffusionTest.dll
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\bin\Debug\net7.0\DezgoStableDiffusionTest.pdb
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.csproj.AssemblyReference.cache
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.GeneratedMSBuildEditorConfig.editorconfig
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.AssemblyInfoInputs.cache
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.AssemblyInfo.cs
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.csproj.CoreCompileInputs.cache
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.dll
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\refint\DezgoStableDiffusionTest.dll
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.pdb
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\DezgoStableDiffusionTest.genruntimeconfig.cache
+D:\source\repos\DezgoStableDiffusionTest\DezgoStableDiffusionTest\obj\Debug\net7.0\ref\DezgoStableDiffusionTest.dll
