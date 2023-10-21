@@ -3,36 +3,160 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AndroidPromptAndSend.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
              x:Class="AndroidPromptAndSend.Views.MainView"
              x:DataType="vm:MainViewModel">
+    
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE, to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="1*" RowDefinitions="1*, 4*, 1*" Margin="10">
+    <!-- Top level grid -->
+    <Grid RowDefinitions="1*" ColumnDefinitions="1*">
         
-        <TextBlock Grid.Column="0" Grid.Row="0"
-                   Text="Prompt:" FontSize="18"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+        <!-- Welcome screen controls grid -->
+        <Grid Grid.Column="0" Grid.Row="0" ColumnDefinitions="1*" RowDefinitions="1*" Margin="10" IsVisible="{Binding WelcomeControlsVisible}">
+           
+            <DockPanel Grid.Row="0">
+                
+                <TextBlock Text="Hello!"
+                           DockPanel.Dock="Top"
+                           FontSize="34"
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,30"/>
+                
+                <Button DockPanel.Dock="Bottom" 
+                        Command="{Binding ShowInstructionsMessageCommand}"
+                        FontSize="22"
+                        Content="Show Instructions"
+                        Padding="30" Margin="5" MinWidth="260" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                
+                <TextBlock FontSize="22" TextWrapping="Wrap" >
+                    This is a silly programming project. <LineBreak />
+                    <LineBreak />
+                    If you would like to participate, then press the 'Show Instructions' button below.<LineBreak />
+                    <LineBreak />
+                    Check out previous answers at https://website.com/dreamages
+                </TextBlock>
+                
+                
+            </DockPanel>
+            
+        </Grid>
         
-        <TextBlock Grid.Column="0" Grid.Row="1"
-                   Text="{Binding PromptText}"
-                   FontSize="18"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   TextWrapping="Wrap" />
+        <!-- Instructions screen controls grid -->
+        <Grid Grid.Column="0" Grid.Row="0" ColumnDefinitions="1*" RowDefinitions="1*" Margin="10" IsVisible="{Binding InstructionsMessageControlsVisible}">
+           
+            <DockPanel Grid.Row="0">
+                
+                <Button DockPanel.Dock="Bottom" 
+                        Command="{Binding ShowPromptCommand}"
+                        FontSize="22"
+                        Content="Get Prompt!" Padding="30" Margin="5" MinWidth="260" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                
+              
+                <TextBlock Text="Instructions:"
+                           DockPanel.Dock="Top"
+                           FontSize="34"
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,30"/>
+                
+                <TextBlock FontSize="22" TextWrapping="Wrap" DockPanel.Dock="Top" >
+                    You will be shown a prompt. <LineBreak />
+                    <LineBreak />
+                    Please press the microphone button, then speak a few sentences about whatever the prompt makes you think of. <LineBreak />
+                </TextBlock>
+                
+                
+            </DockPanel>
+            
+        </Grid>
+        
+        <!-- Prompt screen controls grid -->
+        <Grid Grid.Column="0" Grid.Row="0" ColumnDefinitions="1*" RowDefinitions="160, 200, 20, 250" Margin="10" IsVisible="{Binding PromptControlsVisible}">
+           
+            <DockPanel Grid.Row="0">
+                
+                <TextBlock Text="Prompt:"
+                           DockPanel.Dock="Top"
+                           FontSize="34"
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,20"/>
+                
+                
+                    <TextBlock Text="{Binding PromptText}"
+                               FontSize="22"
+                               HorizontalAlignment="Left"
+                               TextWrapping="Wrap" />
+            </DockPanel>
+            
+            <DockPanel Grid.Row="1">
+                
+                <TextBlock Text="Answer:"
+                           DockPanel.Dock="Top"
+                           FontSize="34"
+                           HorizontalAlignment="Center" />
+                
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+                    
+                    <Button Command="{Binding ClearResponseCommand}"
+                            Content="Clear" Padding="20" Margin="5" MinWidth="160" HorizontalContentAlignment="Center"/>
 
-        <Button Grid.Column="0" Grid.Row="2"
-                HorizontalAlignment="Center"
-                Command="{Binding RecordResponseCommand}"
-                Content="Record Response" />
-      
+                    <Button Command="{Binding SendResponseCommand}"
+                            Content="Send Answer" Padding="20" Margin="5" MinWidth="160" HorizontalContentAlignment="Center"/>
+                    
+                </StackPanel>
+                
+                <TextBox x:Name="UserResponseTextBox" DockPanel.Dock="Top" TextWrapping="Wrap" />
+                
+            </DockPanel>
+            
+            <DockPanel Grid.Row="3">
+                
+                <TextBlock Text="Instructions:"
+                           DockPanel.Dock="Top"
+                           FontSize="34"
+                           HorizontalAlignment="Center" />
+                
+                <TextBlock FontSize="22" TextWrapping="Wrap" DockPanel.Dock="Top" >
+                    Please press the microphone button, then speak a few sentences about whatever the prompt makes you think of. <LineBreak />
+                </TextBlock>
+                
+                <TextBlock FontSize="22" TextWrapping="Wrap" FontWeight="Bold">
+                    If the keyboard disappears, just press on the text box!<LineBreak />
+                </TextBlock>
+            </DockPanel>
+        </Grid>
         
         
-    </Grid>
-  
+        <!-- Confirmation message controls grid -->
+        <Grid Grid.Column="0" Grid.Row="0" ColumnDefinitions="1*" RowDefinitions="500" Margin="10" IsVisible="{Binding ConfirmationControlsVisible}">
+           
+            <DockPanel Grid.Row="0">
+                
+                <TextBlock Text="Thank you!"
+                           DockPanel.Dock="Top"
+                           FontSize="34"
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,20"/>
+                
+                
+                <Button DockPanel.Dock="Bottom" 
+                        Command="{Binding ResetToStartCommand}"
+                        FontSize="22"
+                        Content="Return" Padding="30" Margin="5" MinWidth="260" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                
+                <TextBlock FontSize="22" TextWrapping="Wrap" >
+                    Thank you for participating!<LineBreak />
+                    <LineBreak />
+                    Your answer and the related generated art will be available shortly at:<LineBreak />
+                    <LineBreak />
+                    https://website.com/dreamages
+                </TextBlock>
+            </DockPanel>
+            
+        </Grid>
+      </Grid>
   
 </UserControl>
