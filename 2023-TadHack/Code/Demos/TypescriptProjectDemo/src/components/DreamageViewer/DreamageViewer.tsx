@@ -1,5 +1,4 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
-//import ReactDOM from 'react-dom/client'
 // 2048 x 1536
 // 1080/6
 // 768/6
@@ -16,6 +15,7 @@ const DreamageViewer = () => {
     const [yDir, setYDir] = useState(1);
     const [currWinWidth, setCurrWinWidth] = useState(window.innerWidth);
     const [currWinHeight, setCurrWinHeight] = useState(window.innerHeight);
+    const [imagesArray, setImagesArray] = useState<Object>([]);
     
     // refs
     const mainImgEl = useRef<HTMLImageElement>(null);
