@@ -6,6 +6,10 @@ class Program
 {
     public static async Task Main()
     {
+        var llmUserPrompt = "well by golly gee whiz it was fuckin evanescence, i have listened to them my whole life ever since my middle school graduation";
+
+        var llmPromptPrefix = "A creative interpretation of the following, in a random art style: ";
+        
         var client = new HttpClient();
 
         var request = new HttpRequestMessage
@@ -26,7 +30,7 @@ class Program
                 { "sampler", "dpmpp_2m_karras" },
                 { "steps", "30" },
                 { "guidance", "10" },
-                { "prompt", "A creative interpretation of the following, in a random art style: well by golly gee whiz it was fuckin evanescence, i have listened to them my whole life ever since my middle school graduation" },
+                { "prompt", llmPromptPrefix + llmUserPrompt },
                 { "upscale", "2" },
                 
             }),
