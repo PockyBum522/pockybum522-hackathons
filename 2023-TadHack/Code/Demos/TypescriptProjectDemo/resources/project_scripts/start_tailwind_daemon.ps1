@@ -1,0 +1,3 @@
+# Do not put blank lines in this file, it gets interpreted directly
+cd "C:\Users\jurrd\source\repos\pockybum522-hackathons\2023-TadHack\Code\Demos\TypescriptProjectDemo\"
+npx tailwindcss -i "C:\Users\jurrd\source\repos\pockybum522-hackathons\2023-TadHack\Code\Demos\TypescriptProjectDemo\src\assets\tailwind.css" -o "C:\Users\jurrd\source\repos\pockybum522-hackathons\2023-TadHack\Code\Demos\TypescriptProjectDemo\src\assets\main.css" --watch
