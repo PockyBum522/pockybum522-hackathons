@@ -23,7 +23,7 @@ public static class Program
     {
         var imagesIndex = Directory.GetFiles(PathToStableDiffusionImages);
 
-        var jsonString = "{\"";
+        var jsonString = "{ \"images_filenames\" : [ \"";
 
         for (var i = 0; i < imagesIndex.Length; i++)
         {
@@ -35,7 +35,7 @@ public static class Program
                 jsonString += "\", \"";
         }
 
-        jsonString += "\"}";
+        jsonString += "\" ] }";
 
         Console.WriteLine("Writing:");
         Console.WriteLine(jsonString);
