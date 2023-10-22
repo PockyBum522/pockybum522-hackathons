@@ -161,7 +161,7 @@
                 
                 
                 
-                <Image DockPanel.Dock="Bottom" Width="320" Height="320" Source="web_qr_code.png" />
+                <Image DockPanel.Dock="Bottom" Width="320" Height="320" Source="images/web_qr_code.png" />
                 
                 <TextBlock FontSize="22" TextWrapping="Wrap" >
                     Thank you for participating!<LineBreak />

@@ -26,10 +26,10 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly MainView? _myParentMainView;
     
-    [ObservableProperty] private bool _welcomeControlsVisible = true;
+    [ObservableProperty] private bool _welcomeControlsVisible;
     [ObservableProperty] private bool _instructionsMessageControlsVisible;
     [ObservableProperty] private bool _promptControlsVisible;
-    [ObservableProperty] private bool _confirmationControlsVisible;
+    [ObservableProperty] private bool _confirmationControlsVisible = true;
 
     [ObservableProperty] private string _promptText = "";
     [ObservableProperty] private string _userResponseText = "";
