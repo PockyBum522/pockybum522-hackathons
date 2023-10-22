@@ -42,6 +42,8 @@ public static class Program
 
     private static async Task SaveNewDezgoGeneratedImage(string promptUserSaw, string imagePrompt)
     {
+        Console.WriteLine($"About to generate image on Dezgo using prompt: {imagePrompt}");
+        
         // Prefix for the LLM, will be prepended to the prompt
         const string llmPromptPrefix = "A creative interpretation of the following, in a random art style: ";
         
@@ -101,11 +103,11 @@ public static class Program
         filesafeUserPrompt = filesafeUserPrompt.Replace(" ", "_");
         filesafeUserPrompt = filesafeUserPrompt.ToLower();
         
-        var outFilePath = @$"D:\Dropbox\Documents\Desktop\{filesafeUserPrompt}_{filesafeTimeStamp}.png"; 
+        var outFileName = $"{filesafeUserPrompt}_{filesafeTimeStamp}.png";
+
+        var fullPathToSaveTo = Path.Join(PathToStableDiffusionImages, outFileName);
         
-        File.Delete(outFilePath);
-        
-        SaveStreamAsFile(outFilePath, body);
+        SaveStreamAsFile(fullPathToSaveTo, body);
     }
 
     private static void SaveStreamAsFile(string fullFilePath, Stream inputStream) 
