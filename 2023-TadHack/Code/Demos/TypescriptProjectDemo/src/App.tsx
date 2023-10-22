@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App overflow-hidden">
+    <div className="App">
       <DreamageViewer />
     </div>
   );
