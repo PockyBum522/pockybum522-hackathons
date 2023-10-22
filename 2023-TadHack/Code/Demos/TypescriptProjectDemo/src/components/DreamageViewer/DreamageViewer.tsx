@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
+import Point2D from './Point2D';
 import axios from 'axios';
 // 2048 x 1536
 // 1080/6
@@ -19,7 +20,7 @@ const DreamageViewer = () => {
     const [xDir, setXDir] = useState(1);
     const [yDir, setYDir] = useState(1);
     const [screenImageCount, setScreenImageCount] = useState(6);
-    const [posArray, setPosArray] = useState<Object[]>([]);
+    const [posArray, setPosArray] = useState<Point2D[]>([]);
     const [currImgIndex, setCurrImgIndex] = useState(0);
     const [currWinWidth, setCurrWinWidth] = useState(window.innerWidth);
     const [currWinHeight, setCurrWinHeight] = useState(window.innerHeight);
@@ -37,7 +38,7 @@ const DreamageViewer = () => {
                
                const filenames = response.data.images_filenames;
                let filenamesArray:string[] = [];
-               let randomPosArray:Object[] = [];
+               let randomPosArray:Point2D[] = [];
                
                //console.log(filenames)
                
@@ -49,6 +50,7 @@ const DreamageViewer = () => {
                // need to filter the array to only allow for the png image files and nothing else
                const filenamesArrayFiltered = filenamesArray.filter((path) => /\.(jpe?g|png|webp)$/.test(path));
                
+               // generate random position array for the images
                for (let filename in filenamesArrayFiltered) {
                    if (mainImgEl.current !== null) {
                        const randomXPos = Math.floor(Math.abs(Math.random() * currWinWidth - mainImgEl.current.getBoundingClientRect().right));
@@ -60,6 +62,30 @@ const DreamageViewer = () => {
                
                setimagePathArray(filenamesArrayFiltered);
                setPosArray(randomPosArray);
+               
+               
+               // iterate through random image positions and set the positions of each
+               // React img tag; collect them into an array of {screenImageCount} elements
+               let stagingImageTagsArray:React.ReactElement[] = [];
+               
+               for (let i = 0; i < screenImageCount; i++) {
+                   if (posArray[i] !== undefined) {
+                       console.log(`${posArray[i].xPos}, ${posArray[i].yPos}`);
+
+                       stagingImageTagsArray.push(
+                           <img
+                               id="main_img"
+                               ref={mainImgEl}
+                               style={{"top": posArray[i].yPos, "left": posArray[i].xPos, "width": Math.floor(window.innerWidth / 2)}}
+                               className={`absolute rounded-lg`}
+                               src={`${PROTOCOL}://${DOMAIN}:${PORT}/images/${imagePathArray[currImgIndex]}`}
+                               alt={"placeholder"}>
+                           </img>
+                       );
+                   }
+               }
+               
+               setImageTagsArray(stagingImageTagsArray);
                
            });
     }, []);
@@ -124,6 +150,7 @@ const DreamageViewer = () => {
     return (
         <div className={"relative"}>
             <img id="main_img" ref={mainImgEl} style={{"top": yPos, "left": xPos, "width": Math.floor(window.innerWidth / 2)}} className={`absolute rounded-lg`} src={`${PROTOCOL}://${DOMAIN}:${PORT}/images/${imagePathArray[currImgIndex]}`} alt={"placeholder"}></img>
+            { /*imageTagsArray*/ }
         </div>
     )
 }
