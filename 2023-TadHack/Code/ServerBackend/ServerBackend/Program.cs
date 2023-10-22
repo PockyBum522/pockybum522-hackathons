@@ -1,4 +1,7 @@
-﻿using DezgoStableDiffusionTest;
+﻿using System.Web;
+using DezgoStableDiffusionTest;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ServerBackend;
 
@@ -15,12 +18,57 @@ public static class Program
         {
             await WriteImagesJsonIndex();
 
-            await CheckForNewStacuityKeys();
-
+            var stacuityKeysValuesList = await MakeStacuityKeysValuesList();
+            
+            foreach (var rawValue in stacuityKeysValuesList)
+            {
+                Console.Write("Key: ");
+                Console.WriteLine(
+                    ParseStacuityKey(rawValue));
+                
+                Console.Write("Value: ");
+                Console.WriteLine(
+                    ParseStacuityValue(rawValue));
+            }
+            
             await Task.Delay(10000);
         }
         
         // ReSharper disable once FunctionNeverReturns because it's not supposed to
+    }
+
+    private static string ParseStacuityKey(string rawValue)
+    {
+        var splitKey = rawValue.Split("---");
+                
+        return splitKey[0];
+    }
+
+    private static string ParseStacuityValue(string rawValue)
+    {
+        var splitKey = rawValue.Split("---");
+                
+        return splitKey[1];
+    }
+
+    private static async Task<List<string>> MakeStacuityKeysValuesList()
+    {
+        var keyValueJson = await CheckForNewStacuityKeys();
+            
+        var decodedKeyValueJson = HttpUtility.UrlDecode(keyValueJson);
+
+        dynamic stacuityKeysValuesObject = JObject.Parse(decodedKeyValueJson);
+
+        var stacuityKeysValuesList = new List<string>();
+            
+        foreach (var key in stacuityKeysValuesObject.data)
+        {
+            var rawValue = (string)key.value;
+
+            stacuityKeysValuesList.Add(rawValue);
+        }
+
+        return stacuityKeysValuesList;
     }
 
     private static async Task WriteImagesJsonIndex()
@@ -58,7 +106,7 @@ public static class Program
         await File.WriteAllTextAsync(fullPathToJsonIndex, jsonString);
     }
 
-    private static async Task CheckForNewStacuityKeys()
+    private static async Task<string> CheckForNewStacuityKeys()
     {
         var client = new HttpClient();
 
@@ -93,7 +141,6 @@ public static class Program
 
         var body = await response.Content.ReadAsStringAsync();
 
-        Console.WriteLine("Response:");
-        Console.WriteLine(body);
+        return body;
     }    
 }

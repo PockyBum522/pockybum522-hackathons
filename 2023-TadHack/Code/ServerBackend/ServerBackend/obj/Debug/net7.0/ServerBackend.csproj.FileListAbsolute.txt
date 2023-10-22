@@ -12,3 +12,6 @@ D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-TadHack\Code\Serv
 D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-TadHack\Code\ServerBackend\ServerBackend\obj\Debug\net7.0\ServerBackend.pdb
 D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-TadHack\Code\ServerBackend\ServerBackend\obj\Debug\net7.0\ServerBackend.genruntimeconfig.cache
 D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-TadHack\Code\ServerBackend\ServerBackend\obj\Debug\net7.0\ref\ServerBackend.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-TadHack\Code\ServerBackend\ServerBackend\bin\Debug\net7.0\Newtonsoft.Json.dll
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-TadHack\Code\ServerBackend\ServerBackend\obj\Debug\net7.0\ServerBackend.csproj.AssemblyReference.cache
+D:\source\repos\PockyBum522 Github\pockybum522-hackathons\2023-TadHack\Code\ServerBackend\ServerBackend\obj\Debug\net7.0\ServerBackend.csproj.CopyComplete
