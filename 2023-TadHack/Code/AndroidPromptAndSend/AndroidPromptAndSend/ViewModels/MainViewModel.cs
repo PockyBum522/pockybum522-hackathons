@@ -71,7 +71,7 @@ public partial class MainViewModel : ObservableObject
         // Set up the prompt for later
         var random = new Random(
             int.Parse(
-                DateTime.Now.ToString("ffff")));  // Milliseconds for seed
+                DateTime.Now.ToString("fffff")));  // Milliseconds for seed
         
         var randomPromptNumber = random.Next(0, _prompts.Count);
 
@@ -113,22 +113,21 @@ public partial class MainViewModel : ObservableObject
         // Set up random number for key name
         var random = new Random(
             int.Parse(
-                DateTime.Now.ToString("ffff")));  // Milliseconds for seed
+                DateTime.Now.ToString("fffff")));  // Milliseconds for seed
         
         var randomPromptNumber = random.Next(0, 1999999999);
 
         var urlSafeUserResponse = HttpUtility.UrlEncode(userResponseText);
         
         // TEMPORARY
-        var requestUrl = $"http://edge.stacuity.io/ep/kv/user_response_{randomPromptNumber.ToString()}";
 
-        var debugRequestMessage = $"Request built url: {requestUrl}" + Environment.NewLine;
-        debugRequestMessage += $"Built userResponseText: {urlSafeUserResponse}";
+        // var debugRequestMessage = $"Request built url: {requestUrl}" + Environment.NewLine;
+        // debugRequestMessage += $"Built userResponseText: {urlSafeUserResponse}";
 
-        UserResponseText = debugRequestMessage;
+        // UserResponseText = debugRequestMessage;
         // END TEMPORARY
         
-        var options = new RestClientOptions("http://edge.stacuity.io/ep/kv/test");
+        var options = new RestClientOptions($"http://edge.stacuity.io/ep/kv/usr_resp_{randomPromptNumber}");
         var client = new RestClient(options);
         var request = new RestRequest("");
         request.AddStringBody("\"" + urlSafeUserResponse + "\"", "application/*+json");

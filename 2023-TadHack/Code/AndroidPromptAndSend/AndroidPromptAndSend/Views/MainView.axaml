@@ -35,9 +35,7 @@
                 <TextBlock FontSize="22" TextWrapping="Wrap" >
                     This is a silly programming project. <LineBreak />
                     <LineBreak />
-                    If you would like to participate, then press the 'Show Instructions' button below.<LineBreak />
-                    <LineBreak />
-                    Check out previous answers at https://website.com/dreamages
+                    If you would like to participate, then press the 'Show Instructions' button below.
                 </TextBlock>
                 
                 
@@ -142,7 +140,7 @@
         
         
         <!-- Confirmation message controls grid -->
-        <Grid Grid.Column="0" Grid.Row="0" ColumnDefinitions="1*" RowDefinitions="500" Margin="10" IsVisible="{Binding ConfirmationControlsVisible}">
+        <Grid Grid.Column="0" Grid.Row="0" ColumnDefinitions="1*" RowDefinitions="650" Margin="10" IsVisible="{Binding ConfirmationControlsVisible}">
            
             <DockPanel Grid.Row="0">
                 
@@ -158,12 +156,16 @@
                         FontSize="22"
                         Content="Return" Padding="30" Margin="5" MinWidth="260" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
                 
+                
+                
+                <Image DockPanel.Dock="Bottom" Width="320" Height="320" Source="web_qr_code.png" />
+                
                 <TextBlock FontSize="22" TextWrapping="Wrap" >
                     Thank you for participating!<LineBreak />
                     <LineBreak />
-                    Your answer and the related generated art will be available shortly at:<LineBreak />
+                    Your answer and the related generated art will be available tomorrow at:<LineBreak />
                     <LineBreak />
-                    https://website.com/dreamages
+                    http://pockybum522.com
                 </TextBlock>
             </DockPanel>
             
