@@ -8,3 +8,6 @@ Tests/2023-StacuityTests/src/secrets/Secrets.h
 *SECRETS*
 2023-TadHack/Code/Demos/DezgoStableDiffusionTest/DezgoStableDiffusionTest/SECRETS.cs
 2023-TadHack/Code/ServerBackend/ServerBackend/bin/Debug/net7.0/ServerBackend.dll
+
+*obj/*
+*bin/*
