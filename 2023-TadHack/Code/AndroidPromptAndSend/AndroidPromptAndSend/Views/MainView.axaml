@@ -84,11 +84,16 @@
                            HorizontalAlignment="Center" 
                            Margin="0,0,0,20"/>
                 
+                <Button Command="{Binding TryAnotherPromptCommand}"
+                        DockPanel.Dock="Right"
+                        Content="Change" Padding="5" Margin="0,5,0,0" Width="70" Height="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                 
-                    <TextBlock Text="{Binding PromptText}"
-                               FontSize="22"
-                               HorizontalAlignment="Left"
-                               TextWrapping="Wrap" />
+                <TextBlock Text="{Binding PromptText}"
+                           DockPanel.Dock="Left"
+                           FontSize="20"
+                           Margin="0,0,5,0"
+                           HorizontalAlignment="Left"
+                           TextWrapping="Wrap" />
             </DockPanel>
             
             <DockPanel Grid.Row="1">
@@ -100,9 +105,6 @@
                 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                     
-                    <Button Command="{Binding TryAnotherPromptCommand}"
-                            Content="Change Prompt" Padding="20" Margin="0,5,0,0" MinWidth="140" HorizontalContentAlignment="Center"/>
-
                     <Button Command="{Binding SendResponseCommand}"
                             Content="Send Answer" Padding="20" Margin="5,5,0,0" MinWidth="140" HorizontalContentAlignment="Center"/>
                     
