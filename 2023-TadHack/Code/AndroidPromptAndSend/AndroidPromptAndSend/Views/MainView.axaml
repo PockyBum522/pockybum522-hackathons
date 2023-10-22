@@ -100,11 +100,14 @@
                 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                     
-                    <Button Command="{Binding ClearResponseCommand}"
-                            Content="Clear" Padding="20" Margin="0,5,5,0" MinWidth="160" HorizontalContentAlignment="Center"/>
+                    <Button Command="{Binding TryAnotherPromptCommand}"
+                            Content="Change Prompt" Padding="20" Margin="0,5,0,0" MinWidth="140" HorizontalContentAlignment="Center"/>
 
                     <Button Command="{Binding SendResponseCommand}"
-                            Content="Send Answer" Padding="20" Margin="5,5,0,0" MinWidth="160" HorizontalContentAlignment="Center"/>
+                            Content="Send Answer" Padding="20" Margin="5,5,0,0" MinWidth="140" HorizontalContentAlignment="Center"/>
+                    
+                    <Button Command="{Binding ClearResponseCommand}"
+                            Content="Clear" Padding="20" Margin="5,5,5,0" MinWidth="140" HorizontalContentAlignment="Center"/>
                     
                 </StackPanel>
                 

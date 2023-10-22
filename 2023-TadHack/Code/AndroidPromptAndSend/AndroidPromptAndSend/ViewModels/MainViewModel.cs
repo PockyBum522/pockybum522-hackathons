@@ -26,9 +26,9 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly MainView? _myParentMainView;
     
-    [ObservableProperty] private bool _welcomeControlsVisible = true;
+    [ObservableProperty] private bool _welcomeControlsVisible;
     [ObservableProperty] private bool _instructionsMessageControlsVisible;
-    [ObservableProperty] private bool _promptControlsVisible;
+    [ObservableProperty] private bool _promptControlsVisible = true;
     [ObservableProperty] private bool _confirmationControlsVisible;
 
     [ObservableProperty] private string _promptText = "";
@@ -69,6 +69,18 @@ public partial class MainViewModel : ObservableObject
         InstructionsMessageControlsVisible = true;
         
         // Set up the prompt for later
+        var random = new Random(
+            int.Parse(
+                DateTime.Now.ToString("fffff")));  // Milliseconds for seed
+        
+        var randomPromptNumber = random.Next(0, _prompts.Count);
+
+        PromptText = _prompts[randomPromptNumber];
+    }
+    
+    [RelayCommand]
+    private void TryAnotherPrompt()
+    {
         var random = new Random(
             int.Parse(
                 DateTime.Now.ToString("fffff")));  // Milliseconds for seed
