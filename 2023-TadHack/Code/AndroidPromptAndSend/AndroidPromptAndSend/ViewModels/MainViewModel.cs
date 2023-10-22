@@ -26,9 +26,9 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly MainView? _myParentMainView;
     
-    [ObservableProperty] private bool _welcomeControlsVisible;
+    [ObservableProperty] private bool _welcomeControlsVisible = true;
     [ObservableProperty] private bool _instructionsMessageControlsVisible;
-    [ObservableProperty] private bool _promptControlsVisible = true;
+    [ObservableProperty] private bool _promptControlsVisible;
     [ObservableProperty] private bool _confirmationControlsVisible;
 
     [ObservableProperty] private string _promptText = "";
@@ -67,27 +67,33 @@ public partial class MainViewModel : ObservableObject
     {
         WelcomeControlsVisible = false;
         InstructionsMessageControlsVisible = true;
-        
-        // Set up the prompt for later
-        var random = new Random(
-            int.Parse(
-                DateTime.Now.ToString("fffff")));  // Milliseconds for seed
-        
-        var randomPromptNumber = random.Next(0, _prompts.Count);
 
-        PromptText = _prompts[randomPromptNumber];
+        SetRandomPromptText();
     }
-    
+
+    private void SetRandomPromptText()
+    {
+        var oldPromptText = PromptText;
+
+        do
+        {
+            // Set up the prompt for later
+            var random = new Random(
+                int.Parse(
+                    DateTime.Now.ToString("fffff"))); // Milliseconds for seed
+
+            var randomPromptNumber = random.Next(0, _prompts.Count);
+
+            PromptText = _prompts[randomPromptNumber];
+        } 
+        while (PromptText == oldPromptText);
+        // If we're using the change prompt button, this makes sure it doesn't randomly set the next prompt to the old one
+    }
+
     [RelayCommand]
     private void TryAnotherPrompt()
     {
-        var random = new Random(
-            int.Parse(
-                DateTime.Now.ToString("fffff")));  // Milliseconds for seed
-        
-        var randomPromptNumber = random.Next(0, _prompts.Count);
-
-        PromptText = _prompts[randomPromptNumber];
+        SetRandomPromptText();
     }
     
     [RelayCommand]
