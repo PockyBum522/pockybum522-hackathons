@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using DezgoStableDiffusionTest;
 using Newtonsoft.Json.Linq;
 
 namespace ServerBackend;
@@ -57,16 +58,14 @@ public static class Program
             },
             Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
-                { "width", "1024" },
-                { "height", "768" },
+                { "width", "659" },
+                { "height", "494" },
                 { "model", "epic_diffusion_1_1" },
                 { "negative_prompt", "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, blurry, bad anatomy, blurred, watermark, grainy, signature, cut off, draft" },
                 { "sampler", "dpmpp_2m_karras" },
                 { "steps", "30" },
                 { "guidance", "10" },
                 { "prompt", llmPromptPrefix + imagePrompt },
-                { "upscale", "2" },
-                
             }),
         };
 
