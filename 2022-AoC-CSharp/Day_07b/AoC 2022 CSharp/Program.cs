@@ -5,7 +5,7 @@ namespace AoC_2022_CSharp;
 
 internal static class Program
 {
-    private static int _totalFolderSizesForAnswer = 0;
+    private static List<FilesystemObject> _matchingFoldersList = new List<FilesystemObject>();
     
     private static readonly ILogger Logger = LoggerSetup.BuildLogger(); 
     
@@ -98,8 +98,19 @@ internal static class Program
 
         var smallestFolderSize = spaceNeededForUpdate - currentSpaceFree;
         
+        Logger.Information("Disk capacity: {TotalCapacity} | Space needed for update: {SpaceNeeded} | Currently used space: {CurrentUsed} | Current free space: {CurrentFree}", totalDiskCapacity, spaceNeededForUpdate, usedSpace, currentSpaceFree);
+        Logger.Information("Need to find smallest folder of at least size: {SizeNeededToDelete}", smallestFolderSize);
+
         // Now calculate and show the sizes of all folders in the filesystem
         WalkFolderAndSizeAllSubfolders(rootNode);
+
+        foreach (var filesystemObject in _matchingFoldersList)
+        {
+            var folderSize = CalculateDirectorySize(filesystemObject); 
+            
+            if (folderSize >= 5174025 && folderSize < 8174025)
+                Logger.Information("Folder {FolderName} has size: {Size}", filesystemObject.Name, folderSize);
+        }
     }
 
     private static bool DirectoryPresentIn(List<FilesystemObject> currentFolderChildren, string dirName)
@@ -140,14 +151,13 @@ internal static class Program
 
             var folderSize = CalculateDirectorySize(currentChild);
 
-            if (folderSize <= 100000) _totalFolderSizesForAnswer += folderSize;
+            if (folderSize >= 5174025) 
+                _matchingFoldersList.Add(currentChild);
             
             Logger.Debug("Folder: {FolderName} contains {Size} bytes", currentChild.Name, folderSize);
 
             // Now do any subfolders
             WalkFolderAndSizeAllSubfolders(currentChild);
         }
-        
-        Logger.Information("Total cumulative size of any folders under 10,000 bytes: {Answer}", _totalFolderSizesForAnswer);
     }
 }
