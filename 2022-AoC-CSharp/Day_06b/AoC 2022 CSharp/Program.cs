@@ -11,7 +11,7 @@ internal static class Program
         var rawString = RawData.ActualData;
 
         // Number of unique chars that mean start of packet
-        const int requiredUniqueChars = 4;
+        const int requiredUniqueChars = 14;
 
         var answer = FindPositionAfterUniqueChars(rawString, requiredUniqueChars);
         
