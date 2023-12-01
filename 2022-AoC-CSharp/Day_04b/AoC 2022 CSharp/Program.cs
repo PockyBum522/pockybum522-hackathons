@@ -22,13 +22,13 @@ internal static class Program
             var firstSectionNumbers = GetNumbersFromSection(firstSection);
             var secondSectionNumbers = GetNumbersFromSection(secondSection);
 
-            var oneSectionFullyContained = OneSectionIsFullyContainedInOther(firstSectionNumbers, secondSectionNumbers);
+            var doSectionsOverlap = OneSectionOverlapsOther(firstSectionNumbers, secondSectionNumbers);
             
-            if (oneSectionFullyContained)
+            if (doSectionsOverlap)
                 total++; 
             
             Logger.Debug("Sections: {First}, {Second}", firstSection, secondSection);
-            Logger.Debug("Fully contained? {FullyContained}", oneSectionFullyContained);
+            Logger.Debug("Overlap? {FullyContained}", doSectionsOverlap);
         }
 
         Logger.Information("Total: {Total}", total);
@@ -42,18 +42,28 @@ internal static class Program
         return new[] { int.Parse(firstNumberString), int.Parse(secondNumberString) };
     }
     
-    private static bool OneSectionIsFullyContainedInOther(IReadOnlyList<int> firstSection, IReadOnlyList<int> secondSection)
+    private static bool OneSectionOverlapsOther(IReadOnlyList<int> firstSection, IReadOnlyList<int> secondSection)
     {
-        if (firstSection[0] <= secondSection[0] &&
-            firstSection[1] >= secondSection[1])
+        var sectionOneRangeNumbers = new List<int>();
+        var sectionTwoRangeNumbers = new List<int>();
+        
+        // Get section 1 range
+        for (var secOneIndex = firstSection[0]; secOneIndex <= firstSection[1]; secOneIndex++)
         {
-            return true;
+            sectionOneRangeNumbers.Add(secOneIndex);
         }
         
-        if (secondSection[0] <= firstSection[0] &&
-            secondSection[1] >= firstSection[1])
+        // Get section 2 range
+        for (var secTwoIndex = secondSection[0]; secTwoIndex <= secondSection[1]; secTwoIndex++)
         {
-            return true;
+            sectionTwoRangeNumbers.Add(secTwoIndex);
+        }
+
+        // Check section 1 range against overlap in section 2 range
+        foreach (var numberToCheck in sectionOneRangeNumbers)
+        {
+            if (sectionTwoRangeNumbers.Contains(numberToCheck))
+                return true;
         }
 
         return false;
