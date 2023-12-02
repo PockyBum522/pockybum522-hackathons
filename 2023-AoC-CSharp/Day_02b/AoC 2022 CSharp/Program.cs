@@ -13,47 +13,48 @@ internal static class Program
         
         // 12 red cubes, 13 green cubes, and 14 blue cubes
 
-        var validGamesIdCounter = 0;
+        var totalCumulativePower = 0;
         
         foreach (var line in rawLines)
         {
-            var redCubesLimit = 12;
-            var greenCubesLimit = 13;
-            var blueCubesLimit = 14;
+            var redCubesMinimum = 0;
+            var greenCubesMinimum = 0;
+            var blueCubesMinimum = 0;
             
             var gameId = line.Split(' ')[1].Replace(":", "").Replace("Game ", "");
 
             var cubeSetsRaw = line.Split(';');
             
             Logger.Debug("Raw line: {RawLine} | Game ID: '{GameId}' | Cube sets: {CubeSets}", line, gameId, string.Join(" - ", cubeSetsRaw));
-
-            var allSetsValid = true;
             
             foreach (var cubeSet in cubeSetsRaw)
             {
                 var redCubesAmount = GetCubesAmountInSet(cubeSet, "red");
                 var greenCubesAmount = GetCubesAmountInSet(cubeSet, "green");
                 var blueCubesAmount = GetCubesAmountInSet(cubeSet, "blue");
+                
+                // Set new minimum if we found more than the old minimum
+                if (redCubesAmount > redCubesMinimum)
+                    redCubesMinimum = redCubesAmount;
 
-                Logger.Debug("In set; R: {RedAmountInSet}, G: {GreenAmountInSet}, B: {BlueAmountInSet}", redCubesAmount, greenCubesAmount, blueCubesAmount);
+                if (greenCubesAmount > greenCubesMinimum)
+                    greenCubesMinimum = greenCubesAmount;
 
-                if (redCubesAmount > redCubesLimit ||
-                    greenCubesAmount > greenCubesLimit ||
-                    blueCubesAmount > blueCubesLimit)
-                {
-                    allSetsValid = false;
-                }
+                if (blueCubesAmount > blueCubesMinimum)
+                    blueCubesMinimum = blueCubesAmount;
+                
+                Logger.Debug("In set; R:{RedAmountInSet}, G:{GreenAmountInSet}, B:{BlueAmountInSet}", redCubesAmount, greenCubesAmount, blueCubesAmount);
+                Logger.Debug("Minimums are now: R:{RedMin}, G:{GreenMin}, B:{BlueMin}", redCubesMinimum, greenCubesMinimum, blueCubesMinimum);
             }
 
-            if (!allSetsValid) continue;
+            var totalPower = redCubesMinimum * greenCubesMinimum * blueCubesMinimum;
             
-            var gameIdInt = int.Parse(gameId);
-            validGamesIdCounter += gameIdInt;
-                    
-            Logger.Information("All sets in game under limits! Adding: {GameId} to total of IDs: {ValidGamesCounter}", gameIdInt, validGamesIdCounter);
+            Logger.Debug("Minimum for all sets calculated. Calculating power: {RedMin} * {GreenMin} * {BlueMin} = {Total}", redCubesMinimum, greenCubesMinimum, blueCubesMinimum, totalPower);
+            
+            totalCumulativePower += totalPower;
         }
         
-        Logger.Information("Answer: {IdsTotal}", validGamesIdCounter);
+        Logger.Information("Answer: {IdsTotal}", totalCumulativePower);
     }
 
     private static int GetCubesAmountInSet(string cubeSet, string cubeColor)
