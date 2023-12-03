@@ -10,23 +10,28 @@ internal static class Program
     
     public static void Main()
     {
-        const int boardWidth = 1000;
-        const int boardHeight = 1000;
+        const int boardWidth = 20;
+        const int boardHeight = 20;
         
-        var rawLines = RawData.ActualData
+        var rawLines = RawData.SampleData01
             .Split(Environment.NewLine);
 
         var ropeBoard = InitializeRopeBoard(boardWidth, boardHeight);
 
-        var headPosition = new Point(boardWidth / 2, boardHeight / 2);
-        var tailPosition = new Point(boardWidth / 2, boardHeight / 2);
+        var ropeSegments = new List<Point>();
         
+        // init tail segments
+        for (var i = 0; i < 11; i++)
+        {
+            ropeSegments.Add(new Point(boardWidth / 2, boardHeight / 2));
+        }
+
         foreach (var line in rawLines)
         {
             var direction = line.Split(' ')[0];
             var distance = line.Split(' ')[1];
             
-            //DrawNewBoard(ropeBoard, headPosition, tailPosition, boardWidth, boardHeight);
+            DrawNewBoard(ropeBoard, ropeSegments, boardWidth, boardHeight);
             
             for (var i = 0; i < int.Parse(distance); i++)
             {
@@ -35,29 +40,29 @@ internal static class Program
                 switch (direction)
                 {
                     case "U":
-                        headPosition = new Point(headPosition.X, headPosition.Y - 1);
+                        ropeSegments[0] = new Point(ropeSegments[0].X, ropeSegments[0].Y - 1);
                         break;
                     
                     case "R":
-                        headPosition = new Point(headPosition.X + 1, headPosition.Y);
+                        ropeSegments[0] = new Point(ropeSegments[0].X + 1, ropeSegments[0].Y);
                         break;
                     
                     case "D":
-                        headPosition = new Point(headPosition.X, headPosition.Y + 1);
+                        ropeSegments[0] = new Point(ropeSegments[0].X, ropeSegments[0].Y + 1);
                         break;
                     
                     case "L":
-                        headPosition = new Point(headPosition.X - 1, headPosition.Y);
+                        ropeSegments[0] = new Point(ropeSegments[0].X - 1, ropeSegments[0].Y);
                         break;
                 }
 
-                UpdateTailPosition(ropeBoard, headPosition, ref tailPosition, boardWidth, boardHeight);
+                UpdateSegmentsPosition(ropeBoard, ref ropeSegments, boardWidth, boardHeight);
                 
-                //DrawNewBoard(ropeBoard, headPosition, tailPosition, boardWidth, boardHeight);
+                //DrawNewBoard(ropeBoard, headPosition, ropeSegments, boardWidth, boardHeight);
             }
         }
         
-        DrawNewBoard(ropeBoard, headPosition, tailPosition, boardWidth, boardHeight, false);
+        DrawNewBoard(ropeBoard, ropeSegments, boardWidth, boardHeight, false);
 
         var answer = CalculateHowManySquaresTailVisited(ropeBoard, boardWidth, boardHeight);
         
@@ -80,51 +85,49 @@ internal static class Program
         return totalSquares;
     }
 
-    private static void UpdateTailPosition(BoardSquare[,] ropeBoard, Point headPosition, ref Point tailPosition, int boardWidth, int boardHeight)
+    private static void UpdateSegmentsPosition(BoardSquare[,] ropeBoard, ref List<Point> ropeSegments, int boardWidth, int boardHeight)
     {
-        // For brevity
-        var headX = headPosition.X;
-        var headY = headPosition.Y;
-        
-        var tailX = tailPosition.X;
-        var tailY = tailPosition.Y;
-        
-        // Check if head is not right next to tail
-        if (headX < tailX - 1)
+        for (var i = 1; i < ropeSegments.Count; i++)
         {
-            // Head is one space away from tail to the left
-            tailPosition.X = tailX - 1;
-            tailPosition.Y = headY;
+            var previousSegment = ropeSegments[i - 1];
+            var thisSegment = ropeSegments[i];
+            
+            // Check if this segment is not right next to previous segment
+            if (previousSegment.X < thisSegment.X - 1)
+            {
+                // Prebious is one space away from this to the left
+                thisSegment.X--;
+                thisSegment.Y = previousSegment.Y;
+            }
+        
+            if (previousSegment.X > thisSegment.X + 1)
+            {
+                // Head is one space away from tail to the right
+                thisSegment.X++;
+                thisSegment.Y = previousSegment.Y;
+            }
+        
+            if (previousSegment.Y < thisSegment.Y - 1)
+            {
+                // Head is one space away from tail above
+                thisSegment.X = previousSegment.X;
+                thisSegment.Y--;
+            }
+        
+            if (previousSegment.Y > thisSegment.Y + 1)
+            {
+                // Head is one space away from tail below
+                thisSegment.X = previousSegment.X;
+                thisSegment.Y++;
+            }
         }
         
-        if (headX > tailX + 1)
-        {
-            // Head is one space away from tail to the right
-            tailPosition.X = tailX + 1;
-            tailPosition.Y = headY;
-        }
-        
-        if (headY < tailY - 1)
-        {
-            // Head is one space away from tail above
-            tailPosition.X = headX;
-            tailPosition.Y = tailY - 1;
-        }
-        
-        if (headY > tailY + 1)
-        {
-            // Head is one space away from tail below
-            tailPosition.X = headX;
-            tailPosition.Y = tailY + 1;
-        }
-        
-        ropeBoard[tailPosition.X, tailPosition.Y].HasTailBeenHere = true;
+        ropeBoard[ropeSegments[10].X, ropeSegments[10].Y].HasTailBeenHere = true;
     }
 
     private static void DrawNewBoard(
         BoardSquare[,] ropeBoard, 
-        Point headPosition, 
-        Point tailPosition, 
+        List<Point> ropeSegments, 
         int width,
         int height, 
         bool showTailAndHead = true)
@@ -139,15 +142,25 @@ internal static class Program
             {
                 if (showTailAndHead)
                 {
-                    if (x == headPosition.X &&
-                        y == headPosition.Y)
+                    if (x == ropeSegments[0].X &&
+                        y == ropeSegments[0].Y)
                     {
                         currentRowString += 'H';
                         continue;
                     }
+
+                    for (int i = 1; i < ropeSegments.Count - 1; i++)
+                    {
+                        if (x == ropeSegments[i].X &&
+                            y == ropeSegments[i].Y)
+                        {
+                            currentRowString += i;
+                            break;
+                        }   
+                    }
                 
-                    if (x == tailPosition.X &&
-                        y == tailPosition.Y)
+                    if (x == ropeSegments[10].X &&
+                        y == ropeSegments[10].Y)
                     {
                         currentRowString += 'T';
                         continue;
