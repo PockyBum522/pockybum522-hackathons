@@ -1,25 +1,28 @@
 ﻿using Serilog;
+using Serilog.Events;
 
 namespace AoC_2023_CSharp;
 
 internal static class Program
 {
-    private static readonly ILogger Logger = LoggerSetup.BuildLogger(); 
+    private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
+            .MinimumLevel.Information()
+            .CreateLogger(); 
     
     public static void Main()
     {
         var rawLines = RawData.ActualData
             .Split(Environment.NewLine);
 
-        var totalCumulative = 0;
+        var answerTotal = 0;
         
         foreach (var line in rawLines)
         {
             
             
-            totalCumulative += 1;
+            //answerTotal += 1;
         }
         
-        Logger.Information("Answer: {Total}", totalCumulative);
+        Logger.Information("Answer: {AnswerTotal}", answerTotal);
     }
 }
