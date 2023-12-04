@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using System.Drawing;
+using AoC_2023_CSharp.Models;
+using Serilog;
 
 namespace AoC_2023_CSharp;
 
@@ -11,15 +13,14 @@ internal static class Program
         var rawLines = RawData.ActualData
             .Split(Environment.NewLine);
 
-        var totalCumulative = 0;
+        var total = 0;
 
-        var uniqueSymbols = GetUniqueSymbolsOnly(rawLines);
-
-        var uniquePartNumbers = new List<string>();
+        var uniqueSymbols = new List<char>() { '*' }; // Since we're only looking for one symbol now...
+        var foundNumbers = new List<FoundNumber>(); 
         
         // For making sure a part number we're adding has not been just added
-        var lastStartPosition = 0;
-        var lastY = 0;
+        var lastStartPosition = -1;
+        var lastY = -1;
         
         for (var y = 0; y < rawLines.Length; y++)
         {
@@ -33,55 +34,81 @@ internal static class Program
 
                 // Is a digit, let's check around the part number
                 
-                var fullPartNumber = GetFullPartNumberAt(x, line);
+                var fullGearNumber = GetFullGearNumberAt(x, line);
 
-                var partNumberStartPos = GetStartPositionOfPartNumber(x, line);
-                var partNumberEndPos = GetEndPositionOfPartNumber(x, line);
-                var partNumberLength = partNumberEndPos - partNumberStartPos;
+                var gearNumberStartPos = GetStartPositionOfGearNumber(x, line);
+                var gearNumberEndPos = GetEndPositionOfGearNumber(x, line);
+                var gearNumberLength = gearNumberEndPos - gearNumberStartPos;
+
+                var asteriskPosition =
+                    GetAdjacentSymbolPosition(gearNumberStartPos, y, gearNumberLength, uniqueSymbols, rawLines);
                 
-                if (!SymbolIsAdjacentToPartNumberAt(partNumberStartPos, y, partNumberLength, uniqueSymbols, rawLines))
+                if (asteriskPosition.X == -1)
                 {
-                    //PrintNonMatchingPartNumberForDebug(x, y, rawLines);
+                    //PrintNonMatchingGearNumberForDebug(x, y, rawLines);
                     
-                    lastStartPosition = partNumberStartPos;
+                    lastStartPosition = gearNumberStartPos;
                     lastY = y;
                     
                     continue;
                 }
                 
                 // If we get here, then current character is a digit and there's a symbol adjacent to it
-                if (lastStartPosition != partNumberStartPos ||
+                if (lastStartPosition != gearNumberStartPos ||
                     lastY != y)
                 {
-                    PrintPartNumberForDebug(x, y, rawLines, fullPartNumber);
-                    uniquePartNumbers.Add(fullPartNumber);
+                    PrintGearNumberForDebug(x, y, rawLines, fullGearNumber);
+                    
+                    foundNumbers.Add(
+                        new FoundNumber()
+                        {
+                            AsteriskPosition = asteriskPosition,
+                            Number = fullGearNumber,
+                            NumberPosition = new Point(gearNumberStartPos, y)
+                        });
                 }
                 
-                lastStartPosition = partNumberStartPos;
+                lastStartPosition = gearNumberStartPos;
                 lastY = y;
             }
         }
         
         Logger.Information("Unique symbols found: {Symbols}", string.Join(", ", uniqueSymbols));
-        
-        Logger.Information("Valid part numbers were: {PartNumbers}", string.Join(", ", uniquePartNumbers));
 
-        foreach (var partNumber in uniquePartNumbers)
+        for (var i = 0; i < foundNumbers.Count; i++)
         {
-            totalCumulative += int.Parse(partNumber);
+            var gearNumber = foundNumbers[i];
+            Logger.Debug("Found number: {GearNumber} at X{NumX}, Y{NumY} with asterisk at X{AsteriskX}, Y{AsteriskY}",
+                gearNumber.Number, gearNumber.NumberPosition.X, gearNumber.NumberPosition.Y,
+                gearNumber.AsteriskPosition.X, gearNumber.AsteriskPosition.Y);
+
+            // Starting on the next entry in the list, look for matches on the asterisk location
+            for (var j = i + 1; j < foundNumbers.Count; j++)
+            {
+                var foundNumberToCompare = foundNumbers[j];
+
+                if (gearNumber.AsteriskPosition.X == foundNumberToCompare.AsteriskPosition.X &&
+                    gearNumber.AsteriskPosition.Y == foundNumberToCompare.AsteriskPosition.Y)
+                {
+                    // Found two numbers with the same asterisk
+                    total +=
+                        int.Parse(gearNumber.Number) *
+                        int.Parse(foundNumberToCompare.Number);
+                }
+            }
         }
-        
-        Logger.Information("Answer: {Total}", totalCumulative);
+
+        Logger.Information("Answer: {Total}", total);
     }
 
-    private static void PrintNonMatchingPartNumberForDebug(int x, int y, string[] rawLines)
+    private static void PrintNonMatchingGearNumberForDebug(int x, int y, string[] rawLines)
     {
         try
         {
             var line = rawLines[y];
 
             Logger.Information("NON MATCHING AT: X{X}, Y{Y}", x, y);
-            Logger.Information("Non matching p/n was: {Pn}", GetFullPartNumberAt(x, line));
+            Logger.Information("Non matching p/n was: {Pn}", GetFullGearNumberAt(x, line));
 
             Logger.Information("Line above: -- {Line1}", rawLines[y - 1]);
             Logger.Information("Line at: ----- {Line1}", rawLines[y]);
@@ -96,14 +123,14 @@ internal static class Program
         
     }
     
-    private static void PrintPartNumberForDebug(int x, int y, string[] rawLines, string fullPartNumber)
+    private static void PrintGearNumberForDebug(int x, int y, string[] rawLines, string fullGearNumber)
     {
         try
         {
             var line = rawLines[y];
 
             Logger.Information("MATCHING AT: X{X}, Y{Y}", x, y);
-            Logger.Information("Matching p/n was: {Pn}", fullPartNumber);
+            Logger.Information("Matching p/n was: {Pn}", fullGearNumber);
 
             Logger.Information("Line above: -- {Line1}", rawLines[y - 1]);
             Logger.Information("Line at: ----- {Line1}", rawLines[y]);
@@ -118,25 +145,25 @@ internal static class Program
         
     }
 
-    private static string GetFullPartNumberAt(int x, string line)
+    private static string GetFullGearNumberAt(int x, string line)
     {
-        var partNumberStartPos = GetStartPositionOfPartNumber(x, line);
-        var partNumberEndPos = GetEndPositionOfPartNumber(x, line);
+        var gearNumberStartPos = GetStartPositionOfGearNumber(x, line);
+        var gearNumberEndPos = GetEndPositionOfGearNumber(x, line);
 
-        var fullPartNumberLength = partNumberEndPos - partNumberStartPos;
+        var fullGearNumberLength = gearNumberEndPos - gearNumberStartPos;
 
-        var fullPartNumber = line.Substring(partNumberStartPos, fullPartNumberLength + 1);
+        var fullGearNumber = line.Substring(gearNumberStartPos, fullGearNumberLength + 1);
         
-        Logger.Debug("In: {FullLine} | At X: {XPosition} | Char is: {CharAtX} | Full part number around that is: {FullPartNumber}", line, x, line[x], fullPartNumber);
+        Logger.Debug("In: {FullLine} | At X: {XPosition} | Char is: {CharAtX} | Full part number around that is: {FullGearNumber}", line, x, line[x], fullGearNumber);
 
-        return fullPartNumber;
+        return fullGearNumber;
     }
 
-    private static int GetEndPositionOfPartNumber(int searchStartX, string line)
+    private static int GetEndPositionOfGearNumber(int searchStartX, string line)
     {
         Logger.Debug("Searching for end of part number in line: {Line}", line);
         
-        var endPositionOfPartNumber = 0;
+        var endPositionOfGearNumber = 0;
         
         for (var x = searchStartX; x < line.Length; x++)
         {
@@ -146,7 +173,7 @@ internal static class Program
             
             if (char.IsDigit(currentCharacter))
             {
-                endPositionOfPartNumber = x;
+                endPositionOfGearNumber = x;
             }
             else
             {
@@ -154,14 +181,14 @@ internal static class Program
             }
         }
 
-        return endPositionOfPartNumber;
+        return endPositionOfGearNumber;
     }
 
-    private static int GetStartPositionOfPartNumber(int searchStartX, string line)
+    private static int GetStartPositionOfGearNumber(int searchStartX, string line)
     {
         Logger.Debug("Searching for start of part number in line: {Line}", line);
         
-        var startPositionOfPartNumber = -1;
+        var startPositionOfGearNumber = -1;
 
         for (var x = searchStartX; x >= 0; x--)
         {
@@ -172,7 +199,7 @@ internal static class Program
             if (char.IsDigit(currentCharacter))
             {
                 Logger.Debug("Char is digit, so start position updating to: {X}", x);
-                startPositionOfPartNumber = x;
+                startPositionOfGearNumber = x;
             }
             else
             {
@@ -180,14 +207,14 @@ internal static class Program
             }
         }
 
-        return startPositionOfPartNumber;
+        return startPositionOfGearNumber;
     }
 
-    private static bool SymbolIsAdjacentToPartNumberAt(int partNumberStartPos, int y, int partNumberLength, List<char> validSymbols,
+    private static Point GetAdjacentSymbolPosition(int gearNumberStartPos, int y, int gearNumberLength, List<char> validSymbols,
         string[] rawLines)
     {
-        var leftmostPositionToSearch = partNumberStartPos - 1;
-        var rightmostPositionToSearch = partNumberStartPos + partNumberLength + 1;
+        var leftmostPositionToSearch = gearNumberStartPos - 1;
+        var rightmostPositionToSearch = gearNumberStartPos + gearNumberLength + 1;
         var topLineToSearch = y - 1;
         var bottomLineToSearch = y + 1;
         
@@ -218,30 +245,11 @@ internal static class Program
                 if (!validSymbols.Contains(charToCheck)) continue;
                 
                 Logger.Debug("Valid symbol found!");
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static List<char> GetUniqueSymbolsOnly(IEnumerable<string> rawLines)
-    {
-        var uniqueSymbols = new List<char>();
-        
-        foreach (var line in rawLines)
-        {
-            for (var i = 0; i < line.Length; i++)
-            {
-                if (line[i] == '.') continue;
-                if (char.IsDigit(line[i])) continue;
-                if (uniqueSymbols.Contains(line[i])) continue;
                 
-                // Otherwise:
-                uniqueSymbols.Add(line[i]);
+                return new Point(searchX, searchY);
             }
         }
 
-        return uniqueSymbols;
+        return new Point(-1, -1);
     }
 }
