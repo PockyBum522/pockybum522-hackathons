@@ -28,8 +28,8 @@ internal static class Program
 
         Logger.Information("Answer: {AnswerTotal}", answerTotal);
     }
-    
-    public static int GetScore(ScratchCard scratchCardToScore)
+
+    private static int GetScore(ScratchCard scratchCardToScore)
     {
         var finalScore = 1;
         
