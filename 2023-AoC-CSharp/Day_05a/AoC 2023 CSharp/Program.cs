@@ -11,6 +11,8 @@ internal static class Program
     
     public static void Main()
     {
+        Logger.Information("Starting!");
+        
         var rawLines = RawData.ActualData
             .Split(Environment.NewLine);
 
