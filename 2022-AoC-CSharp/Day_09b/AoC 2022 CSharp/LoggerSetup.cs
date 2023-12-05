@@ -31,8 +31,8 @@ public class LoggerSetup
 
         return new LoggerConfiguration()
             .Enrich.WithProperty("Application", "SerilogTestContext")
-            //.MinimumLevel.Information()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Information()
+            //.MinimumLevel.Debug()
             .WriteTo.Console()
             .WriteTo.File(LogPath, rollingInterval: RollingInterval.Day)
             .CreateLogger();

@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using AoC_2022_CSharp.Models;
 using Serilog;
+using Serilog.Data;
 
 namespace AoC_2022_CSharp;
 
@@ -10,10 +11,10 @@ internal static class Program
     
     public static void Main()
     {
-        const int boardWidth = 20;
-        const int boardHeight = 20;
+        const int boardWidth = 900;
+        const int boardHeight = 900;
         
-        var rawLines = RawData.SampleData01
+        var rawLines = RawData.ActualData
             .Split(Environment.NewLine);
 
         var ropeBoard = InitializeRopeBoard(boardWidth, boardHeight);
@@ -21,13 +22,18 @@ internal static class Program
         var ropeSegments = new List<Point>();
         
         // init tail segments
-        for (var i = 0; i < 11; i++)
+        for (var i = 0; i < 10; i++)
         {
             ropeSegments.Add(new Point(boardWidth / 2, boardHeight / 2));
         }
 
+
+        var lineCount = 0;
+        
         foreach (var line in rawLines)
         {
+            Logger.Information("Executing line {CurrentLineNumber} of {AllLineCount}", lineCount++, rawLines.Length);
+            
             var direction = line.Split(' ')[0];
             var distance = line.Split(' ')[1];
             
@@ -56,9 +62,9 @@ internal static class Program
                         break;
                 }
 
-                UpdateSegmentsPosition(ropeBoard, ref ropeSegments, boardWidth, boardHeight);
+                UpdateSegmentsPosition(ropeBoard, ropeSegments, boardWidth, boardHeight);
                 
-                //DrawNewBoard(ropeBoard, headPosition, ropeSegments, boardWidth, boardHeight);
+                DrawNewBoard(ropeBoard, ropeSegments, boardWidth, boardHeight, true);
             }
         }
         
@@ -85,44 +91,121 @@ internal static class Program
         return totalSquares;
     }
 
-    private static void UpdateSegmentsPosition(BoardSquare[,] ropeBoard, ref List<Point> ropeSegments, int boardWidth, int boardHeight)
+    private static void UpdateSegmentsPosition(BoardSquare[,] ropeBoard, List<Point> ropeSegments, int boardWidth, int boardHeight)
     {
         for (var i = 1; i < ropeSegments.Count; i++)
         {
-            var previousSegment = ropeSegments[i - 1];
-            var thisSegment = ropeSegments[i];
+            var segmentToMove = ropeSegments[i];
+            var nextClosestSegmentToHead = ropeSegments[i - 1];
             
-            // Check if this segment is not right next to previous segment
-            if (previousSegment.X < thisSegment.X - 1)
+            if (segmentToMove.Y > nextClosestSegmentToHead.Y + 1 &&
+                segmentToMove.X < nextClosestSegmentToHead.X - 1)
             {
-                // Prebious is one space away from this to the left
-                thisSegment.X--;
-                thisSegment.Y = previousSegment.Y;
+                // segmentToMove is too far to the south
+
+                Logger.Debug("Moving segment {SegmentIndex} north-east", i);
+
+                var newY = segmentToMove.Y - 1;
+                var newX = segmentToMove.X + 1;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
             }
-        
-            if (previousSegment.X > thisSegment.X + 1)
+            else if (segmentToMove.Y > nextClosestSegmentToHead.Y + 1 &&
+                     segmentToMove.X > nextClosestSegmentToHead.X + 1)
             {
-                // Head is one space away from tail to the right
-                thisSegment.X++;
-                thisSegment.Y = previousSegment.Y;
+                // segmentToMove is too far to the south
+
+                Logger.Debug("Moving segment {SegmentIndex} north-west", i);
+                
+                var newY = segmentToMove.Y - 1;
+                var newX = segmentToMove.X - 1;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
             }
-        
-            if (previousSegment.Y < thisSegment.Y - 1)
+            else if (segmentToMove.Y < nextClosestSegmentToHead.Y - 1 &&
+                     segmentToMove.X < nextClosestSegmentToHead.X - 1)
             {
-                // Head is one space away from tail above
-                thisSegment.X = previousSegment.X;
-                thisSegment.Y--;
+                // segmentToMove is too far to the south
+
+                Logger.Debug("Moving segment {SegmentIndex} south-east", i);
+
+                var newY = segmentToMove.Y + 1;
+                var newX = segmentToMove.X + 1;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
             }
-        
-            if (previousSegment.Y > thisSegment.Y + 1)
+            else if (segmentToMove.Y < nextClosestSegmentToHead.Y - 1 &&
+                     segmentToMove.X > nextClosestSegmentToHead.X + 1)
             {
-                // Head is one space away from tail below
-                thisSegment.X = previousSegment.X;
-                thisSegment.Y++;
+                // segmentToMove is too far to the south
+
+                Logger.Debug("Moving segment {SegmentIndex} south-west", i);
+
+                var newY = segmentToMove.Y + 1;
+                var newX = segmentToMove.X - 1;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
             }
+            else if (segmentToMove.Y > nextClosestSegmentToHead.Y + 1)
+            {
+                // segmentToMove is too far to the south
+
+                Logger.Debug("Moving segment {SegmentIndex} north", i);
+
+                var newY = segmentToMove.Y - 1;
+                var newX = nextClosestSegmentToHead.X;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
+            }
+            else if (segmentToMove.X < nextClosestSegmentToHead.X - 1)
+            {
+                // segmentToMove is too far to the left
+
+                Logger.Debug("Moving segment {SegmentIndex} right", i);
+                
+                var newY = nextClosestSegmentToHead.Y;
+                var newX = segmentToMove.X + 1;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
+            }
+            else if (segmentToMove.Y < nextClosestSegmentToHead.Y - 1)
+            {
+                // segmentToMove is too far to the north
+
+                Logger.Debug("Moving segment {SegmentIndex} south", i);
+
+                var newY = segmentToMove.Y + 1;
+                var newX = nextClosestSegmentToHead.X;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
+            }
+            else if (segmentToMove.X > nextClosestSegmentToHead.X + 1)
+            {
+                // segmentToMove is too far to the right
+
+                Logger.Debug("Moving segment {SegmentIndex} left", i);
+
+                var newY = nextClosestSegmentToHead.Y;
+                var newX = segmentToMove.X - 1;
+                
+                ropeSegments.Insert(i, new Point(newX, newY));
+                ropeSegments.RemoveAt(i + 1);
+            }
+            
+            Logger.Debug("Updated segments a step, last updated segment was {Index}:", i);
+            DrawNewBoard(ropeBoard, ropeSegments, boardWidth, boardHeight, true);
         }
         
-        ropeBoard[ropeSegments[10].X, ropeSegments[10].Y].HasTailBeenHere = true;
+        Logger.Debug("Updated segments: {@Segments}", ropeSegments);
+        
+        ropeBoard[ropeSegments[^1].X, ropeSegments[^1].Y].HasTailBeenHere = true;
     }
 
     private static void DrawNewBoard(
@@ -133,6 +216,8 @@ internal static class Program
         bool showTailAndHead = true)
     {
         var boardStrings = new string[height + 1];
+
+        var tailSegmentPositions = new List<Point>();
         
         for (var y = 0; y < height; y++)
         {
@@ -142,27 +227,45 @@ internal static class Program
             {
                 if (showTailAndHead)
                 {
+                    // Check that we haven't drawn a segment at this location yet
+                    if (TailSegmentPositionsHasMatchingPoint(x, y, tailSegmentPositions)) continue;
+                    
                     if (x == ropeSegments[0].X &&
                         y == ropeSegments[0].Y)
                     {
                         currentRowString += 'H';
+                        
+                        // Log that we've drawn a segment here so we don't draw more here
+                        tailSegmentPositions.Add(new Point(x, y));
+                        
                         continue;
                     }
 
+                    // Draw rest of segments
                     for (int i = 1; i < ropeSegments.Count - 1; i++)
                     {
+                        if (TailSegmentPositionsHasMatchingPoint(x, y, tailSegmentPositions)) continue;
+
                         if (x == ropeSegments[i].X &&
                             y == ropeSegments[i].Y)
                         {
                             currentRowString += i;
-                            break;
+                            
+                            // Log that we've drawn a segment here so we don't draw more here
+                            tailSegmentPositions.Add(new Point(x, y));
                         }   
                     }
-                
-                    if (x == ropeSegments[10].X &&
-                        y == ropeSegments[10].Y)
+                    
+                    // Draw tail
+                    if (x == ropeSegments[^1].X &&
+                        y == ropeSegments[^1].Y)
                     {
+                        if (TailSegmentPositionsHasMatchingPoint(x, y, tailSegmentPositions)) continue;
+
+                        tailSegmentPositions.Add(new Point(x, y));
+
                         currentRowString += 'T';
+
                         continue;
                     }
                 }
@@ -173,20 +276,39 @@ internal static class Program
                 }
                 else
                 {
+                    // Check that we haven't drawn a segment at this location yet
+                    if (TailSegmentPositionsHasMatchingPoint(x, y, tailSegmentPositions)) continue;
+                    
                     currentRowString += '.';
                 }    
             }
 
+            tailSegmentPositions.Clear();
+            
             boardStrings[y] = currentRowString;
         }
 
+        Logger.Debug("");
+        
         foreach (var line in boardStrings)
         {
-            Console.WriteLine(line);    
+            Logger.Debug("{Line}", line);    
         }
 
-        Console.WriteLine();
-        Console.WriteLine();
+        Logger.Debug("");
+        Logger.Debug("");
+    }
+
+    private static bool TailSegmentPositionsHasMatchingPoint(int x, int y, List<Point> tailSegmentPositions)
+    {
+        foreach (var segmentPosition in tailSegmentPositions)
+        {
+            if (segmentPosition.X == x &&
+                segmentPosition.Y == y)
+                return true;
+        }
+
+        return false;
     }
 
     private static BoardSquare[,] InitializeRopeBoard(int width, int height)

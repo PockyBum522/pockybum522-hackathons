@@ -12,6 +12,17 @@ public static class RawData
                                          L 5
                                          R 2
                                          """;
+    public static string SampleData02 => """
+                                         R 5
+                                         U 8
+                                         L 8
+                                         D 3
+                                         R 17
+                                         D 10
+                                         L 25
+                                         U 20
+                                         """;
+    
 
     public static string ActualData => """
                                        R 1
