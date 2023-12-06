@@ -13,13 +13,41 @@ internal static class Program
     public static void Main()
     {
         Logger.Information("Starting!");
-
-        const int seedNumber = 79;
         
-        // Seed 79, seed-to-soil map row 1
-        DebugOutputFullMappingDataRanges(50, 98, 2, seedNumber);
-        // Seed 79, seed-to-soil map row 2
-        DebugOutputFullMappingDataRanges(52, 50, 48, seedNumber);
+        // Seed 79, seed-to-soil map row 1 and 2
+        // DebugOutputFullMappingDataRanges(50, 98, 2, seedNumber);
+        // DebugOutputFullMappingDataRanges(52, 50, 48, seedNumber);
+        
+        const int seedNumber = 51;
+        
+        // soil-to-fertilizer map lines:
+        DebugOutputFullMappingDataRanges(0, 15, 37, seedNumber);  
+        DebugOutputFullMappingDataRanges(37, 52, 2, seedNumber);
+        DebugOutputFullMappingDataRanges(39, 0, 15, seedNumber);
+        
+        // fertilizer-to-water map lines:
+        // DebugOutputFullMappingDataRanges(49, 53, 8, seedNumber);
+        // DebugOutputFullMappingDataRanges(0, 11, 42, seedNumber);
+        // DebugOutputFullMappingDataRanges(42, 0, 7, seedNumber);
+        // DebugOutputFullMappingDataRanges(57, 7, 4, seedNumber);
+        
+        
+        // water-to-light map lines:
+        // DebugOutputFullMappingDataRanges(88, 18, 7, seedNumber);
+        // DebugOutputFullMappingDataRanges(18, 25, 70, seedNumber);
+        //
+        // light-to-temperature map lines:
+        // DebugOutputFullMappingDataRanges(45, 77, 23, seedNumber);
+        // DebugOutputFullMappingDataRanges(81, 45, 19, seedNumber);
+        // DebugOutputFullMappingDataRanges(68, 64, 13, seedNumber);
+        
+        // temperature-to-humidity map lines:
+        // DebugOutputFullMappingDataRanges(0, 69, 1, seedNumber);
+        // DebugOutputFullMappingDataRanges(1, 0, 69, seedNumber);
+        
+        // humidity-to-location map lines:
+        // DebugOutputFullMappingDataRanges(60, 56, 37, seedNumber);
+        // DebugOutputFullMappingDataRanges(56, 93, 4, seedNumber);
     }
 
     private static void DebugOutputFullMappingDataRanges(int destinationStart, int sourceStart, int rangeLength, long incomingNumber)
