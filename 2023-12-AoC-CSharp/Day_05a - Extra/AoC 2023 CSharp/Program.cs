@@ -14,16 +14,38 @@ internal static class Program
     {
         Logger.Information("Starting!");
         
+        var rawLines = RawData.SampleData01
+            .Split(Environment.NewLine);
+        
+        const int seedNumber = 79;
+        
         // Seed 79, seed-to-soil map row 1 and 2
         // DebugOutputFullMappingDataRanges(50, 98, 2, seedNumber);
         // DebugOutputFullMappingDataRanges(52, 50, 48, seedNumber);
         
-        const int seedNumber = 51;
-        
         // soil-to-fertilizer map lines:
-        DebugOutputFullMappingDataRanges(0, 15, 37, seedNumber);  
-        DebugOutputFullMappingDataRanges(37, 52, 2, seedNumber);
-        DebugOutputFullMappingDataRanges(39, 0, 15, seedNumber);
+
+        var mappingDataLines = ParseMappingDataLines("soil-to-fertilizer", rawLines);
+        Logger.Debug("Data lines for {HeaderString}: {@DataLines}", "soil-to-fertilizer", mappingDataLines);
+
+        var mappedValues = new List<long>();
+
+        var outString = "{";
+        
+        for (int i = 0; i < 99; i++)
+        {
+            outString += $", {i}: ";
+            outString += MapSingleValue(i, mappingDataLines);
+        }
+
+        outString += "}";
+        
+        Logger.Information(outString);
+        
+        // DebugOutputFullMappingDataRanges(0, 15, 37, seedNumber);  
+        // DebugOutputFullMappingDataRanges(37, 52, 2, seedNumber);
+        // DebugOutputFullMappingDataRanges(39, 0, 15, seedNumber);
+
         
         // fertilizer-to-water map lines:
         // DebugOutputFullMappingDataRanges(49, 53, 8, seedNumber);
@@ -33,8 +55,8 @@ internal static class Program
         
         
         // water-to-light map lines:
-        // DebugOutputFullMappingDataRanges(88, 18, 7, seedNumber);
-        // DebugOutputFullMappingDataRanges(18, 25, 70, seedNumber);
+        DebugOutputFullMappingDataRanges(88, 18, 7, seedNumber);
+        DebugOutputFullMappingDataRanges(18, 25, 70, seedNumber);
         //
         // light-to-temperature map lines:
         // DebugOutputFullMappingDataRanges(45, 77, 23, seedNumber);
@@ -50,7 +72,7 @@ internal static class Program
         // DebugOutputFullMappingDataRanges(56, 93, 4, seedNumber);
     }
 
-    private static void DebugOutputFullMappingDataRanges(int destinationStart, int sourceStart, int rangeLength, long incomingNumber)
+    private static long DebugOutputFullMappingDataRanges(int destinationStart, int sourceStart, int rangeLength, long incomingNumber)
     {
         var sourceRangeNumbers = new List<long>();
         var destinationRangeNumbers = new List<long>();
@@ -87,6 +109,8 @@ internal static class Program
         Logger.Information("Source (incoming) numbers range: --------------------- {IncomingNumbersMap}", sourceRangeNumbers);    
         Logger.Information("Destination (what to map source to) numbers range: --- {DestinationNumbersMap}", destinationRangeNumbers);
         Logger.Information("Number after being mapped: {MappedNumber}", mappedNumber);
+        
+        return mappedNumber;
     }
 
     private static long[] GetSeedNumbers(string[] rawLines)
