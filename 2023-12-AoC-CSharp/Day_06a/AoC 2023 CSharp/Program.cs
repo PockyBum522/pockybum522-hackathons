@@ -10,8 +10,6 @@ internal static class Program
             .MinimumLevel.Verbose()
             .CreateLogger();
 
-    private static List<int> _records;
-
     public static void Main()
     {
         Logger.Information("Starting!");
@@ -49,26 +47,27 @@ internal static class Program
             }
         }
 
-        _records = new List<int>();
-
-        for (var i = 0; i < times.Count; i++)
-        {
-            RunAllPossibleButtonTimes(i, times, distances);
-        }
-
         var answer = 0;
         
-        foreach (var record in _records)
+        for (var i = 0; i < times.Count; i++)
         {
-            answer *= record;
+            var newNumberOfRecords = RunAllPossibleButtonTimes(i, times, distances);
+            
+            Logger.Debug("Records you got: {@Records}", newNumberOfRecords);
+            
+            if (answer > 0)
+                answer *= RunAllPossibleButtonTimes(i, times, distances);
+            else
+                answer = RunAllPossibleButtonTimes(i, times, distances);
         }
         
-        Logger.Debug("Records you got: {@Records}", _records);
         Logger.Information("Final answer: {Answer}", answer);
     }
 
-    private static void RunAllPossibleButtonTimes(int whichRace, List<int> times, List<int> distances)
+    private static int RunAllPossibleButtonTimes(int whichRace, List<int> times, List<int> distances)
     {
+        var timesRecordBeaten = 0;
+        
         for (var i = 0; i < times[whichRace] - 1; i++)
         {
             var buttonPressedTime = i;
@@ -80,8 +79,10 @@ internal static class Program
             if (thisBoat.Distance > distances[whichRace])
             {
                 Logger.Debug("Adding new record! Distance: {Distance} mm in the race lasting {RaceDuration}", thisBoat.Distance, times[whichRace]);
-                _records.Add(thisBoat.Distance);
+                timesRecordBeaten++;
             }
         }
+
+        return timesRecordBeaten;
     }
 }
