@@ -1,0 +1,109 @@
+  
+        
+        // source = input number
+        // destination = that number, mapped
+        
+        // 50 98 2
+        // 50 98 2 means destinationRange start = 50
+        // 50 98 2 means sourceRange start = 98
+        // 50 98 2 means rangeLength = 2
+        
+        // destinationRange would start at 50 and since rangeLength is 2, destinationRange is 50 and 51
+        
+        // sourceRange would start at 98 and since rangeLength is 2, sourceRange is 98 and 99
+        
+        // This means seedNumber 98 => 50
+        // This means seedNumber 99 => 51
+        
+
+        //                  SECOND LINE
+        // 52 50 48
+
+        // sourceRange starts at 50 and contains 48 values: 50, 51, 52, 53 ..., 96, 97. 
+        // destinationRange starts at 52 and also 48 value: 52, 53, 54, 55 ..., 98, 99.
+        // seed number 53 => soil number 55.
+        
+        // Any source numbers that aren't mapped correspond to the same destination number. So, seed number 10
+        // corresponds to soil number 10.
+        
+        // So, the entire list of seed numbers and their corresponding soil numbers looks like this:
+        
+        // seed  soil
+        // 0     0
+        // 1     1
+        // ...   ...
+        // 48    48
+        // 49    49
+        // 50    52
+        // 51    53
+        // ...   ...
+        // 96    98
+        // 97    99
+        // 98    50
+        // 99    51
+        
+        // With this map, you can look up the soil number required for each initial seed number:
+        
+        //     Seed number 79 corresponds to soil number 81.
+        //     Seed number 14 corresponds to soil number 14.
+        //     Seed number 55 corresponds to soil number 57.
+        //     Seed number 13 corresponds to soil number 13.
+
+        
+        //                  STEPS
+        
+        // Is the number >= sourceRangeStart && <= sourceRangeStart + rangeLength (In any of the ranges given for this particular header)
+        // 50 98 2
+        // 52 50 48
+        
+        // If so, map using range:
+        
+        
+        // If not, keep it as the number.
+        
+        
+        //                  TESTS
+        
+        // Seed: 79
+        
+        // Is the number >= sourceRangeStart && <= sourceRangeStart + rangeLength (In any of the ranges given for this particular header)
+        // 50 98 2
+        
+        // D  S  L
+        // 52 50 48
+        // Yes: In 50 + 48
+        
+        // If so, map using range:
+        // D - S = val to apply to incoming num
+        // 50 - 52 = +2
+        //  => 81
+        
+        // If not, keep it as the number.
+        
+        
+        // Seed: 14
+        
+        // Is the number >= sourceRangeStart && <= sourceRangeStart + rangeLength (In any of the ranges given for this particular header)
+        // No
+        
+        // If not, keep it as the number.
+        
+        // => 14
+        
+        
+        // Seed: 55
+        
+        // Is the number >= sourceRangeStart && <= sourceRangeStart + rangeLength (In any of the ranges given for this particular header)
+        // 52 50 48
+        // Yes
+        
+        // D  S  L
+        // 52 50 48
+        // Yes: In 50 + 48
+        
+        // If so, map using range:
+        // D - S = val to apply to incoming num
+        // 50 - 52 = +2
+        //  => 57
+        
+        // If not, keep it as the number.
