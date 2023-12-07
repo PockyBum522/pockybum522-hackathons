@@ -13,7 +13,7 @@ internal static class Program
     {
         Logger.Information("Starting!");
         
-        var rawLines = RawData.ActualData
+        var rawLines = RawData.SampleData01
             .Split(Environment.NewLine);
 
         var answerTotal = 0;
