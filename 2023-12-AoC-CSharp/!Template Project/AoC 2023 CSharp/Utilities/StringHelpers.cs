@@ -12,7 +12,7 @@ public static class StringHelpers
     
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
     
-    public static T[] SplitGeneric<T>(this string splitString, string splitOn, bool dropFirstEntries = true, char? trimChar = null)
+    public static T[] SplitGeneric<T>(this string splitString, string splitOn, bool dropFirstElement = true, char? trimChar = null)
     {
         LoggerToUse?.Verbose("In method: {ThisMethodName}", nameof(SplitGeneric));
         LoggerToUse?.Verbose("Input string: {SplitString}", splitString);
@@ -23,7 +23,7 @@ public static class StringHelpers
 
         var startAt = 0;
 
-        if (dropFirstEntries)
+        if (dropFirstElement)
             startAt = 1;
         
         for (var i = startAt; i < firstSplit.Length; i++)
