@@ -17,7 +17,7 @@ public static class RawData
                                        Distance:   234   1027   1157   1236
                                        """;
     
-    public static string ActualDataPartB => """
+    public static string ActualDataPart2 => """
                                        Time:        38677673
                                        Distance:   234102711571236
                                        """;

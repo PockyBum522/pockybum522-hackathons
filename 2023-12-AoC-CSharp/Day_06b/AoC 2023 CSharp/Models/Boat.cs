@@ -7,20 +7,20 @@ public class Boat
 {
     private readonly ILogger _logger;
 
-    public Boat(ILogger logger, int buttonPressTime)
+    public Boat(ILogger logger, long buttonPressTime)
     {
         _logger = logger;
         ButtonPressTime = buttonPressTime;
         Speed = ButtonPressTime;
     }
     
-    public int Speed { get; } = 0;
+    public long Speed { get; } = 0;
 
-    public int Distance { get; private set; } = 0;
+    public long Distance { get; private set; } = 0;
     
-    public int ButtonPressTime { get; } = 0;
+    public long ButtonPressTime { get; } = 0;
 
-    public void RunRace(int raceTimeMs)
+    public void RunRace(long raceTimeMs)
     {
         _logger.Debug("Button press time: {ButtonPressTime}", ButtonPressTime);
         _logger.Debug("Boat speed is: {BoatSpeed} mm/ms", Speed);

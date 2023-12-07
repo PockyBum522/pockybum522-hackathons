@@ -14,11 +14,11 @@ internal static class Program
     {
         Logger.Information("Starting!");
         
-        var rawLines = RawData.SampleDataPart2
+        var rawLines = RawData.ActualDataPart2
             .Split(Environment.NewLine);
 
-        List<int> times = new List<int>();
-        List<int> distances = new List<int>();
+        List<long> times = new List<long>();
+        List<long> distances = new List<long>();
         
         foreach (var line in rawLines)
         {
@@ -28,7 +28,7 @@ internal static class Program
 
                 for (var i = 1; i < timesStrings.Length; i++)
                 {
-                    times.Add(int.Parse(timesStrings[i]));
+                    times.Add(long.Parse(timesStrings[i]));
                 }
                 
                 Logger.Debug("{@TimesStrings}", timesStrings);
@@ -40,14 +40,14 @@ internal static class Program
                 
                 for (var i = 1; i < distancesStrings.Length; i++)
                 {
-                    distances.Add(int.Parse(distancesStrings[i]));
+                    distances.Add(long.Parse(distancesStrings[i]));
                 }
                 
                 Logger.Debug("{@DistStrings}", distancesStrings);
             }
         }
 
-        var answer = 0;
+        long answer = 0;
         
         for (var i = 0; i < times.Count; i++)
         {
@@ -56,7 +56,7 @@ internal static class Program
             Logger.Debug("Records you got: {@Records}", newNumberOfRecords);
             
             if (answer > 0)
-                answer *= RunAllPossibleButtonTimes(i, times, distances);
+                answer *= RunAllPossibleButtonTimes((int)i, times, distances);
             else
                 answer = RunAllPossibleButtonTimes(i, times, distances);
         }
@@ -64,7 +64,7 @@ internal static class Program
         Logger.Information("Final answer: {Answer}", answer);
     }
 
-    private static int RunAllPossibleButtonTimes(int whichRace, List<int> times, List<int> distances)
+    private static long RunAllPossibleButtonTimes(int whichRace, List<long> times, List<long> distances)
     {
         var timesRecordBeaten = 0;
         
@@ -80,6 +80,11 @@ internal static class Program
             {
                 Logger.Debug("Adding new record! Distance: {Distance} mm in the race lasting {RaceDuration}", thisBoat.Distance, times[whichRace]);
                 timesRecordBeaten++;
+            }
+
+            if (i % 1000000 == 0)
+            {
+                Logger.Information("i: {I}", i);
             }
         }
 
