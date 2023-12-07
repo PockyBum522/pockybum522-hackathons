@@ -80,9 +80,11 @@ internal static class Program
 
                 Logger.Information("New lowest location! {LowestLocation}", _lowestLocation);
             }
+
+            var remainingEntries = range.End - i;
             
             if (i % 1000000 == 0)
-                Logger.Information("i: {I}", i);
+                Logger.Information("Remaining in this batch: {I}", remainingEntries);
         }
     }
     
