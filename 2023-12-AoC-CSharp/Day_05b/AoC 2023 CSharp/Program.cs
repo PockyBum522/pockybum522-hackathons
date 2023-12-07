@@ -4,6 +4,10 @@ using Serilog.Events;
 
 namespace AoC_2023_CSharp;
 
+// Attempts:
+//
+// 7873085 - wrong
+
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
@@ -41,8 +45,9 @@ internal static class Program
         var stepsArray = steps.ToArray();
 
         var ranges = GetSeedRanges(rawLines);
+        //var ranges = GetSeedNumbers(rawLines);
 
-        Logger.Information("Seed ranges final: {@Ranges}", ranges);
+        Logger.Debug("Seed ranges final: {@Ranges}", ranges);
         
         _lowestLocation = long.MaxValue;
         
@@ -52,6 +57,35 @@ internal static class Program
         }
 
         Logger.Information("Answer: {@Answer}", _lowestLocation);
+    }
+
+    private static SeedRange[] GetSeedNumbers(string[] rawLines)
+    {
+        var seedLineStartString = "seeds: ";
+        
+        var seedNumbers = new List<string>();
+        
+        foreach (var line in rawLines)
+        {
+            if (!line.ToLower().StartsWith(seedLineStartString)) continue;
+
+            seedNumbers = line.Split(' ').ToList();
+            
+            // Get rid of the startString element
+            seedNumbers.RemoveAt(0);                        
+            
+            Logger.Debug("Seed numbers are: {@SeedNumbers}", seedNumbers);
+        }
+
+        var convertedSeedNumbers = new List<SeedRange>();
+
+        foreach (var seedNumberString in seedNumbers)
+        {
+            convertedSeedNumbers.Add(
+                new SeedRange(long.Parse(seedNumberString), 1));
+        }
+
+        return convertedSeedNumbers.ToArray();
     }
 
     private static SeedRange[] GetSeedRanges(string[] rawLines)
@@ -90,7 +124,7 @@ internal static class Program
     {
         Logger.Information("Starting to process {SeedRange} entries", range.Range);
         
-        for (var i = range.Start; i < range.End; i++)
+        for (var i = range.Start; i <= range.End; i++)
         {
             var mappedValue = MapSingleValue(i, steps);
 
@@ -130,15 +164,15 @@ internal static class Program
                     var mapModifyingAmount = mappingLine.DestinationRangeStart - mappingLine.SourceRangeStart;
 
                     Logger.Debug("valueToMap now {ValueToMap}", valueToMap);
-                    Logger.Debug("mappingLine.SourceRangeStart: {SourceStart} - sourceRangeMaximum {SourceRangeMaximum}, mappingLine.DestinationRangeStart {DestinationStart}", mappingLine.SourceRangeStart, sourceRangeMaximum, mappingLine.DestinationRangeStart);
+                    Logger.Debug("mappingLine.SourceRangeStart: {SourceStart} | sourceRangeMaximum {SourceRangeMaximum} | mappingLine.DestinationRangeStart {DestinationStart} | rangeLength: {RangeLength}", mappingLine.SourceRangeStart, sourceRangeMaximum, mappingLine.DestinationRangeStart, mappingLine.RangeLength);
                     Logger.Debug("mapModifyingAmount now {MapModifyingAmount}", mapModifyingAmount);
 
                     valueToMap += mapModifyingAmount;
 
+                    Logger.Debug("valueToMap now {ValueToMap}", valueToMap);
+                    
                     break;
                 }
-                
-                Logger.Debug("valueToMap now {ValueToMap}", valueToMap);
             }
         }
         
