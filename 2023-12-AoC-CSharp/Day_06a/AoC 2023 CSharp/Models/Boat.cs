@@ -19,7 +19,6 @@ public class Boat
     public int Distance { get; private set; } = 0;
     
     public int ButtonPressTime { get; } = 0;
-    public int Record { get; }
 
     public void RunRace(int raceTimeMs)
     {

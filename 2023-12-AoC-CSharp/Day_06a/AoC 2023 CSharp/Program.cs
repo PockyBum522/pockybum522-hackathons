@@ -7,14 +7,14 @@ namespace AoC_2023_CSharp;
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
-            .MinimumLevel.Verbose()
+            .MinimumLevel.Information()
             .CreateLogger();
 
     public static void Main()
     {
         Logger.Information("Starting!");
         
-        var rawLines = RawData.SampleData01
+        var rawLines = RawData.ActualData
             .Split(Environment.NewLine);
 
         List<int> times = new List<int>();
