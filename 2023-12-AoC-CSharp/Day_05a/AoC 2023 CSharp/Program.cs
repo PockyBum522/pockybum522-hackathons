@@ -45,33 +45,7 @@ internal static class Program
         Logger.Information("Answer: {@Answer}", valuesForAnswer);
     }
 
-    private static long[] GetSeedNumbers(string[] rawLines)
-    {
-        var seedLineStartString = "seeds: ";
-        
-        var seedNumbers = new List<string>();
-        
-        foreach (var line in rawLines)
-        {
-            if (!line.ToLower().StartsWith(seedLineStartString)) continue;
-
-            seedNumbers = line.Split(' ').ToList();
-            
-            // Get rid of the startString element
-            seedNumbers.RemoveAt(0);                        
-            
-            Logger.Debug("Seed numbers are: {@SeedNumbers}", seedNumbers);
-        }
-
-        var convertedSeedNumbers = new List<long>();
-
-        foreach (var seedNumberString in seedNumbers)
-        {
-            convertedSeedNumbers.Add(long.Parse(seedNumberString));
-        }
-
-        return convertedSeedNumbers.ToArray();
-    }
+    
 
     private static long[] MapValuesWithHeader(string headerString, long[] currentValuesToMap, string[] rawLines)
     {

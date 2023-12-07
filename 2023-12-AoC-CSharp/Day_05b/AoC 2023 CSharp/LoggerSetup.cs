@@ -34,7 +34,7 @@ public class LoggerSetup
             .Enrich.WithProperty("Application", "SerilogTestContext")
             .WriteTo.Console()
             .WriteTo.Debug()
-            .WriteTo.File(LogPath, rollingInterval: RollingInterval.Hour);
+            .WriteTo.File(LogPath, rollingInterval: RollingInterval.Day);
     }
     
     /// <summary>

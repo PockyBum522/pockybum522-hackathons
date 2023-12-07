@@ -40,25 +40,13 @@ internal static class Program
 
         var stepsArray = steps.ToArray();
 
-        var ranges = new List<SeedRange> ();
-        
-        ranges.Add(new SeedRange(1514493331, 295250933));
-        ranges.Add(new SeedRange(3793791524, 105394212));
-        ranges.Add(new SeedRange(828589016, 654882197)); 
-        ranges.Add(new SeedRange(658370118, 49359719)); 
-        ranges.Add(new SeedRange(4055197159, 59237418));
-        ranges.Add(new SeedRange(314462259, 268880047)); 
-        ranges.Add(new SeedRange(2249227634, 74967914)); 
-        ranges.Add(new SeedRange(2370414906, 38444198)); 
-        ranges.Add(new SeedRange(3291001718, 85800943)); 
-        ranges.Add(new SeedRange(2102534948, 5923540));
-        
-        // ranges.Add(new SeedRange(79, 14));
-        // ranges.Add(new SeedRange(55, 13));
+        var ranges = GetSeedRanges(rawLines);
 
+        Logger.Information("Seed ranges final: {@Ranges}", ranges);
+        
         _lowestLocation = long.MaxValue;
         
-        foreach (var range in ranges)
+        foreach (var range in ranges) 
         {
             CheckRange(range, stepsArray);
         }
@@ -66,6 +54,38 @@ internal static class Program
         Logger.Information("Answer: {@Answer}", _lowestLocation);
     }
 
+    private static SeedRange[] GetSeedRanges(string[] rawLines)
+    {
+        var seedLineStartString = "seeds: ";
+        
+        var seedNumbers = new List<string>();
+        
+        foreach (var line in rawLines)
+        {
+            if (!line.ToLower().StartsWith(seedLineStartString)) continue;
+
+            seedNumbers = line.Split(' ').ToList();
+            
+            // Get rid of the startString element
+            seedNumbers.RemoveAt(0);                        
+            
+            Logger.Debug("Seed numbers are: {@SeedNumbers}", seedNumbers);
+        }
+
+        var convertedSeedNumbers = new List<SeedRange>();
+
+        for (var i = 0; i < seedNumbers.Count; i+=2)
+        {
+            var seedNumberString = seedNumbers[i];
+            var seedRangeString = seedNumbers[i + 1];
+            
+            convertedSeedNumbers.Add(
+                new SeedRange(long.Parse(seedNumberString), long.Parse(seedRangeString)));
+        }
+
+        return convertedSeedNumbers.ToArray();
+    }
+    
     private static void CheckRange(SeedRange range, Step[] steps)
     {
         Logger.Information("Starting to process {SeedRange} entries", range.Range);
