@@ -7,9 +7,11 @@ namespace AoC_2023_CSharp;
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
-            .MinimumLevel.Debug()
-            .CreateLogger(); 
-    
+            .MinimumLevel.Information()
+            .CreateLogger();
+
+    private static long _lowestLocation;
+
     public static void Main()
     {
         Logger.Information("Starting!");
@@ -17,8 +19,6 @@ internal static class Program
         var rawLines = RawData.ActualData
             .Split(Environment.NewLine);
         
-        var seedNumbers = GetSeedNumbers(rawLines);
-
         var mapHeaderStrings = new List<string>()
         {
             "seed-to-soil",
@@ -30,116 +30,97 @@ internal static class Program
             "humidity-to-location"
         };
 
-        var valuesToMap = seedNumbers;
+        var steps = new List<Step>();
         
         foreach (var headerString in mapHeaderStrings)
         {
-            valuesToMap = MapValuesWithHeader(headerString, valuesToMap, rawLines);
-            
-            Logger.Debug("After mapping with {HeaderString}, new values are: {@CurrentValues}", headerString, valuesToMap);
+            steps.Add(
+                new Step(Logger, headerString, rawLines));
         }
+
+        var stepsArray = steps.ToArray();
+
+        var ranges = new List<SeedRange> ();
         
-        var valuesForAnswer = valuesToMap.ToList();
-        valuesForAnswer.Sort();
+        ranges.Add(new SeedRange(1514493331, 295250933));
+        ranges.Add(new SeedRange(3793791524, 105394212));
+        ranges.Add(new SeedRange(828589016, 654882197)); 
+        ranges.Add(new SeedRange(658370118, 49359719)); 
+        ranges.Add(new SeedRange(4055197159, 59237418));
+        ranges.Add(new SeedRange(314462259, 268880047)); 
+        ranges.Add(new SeedRange(2249227634, 74967914)); 
+        ranges.Add(new SeedRange(2370414906, 38444198)); 
+        ranges.Add(new SeedRange(3291001718, 85800943)); 
+        ranges.Add(new SeedRange(2102534948, 5923540));
         
-        Logger.Information("Answer: {@Answer}", valuesForAnswer);
+        // ranges.Add(new SeedRange(79, 14));
+        // ranges.Add(new SeedRange(55, 13));
+
+        _lowestLocation = long.MaxValue;
+        
+        foreach (var range in ranges)
+        {
+            CheckRange(range, stepsArray);
+        }
+
+        Logger.Information("Answer: {@Answer}", _lowestLocation);
     }
 
-    private static long[] GetSeedNumbers(string[] rawLines)
+    private static void CheckRange(SeedRange range, Step[] steps)
     {
-        var seedLineStartString = "seeds: ";
+        Logger.Information("Starting to process {SeedRange} entries", range.Range);
         
-        var seedNumbers = new List<string>();
-        
-        foreach (var line in rawLines)
+        for (var i = range.Start; i < range.End; i++)
         {
-            if (!line.ToLower().StartsWith(seedLineStartString)) continue;
+            var mappedValue = MapSingleValue(i, steps);
 
-            seedNumbers = line.Split(' ').ToList();
-            
-            // Get rid of the startString element
-            seedNumbers.RemoveAt(0);                        
-            
-            Logger.Debug("Seed numbers are: {@SeedNumbers}", seedNumbers);
-        }
-
-        var convertedSeedNumbers = new List<long>();
-
-        foreach (var seedNumberString in seedNumbers)
-        {
-            convertedSeedNumbers.Add(long.Parse(seedNumberString));
-        }
-
-        return convertedSeedNumbers.ToArray();
-    }
-
-    private static long[] MapValuesWithHeader(string headerString, long[] currentValuesToMap, string[] rawLines)
-    {
-        var mappingDataLines = ParseMappingDataLines(headerString, rawLines);
-        Logger.Debug("Data lines for {HeaderString}: {@DataLines}", headerString, mappingDataLines);
-
-        var mappedValues = new List<long>();
-
-        foreach (var valueToMap in currentValuesToMap)
-        {
-            var mappedValue = MapSingleValue(valueToMap, mappingDataLines);
-            
-            Logger.Debug("About to add mapped value: {MappedVal}", mappedValue);
-            
-            mappedValues.Add(mappedValue);    
-        }
-
-        return mappedValues.ToArray();
-    }
-
-    private static long MapSingleValue(long valueToMap, List<MappingLine> mappingDataLines)
-    {
-        foreach (var mappingLine in mappingDataLines)
-        {
-            var sourceRangeMaximum = mappingLine.SourceRangeStart + mappingLine.RangeLength;
-            
-            // Is the number >= sourceRangeStart && <= sourceRangeStart + rangeLength (In any of the ranges given for this particular header)
-            if (valueToMap >= mappingLine.SourceRangeStart &&
-                valueToMap <= sourceRangeMaximum)
+            if (mappedValue < _lowestLocation)
             {
-                // If so, map using range:
-                // D - S = val to apply to incoming num
-                // 52 - 50 = +2
-                var mapModifyingAmount = mappingLine.DestinationRangeStart - mappingLine.SourceRangeStart;
+                _lowestLocation = mappedValue;
 
-                return valueToMap + mapModifyingAmount;
+                Logger.Information("New lowest location! {LowestLocation}", _lowestLocation);
+            }
+            
+            if (i % 1000000 == 0)
+                Logger.Information("i: {I}", i);
+        }
+    }
+    
+    private static long MapSingleValue(long valueToMap, Step[] steps)
+    {
+        Logger.Debug("STARTING TO MAP {ValueToMap}", valueToMap);
+        
+        foreach (var step in steps)
+        {
+            Logger.Debug("Running step {StepHeader} with: {@MappingLines}", step.Header, step.MappingLines);
+            
+            foreach (var mappingLine in step.MappingLines)
+            {
+                var sourceRangeMaximum = mappingLine.SourceRangeStart + mappingLine.RangeLength;
+            
+                // Is the number >= sourceRangeStart && <= sourceRangeStart + rangeLength (In any of the ranges given for this particular header)
+                if (valueToMap >= mappingLine.SourceRangeStart &&
+                    valueToMap <= sourceRangeMaximum)
+                {
+                    // If so, map using range:
+                    // D - S = val to apply to incoming num
+                    // 52 - 50 = +2
+                    var mapModifyingAmount = mappingLine.DestinationRangeStart - mappingLine.SourceRangeStart;
+
+                    Logger.Debug("valueToMap now {ValueToMap}", valueToMap);
+                    Logger.Debug("mappingLine.SourceRangeStart: {SourceStart} - sourceRangeMaximum {SourceRangeMaximum}, mappingLine.DestinationRangeStart {DestinationStart}", mappingLine.SourceRangeStart, sourceRangeMaximum, mappingLine.DestinationRangeStart);
+                    Logger.Debug("mapModifyingAmount now {MapModifyingAmount}", mapModifyingAmount);
+
+                    valueToMap += mapModifyingAmount;
+
+                    break;
+                }
+                
+                Logger.Debug("valueToMap now {ValueToMap}", valueToMap);
             }
         }
         
         // If we checked all the ranges, and it's not in any of them, keep it as the number
         return valueToMap;
-    }
-
-    private static List<MappingLine> ParseMappingDataLines(string headerString, string[] rawLines)
-    {
-        var foundHeaderStringLine = false;
-        var returnMappingDataLines = new List<MappingLine>();
-        
-        // Each line after the header string but before the next header is mapping data
-        foreach (var line in rawLines)
-        {
-            if (foundHeaderStringLine)
-            {
-                if (string.IsNullOrWhiteSpace(line)) break;
-                
-                // Start grabbing values
-                returnMappingDataLines.Add(new MappingLine(line));
-            }
-            
-            if (!line.StartsWith(headerString)) continue;
-
-            // Otherwise, found it:
-            foundHeaderStringLine = true;
-        }
-
-        if (returnMappingDataLines.Count == 0)
-            throw new Exception($"Could not get mapping data lines for {headerString}");
-        
-        return returnMappingDataLines;
     }
 }
