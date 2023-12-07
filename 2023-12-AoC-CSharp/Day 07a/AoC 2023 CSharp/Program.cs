@@ -1,5 +1,5 @@
-﻿using Serilog;
-using Serilog.Events;
+﻿using AoC_2023_CSharp.Models;
+using Serilog;
 
 namespace AoC_2023_CSharp;
 
@@ -17,12 +17,13 @@ internal static class Program
             .Split(Environment.NewLine);
 
         var answerTotal = 0;
+
+        var allHands = new List<CamelCardsHand>();
         
         foreach (var line in rawLines)
         {
-            
-            
-            //answerTotal += 1;
+            allHands.Add(
+                new CamelCardsHand(line));
         }
         
         Logger.Information("Answer: {AnswerTotal}", answerTotal);
