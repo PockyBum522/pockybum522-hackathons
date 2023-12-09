@@ -6,9 +6,9 @@ namespace AoC_2023_CSharp.Models;
 
 public class DataLine
 {
-    private readonly ILogger _logger;
+    private readonly ILogger? _logger;
 
-    public DataLine(string rawLine, ILogger logger = null)
+    public DataLine(string rawLine, ILogger? logger = null)
     {
         _logger = logger;
         

@@ -3,25 +3,32 @@
 public static class RawData
 {
     public static string SampleData01 => """
-                                         RL
-                                         
-                                         AAA = (BBB, CCC)
-                                         BBB = (DDD, EEE)
-                                         CCC = (ZZZ, GGG)
-                                         DDD = (DDD, DDD)
-                                         EEE = (EEE, EEE)
-                                         GGG = (GGG, GGG)
-                                         ZZZ = (ZZZ, ZZZ)
+                                         LR
+
+                                         11A = (11B, XXX)
+                                         11B = (XXX, 11Z)
+                                         11Z = (11B, XXX)
+                                         22A = (22B, XXX)
+                                         22B = (22C, 22C)
+                                         22C = (22Z, 22Z)
+                                         22Z = (22B, 22B)
+                                         XXX = (XXX, XXX)
                                          """;
     
     public static string SampleData02 => """
-                                         LLR
-                                         
-                                         AAA = (BBB, BBB)
-                                         BBB = (AAA, ZZZ)
-                                         ZZZ = (ZZZ, ZZZ)
-                                         """;
+                                         R
 
+                                         11A = (11B, 11B)
+                                         11B = (XXX, 11C)
+                                         11C = (11B, 11D)
+                                         11D = (22B, 11E)
+                                         11E = (22C, 11F)
+                                         11F = (22Z, 11G)
+                                         11G = (22B, 11H)
+                                         11H = (22B, 11C)
+                                         XXX = (XXX, XXX)
+                                         """;
+    
     public static string ActualData01 => """
                                          LLRLLRLRLRRRLLRRRLRRLRLRLRLRLRLRRLRRRLRLLRRLRRLRRRLLRLLRRLLRRRLLLRLRRRLLLLRRRLLRRRLRRLRLLRLRLRRRLRRRLRRLRRLRRLRLLRRRLRRLRRRLLRRRLRLRRLLRRLLRLRLRRLRRLLRLLRRLRLLRRRLLRRRLRRLLRRLRRRLRLRRRLRRLLLRLLRLLRRRLRLRLRLRRLRRRLLLRRRLRRRLRRRLRRLRLRLRLRRRLRRLLRLRRRLRLRLRRLLLRRRR
                                          

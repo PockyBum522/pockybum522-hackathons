@@ -1,0 +1,27 @@
+
+        // total: 20
+        // checkCount: 1
+        // First half: 19
+        // Second half: 20
+        
+        // total: 20
+        // checkCount: 2
+        // First half: 17, 18
+        // Second half: 19, 20
+
+        // total: 20
+        // checkCount: 3
+        // First half: 15, 16, 17
+        // Second half: 18, 19, 20
+
+        // total: 20
+        // checkCount: 9
+        // First half:  03, 04, 05, 06, 07, 08, 09, 10, 11
+        // Second half: 12, 13, 14, 15, 16, 17, 18, 19, 20
+
+        // Start at total
+        // Count backwards elementsToCheckCount times
+        // Those numbers are your second half
+        
+        // Count backwards from second half's lowest elementsToCheckCount times
+        // Those numbers are your first half
