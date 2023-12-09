@@ -28,6 +28,8 @@ internal static class Program
 
         //var answer = FindAllStartPositionsLoopPeriods(startPositions, commandLine);
         
+        //Logger.Information("22A Answer: {Answer}",FindLoopPeriodForStartPosition("22A", commandLine));
+        
         Logger.Information("11A Answer: {Answer}",FindLoopPeriodForStartPosition("11A", commandLine));
         
         //Logger.Information("JQA Answer: {Answer}",FindLoopPeriodForStartPosition("JQA", commandLine));
@@ -70,9 +72,9 @@ internal static class Program
     private static int FindLoopPeriodForStartPosition(string startPosition, string commandLine)
     {
         var numberOfCommandSteps = 0;
-        
-        var positionRecords = new List<string>();
-        
+
+        var positionRecords = new string[int.MaxValue - 100];
+
         Logger.Information("Start! - CurrentPosition: {CurrentPosition}", startPosition);
 
         var currentHeader = startPosition;
@@ -89,19 +91,19 @@ internal static class Program
                 Logger.Debug("At command steps: {CommandSteps} - currentHeader is: {CurrentPosition}",
                     numberOfCommandSteps, currentHeader);
 
+                // Save it so we can compare and find out when we've looped
+                positionRecords[numberOfCommandSteps - 1] = currentHeader;
+                
                 currentHeader = 
                     FindDataLineWithHeader(currentHeader).FindNextHeaderValue(currentCommand);
             
-                // Save it so we can compare and find out when we've looped
-                positionRecords.Add(currentHeader);
-
-                if (positionRecords.Count % 1000 == 0)
+                if (numberOfCommandSteps % 1000 == 0)
                 {
-                    Logger.Information("At command steps: {CommandSteps} - After applying command: {CurrentCommand} currentHeader now: {CurrentPosition} - positionRecords count: {PositionRecordsCount}", 
-                        numberOfCommandSteps, currentCommand, currentHeader, positionRecords.Count);    
+                    Logger.Information("At command steps: {CommandSteps} - After applying command: {CurrentCommand} currentHeader now: {CurrentPosition}", 
+                        numberOfCommandSteps, currentCommand, currentHeader);    
                 }
 
-                var loopCheckResult = LoopSeenTwice(positionRecords);
+                var loopCheckResult = LoopSeenTwice(positionRecords, numberOfCommandSteps);
                 
                 if (loopCheckResult < 0) continue;
             
@@ -115,12 +117,17 @@ internal static class Program
         }
     }
 
-    private static int LoopSeenTwice(List<string> positionRecords)
+    private static int LoopSeenTwice(string[] positionRecords, int positionRecordsSize)
     {
         // Not enough records to see if we've looped until 4 
-        if (positionRecords.Count < 2) return -1;
+        if (positionRecordsSize < 2) return -1;
         
-        var halfOfRecordsCount = positionRecords.Count / 2;
+        var halfOfRecordsCount = positionRecordsSize / 2;
+        
+        for (int i = 0; i < positionRecordsSize; i++)
+        {
+            Logger.Debug("All: {RecordsItem}", positionRecords[i]);
+        }
         
         // This for loop:
         // i Start: Half of positionRecords count
@@ -128,75 +135,82 @@ internal static class Program
         // Inc: i--
         for (var elementsToCheckCount = halfOfRecordsCount; elementsToCheckCount > 0; elementsToCheckCount--)
         {
-            var firstHalfList = GetFirstHalfOfList(elementsToCheckCount, positionRecords);
-            var secondHalfList = GetSecondHalfOfList(elementsToCheckCount, positionRecords);
-            
-            Logger.Debug("First half list: {@FirstHalfList}", firstHalfList);
-            Logger.Debug("Second half list: {@SecondHalfList}", secondHalfList);
-
             var allEqual = true;
+
+            // Debugging ranges:
             
-            for (var i = 0; i < firstHalfList.Count; i++)
+            // var numberToCheck = 5;
+            // var recordsCount = 12;
+            //
+            // for (int i = 0; i < numberToCheck; i++)
+            // {
+            //     var mappedFirstHalfIndex = MapIndexForFirstHalfOfRecords(i, numberToCheck, positionRecords, recordsCount);
+            //     
+            //     Logger.Debug("mappedFirstHalfIndex for numberToCheck: {NumberToCheck} and recordsCount: {RecordsCount} was: {MappedIndex}",
+            //         numberToCheck, recordsCount, mappedFirstHalfIndex);
+            // }
+            //
+            // for (int i = 0; i < numberToCheck; i++)
+            // {
+            //     var mappedSecondHalfIndex = MapIndexForSecondHalfOfRecords(i, numberToCheck, positionRecords, recordsCount);
+            //     
+            //     Logger.Debug("mappedSecondHalfIndex for numberToCheck: {NumberToCheck} and recordsCount: {RecordsCount} was: {MappedIndex}",
+            //         numberToCheck, recordsCount, mappedSecondHalfIndex);
+            // }
+            
+            for (var i = 0; i < elementsToCheckCount; i++)
             {
-                Logger.Debug("Checking firstHalfList[i]: {} == secondHalfList[i] {}", firstHalfList[i], secondHalfList[i]);
+                var firstHalfItemIndex = MapIndexForFirstHalfOfRecords(i, elementsToCheckCount, positionRecords, positionRecordsSize);
+                var secondHalfItemIndex = MapIndexForSecondHalfOfRecords(i, elementsToCheckCount, positionRecords, positionRecordsSize);
+
+                var firstHalfItem = positionRecords[firstHalfItemIndex];
+                var secondHalfItem = positionRecords[secondHalfItemIndex];
+            
+                Logger.Debug("Checking firstHalfItem: {FirstHalfItem} == secondHalfItem {SecondHalfItem}", firstHalfItem, secondHalfItem);
                 
-                if (firstHalfList[i] == secondHalfList[i]) continue;
+                if (firstHalfItem == secondHalfItem) continue;
 
                 allEqual = false;
             }
 
             if (allEqual)
-                return firstHalfList.Count;
+                return elementsToCheckCount;
         }
 
         return -1;
     }
 
-    private static List<string> GetFirstHalfOfList(int elementsToCheckCount, List<string> positionRecords)
+    private static int MapIndexForFirstHalfOfRecords(int index, int elementsToCheckCount, string[] positionRecords, int positionRecordsSize)
     {
-        var returnList = new List<string>();
-
-        var total = positionRecords.Count;
-        var secondHalfMinimumNumber = total - elementsToCheckCount;
-        var firstHalfMinimumNumber = secondHalfMinimumNumber - elementsToCheckCount - 1;
+        var secondHalfMinimumNumber = positionRecordsSize - elementsToCheckCount;
+        var firstHalfMinimumNumber = secondHalfMinimumNumber - elementsToCheckCount;
         
-        for (var i = secondHalfMinimumNumber - 1; i > firstHalfMinimumNumber; i--)
-        {
-            Logger.Verbose("Total: {Total}, first half i start: {Start}, first half current: {Index}", total, secondHalfMinimumNumber - 1, i);
-
-            returnList.Insert(0, positionRecords[i]);
-        }
+        var adjustedIndex = firstHalfMinimumNumber + index; 
         
-        Logger.Verbose("Made first half of:");
-        Logger.Verbose("{@AllRecords}", positionRecords);
+        // Logger.Debug("In first half of records:");
+        // Logger.Debug("Total size: {Total}", positionRecordsSize);
+        // Logger.Debug("secondHalfMinimumNumber: {SecondHalfMinimumNumber}", secondHalfMinimumNumber);
+        // Logger.Debug("firstHalfMinimumNumber: {FirstHalfMinimumNumber}", firstHalfMinimumNumber);
+        // Logger.Debug("Index requested: {RequestedIndex}", index);
+        // Logger.Debug("adjustedIndex: {AdjustedIndex}", adjustedIndex);
+        // Logger.Debug("returning: {ReturnItem}", positionRecords[adjustedIndex]);
         
-        Logger.Verbose("Into list:");
-        Logger.Verbose("{@SecondHalfList}", returnList);
-
-        return returnList;
+        return adjustedIndex;
     }
 
-    private static List<string> GetSecondHalfOfList(int elementsToCheckCount, List<string> positionRecords)
+    private static int MapIndexForSecondHalfOfRecords(int index, int elementsToCheckCount, string[] positionRecords, int positionRecordsSize)
     {
-        var returnList = new List<string>();
+        var secondHalfMinimumNumber = positionRecordsSize - elementsToCheckCount;
+        var adjustedIndex = secondHalfMinimumNumber + index;
 
-        var secondHalfStart = positionRecords.Count - 1;
-        var secondHalfMinimumNumber = secondHalfStart - elementsToCheckCount;
+        // Logger.Debug("In second half of records:");
+        // Logger.Debug("Total size: {Total}", positionRecordsSize);
+        // Logger.Debug("secondHalfMinimumNumber: {SecondHalfMinimumNumber}", secondHalfMinimumNumber);
+        // Logger.Debug("Index requested: {RequestedIndex}", index);
+        // Logger.Debug("adjustedIndex: {AdjustedIndex}", adjustedIndex);
+        // Logger.Debug("returning: {ReturnItem}", positionRecords[adjustedIndex]);
         
-        for (var i = secondHalfStart; i > secondHalfMinimumNumber; i--)
-        {
-            Logger.Verbose("Total: {Total}, second half min: {SecondHalfMin}, Second half current: {SecondHalfIndex}", secondHalfStart, secondHalfMinimumNumber, i);
-            
-            returnList.Insert(0, positionRecords[i]);
-        }
-        
-        Logger.Verbose("Made second half of:");
-        Logger.Verbose("{@AllRecords}", positionRecords);
-        
-        Logger.Verbose("Into list:");
-        Logger.Verbose("{@SecondHalfList}", returnList);
-
-        return returnList;
+        return adjustedIndex;
     }
 
 
