@@ -7,7 +7,7 @@ namespace AoC_2023_CSharp;
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Information()
             .CreateLogger();
 
     private static List<DataLine> _dataLines = new();
@@ -16,7 +16,7 @@ internal static class Program
     {
         Logger.Information("Starting!");
         
-        var rawLines = RawData.SampleData02
+        var rawLines = RawData.ActualData01
             .Split(Environment.NewLine);
         
         var commandLine = rawLines[0];
@@ -30,14 +30,14 @@ internal static class Program
         
         //Logger.Information("22A Answer: {Answer}",FindLoopPeriodForStartPosition("22A", commandLine));
         
-        Logger.Information("11A Answer: {Answer}",FindLoopPeriodForStartPosition("11A", commandLine));
+        //Logger.Information("11A Answer: {Answer}",FindLoopPeriodForStartPosition("11A", commandLine));
         
         //Logger.Information("JQA Answer: {Answer}",FindLoopPeriodForStartPosition("JQA", commandLine));
-        //Logger.Information("NHA Answer: {Answer}",FindLoopPeriodForStartPosition("NHA", commandLine));
-        // Logger.Information("AAA Answer: {Answer}",FindLoopPeriodForStartPosition("AAA", commandLine));
-        // Logger.Information("FSA Answer: {Answer}",FindLoopPeriodForStartPosition("FSA", commandLine));
-        // Logger.Information("LLA Answer: {Answer}",FindLoopPeriodForStartPosition("LLA", commandLine));
-        // Logger.Information("MNA Answer: {Answer}",FindLoopPeriodForStartPosition("MNA", commandLine));
+        Logger.Information("NHA Answer: {Answer}",FindLoopPeriodForStartPosition("NHA", commandLine));
+        Logger.Information("AAA Answer: {Answer}",FindLoopPeriodForStartPosition("AAA", commandLine));
+        Logger.Information("FSA Answer: {Answer}",FindLoopPeriodForStartPosition("FSA", commandLine));
+        Logger.Information("LLA Answer: {Answer}",FindLoopPeriodForStartPosition("LLA", commandLine));
+        Logger.Information("MNA Answer: {Answer}",FindLoopPeriodForStartPosition("MNA", commandLine));
         
         //var loopPeriod = FindLoopPeriodForStartPosition("JQA", commandLine);
 
