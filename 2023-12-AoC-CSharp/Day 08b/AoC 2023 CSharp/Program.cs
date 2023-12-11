@@ -65,7 +65,9 @@ internal static class Program
 
         CheckLoopsConvergence();
 
-        // Logger.Information("Answer: {AnswerTotal}", loopPeriod);
+        // Make sure if we log right before the program ends, we can see it
+        Log.CloseAndFlush();
+        Task.Delay(2000);
     }
 
     private static void CheckLoopsConvergence()
@@ -100,8 +102,10 @@ internal static class Program
         var loopPosition04 = loopStartAt04 + loopPeriod04; 
         var loopPosition05 = loopStartAt05 + loopPeriod05; 
         var loopPosition06 = loopStartAt06 + loopPeriod06;
-        
-        for (var i = 0; i < 999999999; i++)
+
+        long counter = 0;
+
+        while (counter++ < long.MaxValue)
         {
             loopPosition01 += loopPeriod01;
             loopPosition02 += loopPeriod02;
@@ -123,6 +127,7 @@ internal static class Program
                 loopPosition01 == loopPosition05 &&
                 loopPosition01 == loopPosition06)
             {
+                Console.WriteLine($"All loops aligned at: {loopPosition01}");
                 Logger.Information("All loops aligned at: {LoopValue}", loopPosition01);
                 
                 return;
