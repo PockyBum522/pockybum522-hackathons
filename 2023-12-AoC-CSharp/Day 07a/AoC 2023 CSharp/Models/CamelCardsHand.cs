@@ -25,7 +25,7 @@ public class CamelCardsHand
 
     private CamelCardHandStrengthEnum CalculateHandStrength()
     {
-        throw new NotImplementedException();
+        
     }
 }
 
