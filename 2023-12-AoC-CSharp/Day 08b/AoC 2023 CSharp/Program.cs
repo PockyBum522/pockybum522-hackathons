@@ -23,6 +23,115 @@ internal static class Program
 
         _dataLines = GetParsedDataLines(rawLines);
         
+        // Run this to get the loop periods for all starting positions. They are:
+        // GetAllLoopPeriods(commandLine);
+
+        // They are:
+        // [07:12:50 INF] For start: NHA
+        // [07:12:50 INF] Loop seen twice at: 22621
+        // [07:12:50 INF] Loop period was: 11309
+        // [07:12:50 INF] Loop happened after 4 steps that weren't part of the loop
+        // [07:12:50 INF] NHA Answer: 22621
+        //
+        // [08:26:51 INF] For start: JQA
+        // [08:26:51 INF] Loop seen twice at: 27881
+        // [08:26:51 INF] Loop period was: 13939
+        // [08:26:51 INF] Loop happened after 4 steps that weren't part of the loop
+        // [08:26:51 INF] JQA Answer: 27881
+        //
+        // [09:27:35 INF] For start: FSA
+        // [09:27:35 INF] Loop seen twice at: 31036
+        // [09:27:35 INF] Loop period was: 15517
+        // [09:27:35 INF] Loop happened after 3 steps that weren't part of the loop
+        // [09:27:35 INF] FSA Answer: 31036
+        //
+        // [11:09:32 INF] For start: LLA
+        // [11:09:32 INF] Loop seen twice at: 35246
+        // [11:09:32 INF] Loop period was: 17621
+        // [11:09:32 INF] Loop happened after 5 steps that weren't part of the loop
+        // [11:09:32 INF] LLA Answer: 35246
+        //
+        // [12:09:49 INF] For start: MNA
+        // [12:09:49 INF] Loop seen twice at: 37348
+        // [12:09:49 INF] Loop period was: 18673
+        // [12:09:49 INF] Loop happened after 3 steps that weren't part of the loop
+        // [12:09:49 INF] MNA Answer: 37348
+        //
+        // [14:27:34 INF] For start: AAA
+        // [14:27:34 INF] Loop seen twice at: 41556
+        // [14:27:34 INF] Loop period was: 20777
+        // [14:27:34 INF] Loop happened after 3 steps that weren't part of the loop
+        // [14:27:34 INF] AAA Answer: 41556
+
+        CheckLoopsConvergence();
+
+        // Logger.Information("Answer: {AnswerTotal}", loopPeriod);
+    }
+
+    private static void CheckLoopsConvergence()
+    {
+        // NHA
+        var loopStartAt01 = 4;
+        var loopPeriod01 = 11309;
+        
+        // JQA
+        var loopStartAt02 = 4;
+        var loopPeriod02 = 13939;
+        
+        // FSA
+        var loopStartAt03 = 3;
+        var loopPeriod03 = 15517;
+        
+        // LLA
+        var loopStartAt04 = 5;
+        var loopPeriod04 = 17621;
+        
+        // MNA
+        var loopStartAt05 = 3;
+        var loopPeriod05 = 18673;
+        
+        // AAA
+        var loopStartAt06 = 3;
+        var loopPeriod06 = 20777;
+
+        var loopPosition01 = loopStartAt01 + loopPeriod01; 
+        var loopPosition02 = loopStartAt02 + loopPeriod02; 
+        var loopPosition03 = loopStartAt03 + loopPeriod03; 
+        var loopPosition04 = loopStartAt04 + loopPeriod04; 
+        var loopPosition05 = loopStartAt05 + loopPeriod05; 
+        var loopPosition06 = loopStartAt06 + loopPeriod06;
+        
+        for (var i = 0; i < 999999999; i++)
+        {
+            loopPosition01 += loopPeriod01;
+            loopPosition02 += loopPeriod02;
+            loopPosition03 += loopPeriod03;
+            loopPosition04 += loopPeriod04;
+            loopPosition05 += loopPeriod05;
+            loopPosition06 += loopPeriod06;
+
+            Logger.Debug("loopPosition01 at: {LoopValue}", loopPosition01);
+            Logger.Debug("loopPosition02 at: {LoopValue}", loopPosition02);
+            Logger.Debug("loopPosition03 at: {LoopValue}", loopPosition03);
+            Logger.Debug("loopPosition04 at: {LoopValue}", loopPosition04);
+            Logger.Debug("loopPosition05 at: {LoopValue}", loopPosition05);
+            Logger.Debug("loopPosition06 at: {LoopValue}", loopPosition06);
+            
+            if (loopPosition01 == loopPosition02 &&
+                loopPosition01 == loopPosition03 &&
+                loopPosition01 == loopPosition04 &&
+                loopPosition01 == loopPosition05 &&
+                loopPosition01 == loopPosition06)
+            {
+                Logger.Information("All loops aligned at: {LoopValue}", loopPosition01);
+                
+                return;
+            }
+        }
+    }
+
+    private static void GetAllLoopPeriods(string commandLine)
+    {
         // var startPositions = 
         //     FindDataLinesEndingWith('A');
 
@@ -32,16 +141,12 @@ internal static class Program
         
         //Logger.Information("11A Answer: {Answer}",FindLoopPeriodForStartPosition("11A", commandLine));
         
-        //Logger.Information("JQA Answer: {Answer}",FindLoopPeriodForStartPosition("JQA", commandLine));
+        Logger.Information("JQA Answer: {Answer}",FindLoopPeriodForStartPosition("JQA", commandLine));
         Logger.Information("NHA Answer: {Answer}",FindLoopPeriodForStartPosition("NHA", commandLine));
         Logger.Information("AAA Answer: {Answer}",FindLoopPeriodForStartPosition("AAA", commandLine));
         Logger.Information("FSA Answer: {Answer}",FindLoopPeriodForStartPosition("FSA", commandLine));
         Logger.Information("LLA Answer: {Answer}",FindLoopPeriodForStartPosition("LLA", commandLine));
         Logger.Information("MNA Answer: {Answer}",FindLoopPeriodForStartPosition("MNA", commandLine));
-        
-        //var loopPeriod = FindLoopPeriodForStartPosition("JQA", commandLine);
-
-        //Logger.Information("Answer: {AnswerTotal}", loopPeriod);
     }
 
     private static List<DataLine> GetParsedDataLines(string[] rawLines)
