@@ -74,38 +74,38 @@ internal static class Program
     {
         // NHA
         var loopStartAt01 = 4;
-        var loopPeriod01 = 11309;
+        var loopPeriod01 = (ulong)11309;
         
         // JQA
         var loopStartAt02 = 4;
-        var loopPeriod02 = 13939;
+        var loopPeriod02 = (ulong)13939;
         
         // FSA
         var loopStartAt03 = 3;
-        var loopPeriod03 = 15517;
+        var loopPeriod03 = (ulong)15517;
         
         // LLA
         var loopStartAt04 = 5;
-        var loopPeriod04 = 17621;
+        var loopPeriod04 = (ulong)17621;
         
         // MNA
         var loopStartAt05 = 3;
-        var loopPeriod05 = 18673;
+        var loopPeriod05 = (ulong)18673;
         
         // AAA
         var loopStartAt06 = 3;
-        var loopPeriod06 = 20777;
+        var loopPeriod06 = (ulong)20777;
 
-        var loopPosition01 = loopStartAt01 + loopPeriod01; 
-        var loopPosition02 = loopStartAt02 + loopPeriod02; 
-        var loopPosition03 = loopStartAt03 + loopPeriod03; 
-        var loopPosition04 = loopStartAt04 + loopPeriod04; 
-        var loopPosition05 = loopStartAt05 + loopPeriod05; 
-        var loopPosition06 = loopStartAt06 + loopPeriod06;
+        var loopPosition01 = (ulong)loopStartAt01 + loopPeriod01; 
+        var loopPosition02 = (ulong)loopStartAt02 + loopPeriod02; 
+        var loopPosition03 = (ulong)loopStartAt03 + loopPeriod03; 
+        var loopPosition04 = (ulong)loopStartAt04 + loopPeriod04; 
+        var loopPosition05 = (ulong)loopStartAt05 + loopPeriod05; 
+        var loopPosition06 = (ulong)loopStartAt06 + loopPeriod06;
 
-        long counter = 0;
+        ulong counter = 0;
 
-        while (counter++ < long.MaxValue)
+        while (counter++ < ulong.MaxValue)
         {
             loopPosition01 += loopPeriod01;
             loopPosition02 += loopPeriod02;
