@@ -7,7 +7,7 @@ namespace AoC_2023_CSharp;
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
-            .MinimumLevel.Information()
+            .MinimumLevel.Debug()
             .CreateLogger();
 
     private static List<DataLine> _dataLines = new();
@@ -72,67 +72,63 @@ internal static class Program
 
     private static void CheckLoopsConvergence()
     {
-        // NHA
-        var loopStartAt01 = 4;
-        var loopPeriod01 = (ulong)11309;
+        var loopStartAt01 = (ulong)4;
+        var loopPeriod01 = (ulong)13939;
         
         // JQA
-        var loopStartAt02 = 4;
-        var loopPeriod02 = (ulong)13939;
+        var loopStartAt02 = (ulong)3;
+        var loopPeriod02 = (ulong)15517;
         
-        // FSA
-        var loopStartAt03 = 3;
-        var loopPeriod03 = (ulong)15517;
-        
-        // LLA
-        var loopStartAt04 = 5;
-        var loopPeriod04 = (ulong)17621;
-        
-        // MNA
-        var loopStartAt05 = 3;
-        var loopPeriod05 = (ulong)18673;
-        
-        // AAA
-        var loopStartAt06 = 3;
-        var loopPeriod06 = (ulong)20777;
+        // // NHA
+        // var loopStartAt01 = (ulong)4;
+        // var loopPeriod01 = (ulong)11309;
+        //
+        // // JQA
+        // var loopStartAt02 = (ulong)4;
+        // var loopPeriod02 = (ulong)13939;
+        //
+        // // FSA
+        // var loopStartAt03 = (ulong)3;
+        // var loopPeriod03 = (ulong)15517;
+        //
+        // // LLA
+        // var loopStartAt04 = (ulong)5;
+        // var loopPeriod04 = (ulong)17621;
+        //
+        // // MNA
+        // var loopStartAt05 = (ulong)3;
+        // var loopPeriod05 = (ulong)18673;
+        //
+        // // AAA
+        // var loopStartAt06 = (ulong)3;
+        // var loopPeriod06 = (ulong)20777;
 
-        var loopPosition01 = (ulong)loopStartAt01 + loopPeriod01; 
-        var loopPosition02 = (ulong)loopStartAt02 + loopPeriod02; 
-        var loopPosition03 = (ulong)loopStartAt03 + loopPeriod03; 
-        var loopPosition04 = (ulong)loopStartAt04 + loopPeriod04; 
-        var loopPosition05 = (ulong)loopStartAt05 + loopPeriod05; 
-        var loopPosition06 = (ulong)loopStartAt06 + loopPeriod06;
+        var loopPosition01 = (ulong)0;
 
+        // 01 and 02 align at: 599381
+        
         ulong counter = 0;
 
         while (counter++ < ulong.MaxValue)
         {
-            loopPosition01 += loopPeriod01;
-            loopPosition02 += loopPeriod02;
-            loopPosition03 += loopPeriod03;
-            loopPosition04 += loopPeriod04;
-            loopPosition05 += loopPeriod05;
-            loopPosition06 += loopPeriod06;
-
-            Logger.Debug("loopPosition01 at: {LoopValue}", loopPosition01);
-            Logger.Debug("loopPosition02 at: {LoopValue}", loopPosition02);
-            Logger.Debug("loopPosition03 at: {LoopValue}", loopPosition03);
-            Logger.Debug("loopPosition04 at: {LoopValue}", loopPosition04);
-            Logger.Debug("loopPosition05 at: {LoopValue}", loopPosition05);
-            Logger.Debug("loopPosition06 at: {LoopValue}", loopPosition06);
+            loopPosition02 = loopStartAt02 + (loopPeriod02 * counter);
             
-            if (loopPosition01 == loopPosition02 &&
-                loopPosition01 == loopPosition03 &&
-                loopPosition01 == loopPosition04 &&
-                loopPosition01 == loopPosition05 &&
-                loopPosition01 == loopPosition06)
+            for (var i = 1; i < 999999; i++)
             {
-                Console.WriteLine($"All loops aligned at: {loopPosition01}");
-                Logger.Information("All loops aligned at: {LoopValue}", loopPosition01);
-                
+                loopPosition01 = loopStartAt01 + (loopPeriod01 * (ulong)i);
+
+                if (loopPosition01 != loopPosition02) continue;
+                Logger.Information("loopPosition01 at: {LoopValue}", loopPosition01);
+                Logger.Information("loopPosition02 at: {LoopValue}", loopPosition02);
                 return;
             }
+
+            if (loopPosition01 != loopPosition02) continue;
+            Console.WriteLine($"All loops aligned at: {loopPosition01}");
+                
         }
+        
+        Logger.Information("Loops never aligned");
     }
 
     private static void GetAllLoopPeriods(string commandLine)
