@@ -4,6 +4,16 @@ using Serilog.Events;
 
 namespace AoC_2023_CSharp;
 
+// I thought of another way to do it that's way faster than how I did it below. 
+//
+// If instead of making a list of all the elements you've seen so far and checking them for two matching sets in a row to tell when the loop period is...which works, but took a few hours of multithreading... 
+//
+// What you could do is as you traverse the list, every time you hit a header that ends in 'Z' just check how many steps you've taken so far, double that, and run a check on the header that's the doubled number of steps in.
+//
+// If it's the same header that is at the non-doubled index, then you know that's your loop period. 
+//
+// ...which kinda is the algorithm Jurrd found, but attacked from a different side. The algo he found would still be faster, but this is at least getting close to the same big O notation as that algo.
+
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
