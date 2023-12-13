@@ -7,10 +7,12 @@ namespace AoC_2023_CSharp;
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Information()
             .CreateLogger();
 
     private static List<DataLine> _dataLines = new();
+
+    private static ulong _stepsCounter = 0;
 
     public static void Main()
     {
@@ -63,80 +65,216 @@ internal static class Program
         // [14:27:34 INF] Loop happened after 3 steps that weren't part of the loop
         // [14:27:34 INF] AAA Answer: 41556
 
-        CheckLoopsConvergence();
+        CheckLoopsConvergence(rawLines, commandLine);
 
         // Make sure if we log right before the program ends, we can see it
         Log.CloseAndFlush();
         Task.Delay(2000);
     }
 
-    private static void CheckLoopsConvergence()
+    private static void CheckLoopsConvergence(string[] rawLines, string commandLine)
     {
-        var loopStartAt01 = (ulong)4;
-        var loopPeriod01 = (ulong)13939;
-        
-        // JQA
-        var loopStartAt02 = (ulong)3;
-        var loopPeriod02 = (ulong)15517;
-        
-        // // NHA
-        // var loopStartAt01 = (ulong)4;
-        // var loopPeriod01 = (ulong)11309;
-        //
-        // // JQA
-        // var loopStartAt02 = (ulong)4;
-        // var loopPeriod02 = (ulong)13939;
-        //
-        // // FSA
-        // var loopStartAt03 = (ulong)3;
-        // var loopPeriod03 = (ulong)15517;
-        //
-        // // LLA
-        // var loopStartAt04 = (ulong)5;
-        // var loopPeriod04 = (ulong)17621;
-        //
-        // // MNA
-        // var loopStartAt05 = (ulong)3;
-        // var loopPeriod05 = (ulong)18673;
-        //
-        // // AAA
-        // var loopStartAt06 = (ulong)3;
-        // var loopPeriod06 = (ulong)20777;
+        var loopNha = new Loop(0, 11309); 
+        var loopJqa = new Loop(0, 13939);  
+        var loopFsa = new Loop(0, 15517);
+        var loopLla = new Loop(0, 17621); 
+        var loopMna = new Loop(0, 18673);
+        var loopAaa = new Loop(0, 20777);
 
-        var loopPosition01 = (ulong)0;
-
-        // 01 and 02 align at: 599381
+        // Logger.Information("For start: {StartHeader} - Header at steps: {StepsToCheckAt} is {FoundHeader}", 
+        //     startHeader, stepsToCheckAt, GetStringAtSteps(startHeader, stepsToCheckAt, rawLines, commandLine));
+        
+        // var startHeader = "NHA";
+        // ulong stepsToCheckAt = 639630977;
+        //
+        // Logger.Information("For start: {StartHeader} - Header at steps: {StepsToCheckAt} is {FoundHeader}", 
+        //     startHeader, stepsToCheckAt, GetStringAtSteps(startHeader, stepsToCheckAt - 2, rawLines, commandLine));
+        //
+        // Logger.Information("For start: {StartHeader} - Header at steps: {StepsToCheckAt} is {FoundHeader}", 
+        //     startHeader, stepsToCheckAt, GetStringAtSteps(startHeader, stepsToCheckAt - 1, rawLines, commandLine));
+        //
+        // Logger.Information("For start: {StartHeader} - Header at steps: {StepsToCheckAt} is {FoundHeader}", 
+        //     startHeader, stepsToCheckAt, GetStringAtSteps(startHeader, stepsToCheckAt, rawLines, commandLine));
+        //
+        // Logger.Information("For start: {StartHeader} - Header at steps: {StepsToCheckAt} is {FoundHeader}", 
+        //     startHeader, stepsToCheckAt, GetStringAtSteps(startHeader, stepsToCheckAt + 1, rawLines, commandLine));
+        //
+        // Logger.Information("For start: {StartHeader} - Header at steps: {StepsToCheckAt} is {FoundHeader}", 
+        //     startHeader, stepsToCheckAt, GetStringAtSteps(startHeader, stepsToCheckAt + 2, rawLines, commandLine));
+        
+        // var loops = new List<Loop>();
+        //
+        // loops.Add(loopNha);
+        // loops.Add(loopJqa);
+        // loops.Add(loopFsa);
+        // loops.Add(loopLla);
+        // loops.Add(loopMna);
+        // loops.Add(loopAaa);
+        
+        
+        // Original values
+        // var loopNha = new Loop(4, 11309); 
+        // var loopJqa = new Loop(4, 13939);  
+        // var loopFsa = new Loop(3, 15517);
+        // var loopLla = new Loop(5, 17621); 
+        // var loopMna = new Loop(3, 18673);
+        // var loopAaa = new Loop(3, 20777); 
+        
         
         ulong counter = 0;
 
+        
         while (counter++ < ulong.MaxValue)
         {
-            loopPosition02 = loopStartAt02 + (loopPeriod02 * counter);
+            _stepsCounter = counter;
+            var loopAaaPosition = loopAaa.CurrentValueAtMultiple(counter);
+
+            var mnaUnder = loopMna.GetClosestValueTo(loopAaaPosition);
+            var llaUnder = loopLla.GetClosestValueTo(loopAaaPosition);
+            var fsaUnder = loopFsa.GetClosestValueTo(loopAaaPosition);
+            var jqaUnder = loopJqa.GetClosestValueTo(loopAaaPosition);
+            var nhaUnder = loopNha.GetClosestValueTo(loopAaaPosition);
             
-            for (var i = 1; i < 999999; i++)
-            {
-                loopPosition01 = loopStartAt01 + (loopPeriod01 * (ulong)i);
+            // LogDifferences(mnaUnder, loopAaaPosition, llaUnder, fsaUnder, jqaUnder, nhaUnder);
 
-                if (loopPosition01 != loopPosition02) continue;
-                Logger.Information("loopPosition01 at: {LoopValue}", loopPosition01);
-                Logger.Information("loopPosition02 at: {LoopValue}", loopPosition02);
-                return;
-            }
+            // var mnaUnder = loopMna.GetClosestValueTo(loopAaaPosition);
+            if (mnaUnder != loopAaaPosition) continue;
+            
+            // var llaUnder = loopLla.GetClosestValueTo(loopAaaPosition);
+            if (llaUnder != loopAaaPosition) continue;
+            
+            // var fsaUnder = loopFsa.GetClosestValueTo(loopAaaPosition);
+            if (fsaUnder != loopAaaPosition) continue;
+            
+            // var jqaUnder = loopJqa.GetClosestValueTo(loopAaaPosition);
+            if (jqaUnder != loopAaaPosition) continue;
+            
+            // var nhaUnder = loopNha.GetClosestValueTo(loopAaaPosition);
+            if (nhaUnder != loopAaaPosition) continue;
+            
+            Logger.Information($"ALL loops aligned at: {loopAaaPosition}");
+            Logger.Information("Steps: {Counter}", _stepsCounter);
 
-            if (loopPosition01 != loopPosition02) continue;
-            Console.WriteLine($"All loops aligned at: {loopPosition01}");
-                
+            break;
+        }
+    }
+
+    private static void LogDifferences(ulong mnaUnder, ulong loopAaaPosition, ulong llaUnder, ulong fsaUnder, ulong jqaUnder, ulong nhaUnder)
+    {
+        var mnaDifference = (long)loopAaaPosition - (long)mnaUnder;
+        var llaDifference = (long)loopAaaPosition - (long)llaUnder;
+        var fsaDifference = (long)loopAaaPosition - (long)fsaUnder;
+        var jqaDifference = (long)loopAaaPosition - (long)jqaUnder;
+        var nhaDifference = (long)loopAaaPosition - (long)nhaUnder;
+        
+        // Logger.Information("AAA: {AaaVal}, MNA: {MnaVal}, LLA: {LlaVal}, FSA: {FsaVal}, JQA: {JqaVal}, NHA: {NhaVal}",
+        //     loopAaaPosition, mnaDifference, llaDifference, fsaDifference, jqaDifference, nhaDifference);
+
+        var matchTolerance = 100;
+
+        var matchingCount = 0;
+
+        if (IsWithinX(mnaDifference, matchTolerance)) matchingCount++;
+        if (IsWithinX(llaDifference, matchTolerance)) matchingCount++;
+        if (IsWithinX(fsaDifference, matchTolerance)) matchingCount++;
+        if (IsWithinX(jqaDifference, matchTolerance)) matchingCount++;
+        if (IsWithinX(nhaDifference, matchTolerance)) matchingCount++;
+        
+        if (matchingCount >= 4)
+        {
+            
+            Logger.Information("{MnaVal} \t {LlaVal} \t {FsaVal} \t {JqaVal} \t {NhaVal}",
+                mnaDifference, llaDifference, fsaDifference, jqaDifference, nhaDifference);
+            
+            //Logger.Information("");
         }
         
-        Logger.Information("Loops never aligned");
+        if (matchingCount >= 5)
+        {
+            Logger.Information("");
+
+            Logger.Information("AAA: {MnaVal}", loopAaaPosition);
+            
+            Logger.Information("MNA: {MnaVal} \t LLA: {LlaVal} \t FSA: {FsaVal} \t JQA: {JqaVal} \t NHA: {NhaVal}",
+                mnaDifference, llaDifference, fsaDifference, jqaDifference, nhaDifference);
+            
+            Logger.Information("");
+        }
+        
+        // if (IsWithin5(mnaDifference))
+        // {
+        //     Logger.Information("MNA Difference: {Difference}", mnaDifference);
+        // }
+        
+        // CHECKS:
+        
+        // -2
+        // if (IsWithin5(llaDifference))
+        // {
+        //     Logger.Information("LLA Difference: {Difference}", llaDifference);
+        // }
+        
+        // 0
+        // if (IsWithin5(fsaDifference))
+        // {
+        //     Logger.Information("FSA Difference: {Difference}", fsaDifference);
+        // }
+        
+        // -1
+        // if (IsWithin5(jqaDifference))
+        // {
+        //     Logger.Information("JQA Difference: {Difference}", jqaDifference);
+        // }
+        
+        // -1
+        // if (IsWithin5(nhaDifference))
+        // {
+        //     Logger.Information("NHA Difference: {Difference}", nhaDifference);
+        // }
+    }
+
+    private static void LogAllValues(ulong mnaUnder, ulong loopAaaPosition, ulong llaUnder, ulong fsaUnder, ulong jqaUnder,
+        ulong nhaUnder)
+    {
+        // if (IsWithin5(mnaUnder, loopAaaPosition))
+        // {
+        //     Logger.Information("AAA: {AaaVal}, MNA: {MnaVal}, LLA: {LlaVal}, FSA: {FsaVal}, JQA: {JqaVal}, NHA: {NhaVal} (AAA and MNA)",
+        //         loopAaaPosition, mnaUnder, llaUnder, fsaUnder, jqaUnder, nhaUnder);
+        // }
+        //     
+        // if (IsWithin5(llaUnder, loopAaaPosition))
+        // {
+        //     Logger.Information("AAA: {AaaVal}, MNA: {MnaVal}, LLA: {LlaVal}, FSA: {FsaVal}, JQA: {JqaVal}, NHA: {NhaVal} (AAA and LLA)",
+        //         loopAaaPosition, mnaUnder, llaUnder, fsaUnder, jqaUnder, nhaUnder);
+        // }
+        //     
+        // if (IsWithin5(fsaUnder, loopAaaPosition))
+        // {
+        //     Logger.Information("AAA: {AaaVal}, MNA: {MnaVal}, LLA: {LlaVal}, FSA: {FsaVal}, JQA: {JqaVal}, NHA: {NhaVal} (AAA and FSA)",
+        //         loopAaaPosition, mnaUnder, llaUnder, fsaUnder, jqaUnder, nhaUnder);
+        // }
+        //     
+        // if (IsWithin5(jqaUnder, loopAaaPosition))
+        // {
+        //     Logger.Information("AAA: {AaaVal}, MNA: {MnaVal}, LLA: {LlaVal}, FSA: {FsaVal}, JQA: {JqaVal}, NHA: {NhaVal} (AAA and JQA)",
+        //         loopAaaPosition, mnaUnder, llaUnder, fsaUnder, jqaUnder, nhaUnder);
+        // }
+        //     
+        // if (IsWithin5(nhaUnder, loopAaaPosition))
+        // {
+        //     Logger.Information("AAA: {AaaVal}, MNA: {MnaVal}, LLA: {LlaVal}, FSA: {FsaVal}, JQA: {JqaVal}, NHA: {NhaVal} (AAA and NHA)",
+        //         loopAaaPosition, mnaUnder, llaUnder, fsaUnder, jqaUnder, nhaUnder);
+        // }
     }
 
     private static void GetAllLoopPeriods(string commandLine)
     {
-        // var startPositions = 
-        //     FindDataLinesEndingWith('A');
+        var startPositions = 
+             FindDataLinesEndingWith('A');
 
-        //var answer = FindAllStartPositionsLoopPeriods(startPositions, commandLine);
+        Logger.Information("{@Starts}", startPositions);
+        
+        // var answer = FindAllStartPositionsLoopPeriods(startPositions, commandLine);
         
         //Logger.Information("22A Answer: {Answer}",FindLoopPeriodForStartPosition("22A", commandLine));
         
@@ -318,7 +456,17 @@ internal static class Program
         
         return adjustedIndex;
     }
-
+    
+    private static bool IsWithinX(long checkValue, long matchTolerance)
+    {
+        if (checkValue < matchTolerance &&
+            checkValue > matchTolerance * -1)
+        {
+            return true;   
+        }
+            
+        return false;
+    }
 
     // private static void DebugPrintListHeaders(List<string> listToPrint, string listName)
     // {
@@ -333,19 +481,43 @@ internal static class Program
     //     }
     // }
 
-    // private static string[] FindDataLinesEndingWith(char headerEndCharNeedle)
-    // {
-    //     var startLines = new List<string>();
-    //     
-    //     foreach (var dataLine in _dataLines)
-    //     {
-    //         if (dataLine.Header.EndsWith(headerEndCharNeedle))
-    //             startLines.Add(dataLine.Header);
-    //     }
-    //     
-    //     return startLines.ToArray();
-    // }
+    private static string[] FindDataLinesEndingWith(char headerEndCharNeedle)
+    {
+        var startLines = new List<string>();
+        
+        foreach (var dataLine in _dataLines)
+        {
+            if (dataLine.Header.EndsWith(headerEndCharNeedle))
+                startLines.Add(dataLine.Header);
+        }
+        
+        return startLines.ToArray();
+    }
 
+    public static string GetStringAtSteps(string startHeader, ulong stepsToRun, string[] rawLines, string commandLine)
+    {
+        var numberOfCommandSteps = (ulong)0;
+
+        var currentHeader = startHeader;
+
+        while (numberOfCommandSteps < stepsToRun)
+        {
+            for (var commandIndex = 0; commandIndex < commandLine.Length; commandIndex++)
+            {
+                numberOfCommandSteps++;
+            
+                var currentCommand = commandLine[commandIndex];
+
+                currentHeader = 
+                    FindDataLineWithHeader(currentHeader).FindNextHeaderValue(currentCommand);
+                
+                if (numberOfCommandSteps >= stepsToRun) break;
+            }
+        }
+
+        return currentHeader;
+    }
+    
     // private static int FindAllStartPositionsLoopPeriods(string[] startPositions, string commandLine)
     // {
     //     var numberOfCommandSteps = 0;
