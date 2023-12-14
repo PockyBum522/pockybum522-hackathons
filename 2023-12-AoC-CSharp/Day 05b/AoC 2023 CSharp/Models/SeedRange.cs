@@ -2,17 +2,17 @@
 
 public class SeedRange
 {
-    public SeedRange(long seedStart, long seedRange)
+    public SeedRange(ulong seedStart, ulong seedRange)
     {
         Start = seedStart;
         Range = seedRange;
         End = seedStart + seedRange;
     }
     
-    public long Start { get; }
+    public ulong Start { get; }
     
-    public long End { get; }
+    public ulong End { get; }
     
-    public long Range { get; }
+    public ulong Range { get; }
     
 }

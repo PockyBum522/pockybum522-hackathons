@@ -6,14 +6,14 @@ public class MappingLine
     {
         var lineValues = rawLine.Split(' ');
 
-        DestinationRangeStart = long.Parse(lineValues[0]);
-        SourceRangeStart = long.Parse(lineValues[1]);
-        RangeLength = long.Parse(lineValues[2]);
+        DestinationRangeStart = ulong.Parse(lineValues[0]);
+        SourceRangeStart = ulong.Parse(lineValues[1]);
+        RangeLength = ulong.Parse(lineValues[2]);
     }
     
-    public long DestinationRangeStart { get; } 
+    public ulong DestinationRangeStart { get; } 
     
-    public long SourceRangeStart { get; } 
+    public ulong SourceRangeStart { get; } 
     
-    public long RangeLength { get; } 
+    public ulong RangeLength { get; } 
 }
