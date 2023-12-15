@@ -13,9 +13,10 @@ internal static class Program
     {
         Logger.Information("Starting!");
         
-        var rawLines = RawData.SampleData01
+        var rawLines = RawData.ActualData01
             .Split(Environment.NewLine);
-        
+
+        string[] rawLinesAt100 = new []{ "" };
 
         LogAllRawLines(rawLines);
 
@@ -26,8 +27,16 @@ internal static class Program
             MoveAllOsDown(rawLines);
             MoveAllOsRight(rawLines);
             
-            if (i % 1000000 == 0)
-                Logger.Information("i: {I}", i);
+            // This works to solve the sample data. Pattern repeats at 7
+            // if (i == 10000)
+            // {
+            //     i = 10000 + (7 * 142850000);
+            // }
+                
+            Logger.Information("i: {I}", i);
+            
+            if (i == 100)
+                i = 100 + (7 * 142857100);
         }
 
         var answerTotal = ScoreAllRows(rawLines);
