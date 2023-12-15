@@ -25,7 +25,24 @@ public class CamelCardsHand
 
     private CamelCardHandStrengthEnum CalculateHandStrength()
     {
-        
+        var uniqueCardsInHand = new List<CamelCard>();
+
+        // Make list of unique cards 
+        foreach (var card in Cards)
+        {
+            if (Cards.All(camelCard => camelCard.Value != card.Value))
+                uniqueCardsInHand.Add(card);
+        }
+
+        // for each card in list, make note of how many of that card there is
+        foreach (var card in uniqueCardsInHand)
+        {
+            var cardsOfThisValueCount = Cards.Count(camelCard => camelCard.Value == card.Value);
+
+            card.NumberInHand = cardsOfThisValueCount;
+        }
+
+        uniqueCardsInHand.Sort(c => c.NumberInHand);
     }
 }
 
@@ -37,6 +54,8 @@ public class CamelCard
     }
     
     public char Value { get; }
+    
+    public int NumberInHand { get; set; }
 }
 
 public enum CamelCardHandStrengthEnum
