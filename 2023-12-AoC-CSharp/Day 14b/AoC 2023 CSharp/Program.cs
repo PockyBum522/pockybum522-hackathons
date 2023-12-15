@@ -13,12 +13,80 @@ internal static class Program
     {
         Logger.Information("Starting!");
         
-        var rawLines = RawData.ActualData01
+        var rawLines = RawData.SampleData01
             .Split(Environment.NewLine);
         
-        string[] lastRawLines;
 
         LogAllRawLines(rawLines);
+
+        for (var i = 0; i < 1000000000; i++)
+        {
+            MoveAllOsUp(rawLines);
+            MoveAllOsLeft(rawLines);
+            MoveAllOsDown(rawLines);
+            MoveAllOsRight(rawLines);
+            
+            if (i % 1000000 == 0)
+                Logger.Information("i: {I}", i);
+        }
+
+        var answerTotal = ScoreAllRows(rawLines);
+        
+        Logger.Information("Answer: {AnswerTotal}", answerTotal);
+        
+        // Make sure if we log on other threads right before the program ends, we can see it
+        Log.CloseAndFlush();
+        Task.Delay(2000);
+    }
+
+    private static void MoveAllOsRight(string[] rawLines)
+    {
+        string[] lastRawLines;
+
+        do
+        {
+            lastRawLines = (string[])rawLines.Clone();
+            
+            MoveAllOsRightOne(rawLines);
+
+            LogAllRawLines(rawLines);
+        } 
+        while (!HasSameCharacters(lastRawLines, rawLines));
+    }
+
+    private static void MoveAllOsDown(string[] rawLines)
+    {
+        string[] lastRawLines;
+
+        do
+        {
+            lastRawLines = (string[])rawLines.Clone();
+            
+            MoveAllOsDownOne(rawLines);
+
+            LogAllRawLines(rawLines);
+        } 
+        while (!HasSameCharacters(lastRawLines, rawLines));
+    }
+
+    private static void MoveAllOsLeft(string[] rawLines)
+    {
+        string[] lastRawLines;
+
+        do
+        {
+            lastRawLines = (string[])rawLines.Clone();
+            
+            MoveAllOsLeftOne(rawLines);
+
+            LogAllRawLines(rawLines);
+        } 
+        while (!HasSameCharacters(lastRawLines, rawLines));
+    }
+
+    private static void MoveAllOsUp(string[] rawLines)
+    {
+        string[] lastRawLines;
 
         do
         {
@@ -29,14 +97,6 @@ internal static class Program
             LogAllRawLines(rawLines);
         } 
         while (!HasSameCharacters(lastRawLines, rawLines));
-
-        var answerTotal = ScoreAllRows(rawLines);
-        
-        Logger.Information("Answer: {AnswerTotal}", answerTotal);
-        
-        // Make sure if we log on other threads right before the program ends, we can see it
-        Log.CloseAndFlush();
-        Task.Delay(2000);
     }
 
     private static int ScoreAllRows(string[] rawLines)
@@ -90,6 +150,54 @@ internal static class Program
         
         Logger.Debug("");
         Logger.Debug("");
+    }
+
+    private static void MoveAllOsRightOne(string[] rawLines)
+    {
+        for (var y = 0; y < rawLines.Length; y++)
+        {
+            for (var x = 0; x < rawLines[y].Length - 1; x++)
+            {
+                if (rawLines[y][x] != 'O') continue;
+                
+                if (rawLines[y][x + 1] != '.') continue;
+
+                rawLines[y] = PlaceCharIn(rawLines[y], x + 1, 'O');
+                rawLines[y] = PlaceCharIn(rawLines[y], x, '.');
+            }
+        }
+    }
+
+    private static void MoveAllOsLeftOne(string[] rawLines)
+    {
+        for (var y = 0; y < rawLines.Length; y++)
+        {
+            for (var x = 1; x < rawLines[y].Length; x++)
+            {
+                if (rawLines[y][x] != 'O') continue;
+                
+                if (rawLines[y][x - 1] != '.') continue;
+
+                rawLines[y] = PlaceCharIn(rawLines[y], x - 1, 'O');
+                rawLines[y] = PlaceCharIn(rawLines[y], x, '.');
+            }
+        }
+    }
+
+    private static void MoveAllOsDownOne(string[] rawLines)
+    {
+        for (var y = rawLines.Length - 2; y >= 0; y--)
+        {
+            for (var x = 0; x < rawLines[y].Length; x++)
+            {
+                if (rawLines[y][x] != 'O') continue;
+                
+                if (rawLines[y + 1][x] != '.') continue;
+
+                rawLines[y + 1] = PlaceCharIn(rawLines[y + 1], x, 'O');
+                rawLines[y] = PlaceCharIn(rawLines[y], x, '.');
+            }
+        }
     }
 
     private static void MoveAllOsUpOne(string[] rawLines)
