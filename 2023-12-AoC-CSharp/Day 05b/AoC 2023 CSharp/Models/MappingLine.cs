@@ -13,7 +13,11 @@ public class MappingLine
     
     public ulong DestinationRangeStart { get; } 
     
-    public ulong SourceRangeStart { get; } 
+    public ulong SourceRangeStart { get; }
+
+    public ulong SourceRangeMaximum => SourceRangeStart + RangeLength - 1;
     
-    public ulong RangeLength { get; } 
+    public ulong RangeLength { get; }
+
+    public long ModifyingAmount => (long)DestinationRangeStart - (long)SourceRangeStart;
 }

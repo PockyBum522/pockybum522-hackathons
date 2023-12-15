@@ -6,7 +6,7 @@ public class SeedRange
     {
         Start = seedStart;
         Range = seedRange;
-        End = seedStart + seedRange;
+        End = seedStart + seedRange - 1;
     }
     
     public ulong Start { get; }

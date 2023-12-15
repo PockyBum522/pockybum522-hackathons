@@ -1,26 +1,19 @@
 ﻿using AoC_2023_CSharp.Models;
 using Serilog;
-using Serilog.Events;
 
 namespace AoC_2023_CSharp;
-
-// Attempts:
-
-// 7873085 - wrong
-// 0 - wrong
-// 110359151 - wrong
 
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Information()
             .CreateLogger();
 
     public static async Task Main()
     {
         Logger.Information("Starting!");
         
-        var rawLines = RawData.SampleData01
+        var rawLines = RawData.ActualData
             .Split(Environment.NewLine);
         
         var mapHeaderStrings = new List<string>()
@@ -48,11 +41,12 @@ internal static class Program
 
         Logger.Debug("Seed ranges final: {@Ranges}", ranges);
         
+        var results = new List<ulong>();
+        
         var checkTasks = new List<Task>();
-
-        MapSingleValue(463750354, stepsArray);
         
         var counter = 0;
+
         foreach (var range in ranges) 
         {
             checkTasks.Add(
@@ -61,18 +55,14 @@ internal static class Program
 
         await Task.WhenAll(checkTasks);
 
-        var results = new List<ulong>();
-        
         foreach (Task<ulong> checkTask in checkTasks)
         {
             results.Add(await checkTask);
         }
-        
-        results.Sort();
-        
-        Logger.Information("{@ReturnValues}", results);
 
-        //Logger.Information("Answer: {@Answer}", _lowestLocation);
+        results.Sort();
+
+        Logger.Information("{@ReturnValues}", results);
     }
     
     private static SeedRange[] GetSeedRanges(string[] rawLines)
@@ -104,7 +94,7 @@ internal static class Program
             
             convertedSeedNumbers.Add(newRange);
             
-            Logger.Debug("Adding new seed range starting at: {Start} with length: {Length} ", newRange.Start, newRange.Range);
+            Logger.Information("Adding new seed range starting at: {Start} with length: {Length} ending at: {End}", newRange.Start, newRange.Range, newRange.End);
         }
 
         return convertedSeedNumbers.ToArray();
@@ -120,25 +110,11 @@ internal static class Program
         {
             ulong mappedValue = MapSingleValue(i, steps);
 
-            if (mappedValue > 100 &&
-                mappedValue < lowestValue)
+            if (lowestValue > mappedValue)
             {
                 lowestValue = mappedValue;
-
-                Logger.Information("New lowest location in batch {BatchNum}! {LowestLocation}", batchNumber, lowestValue);
+                Logger.Information("New lowest value: {NewLowest}", lowestValue);
             }
-            
-            if (mappedValue == 7873085)         
-            {
-                lowestValue = mappedValue;
-
-                Logger.Information("in batch {BatchNum}! Final value: {MappedValue}, StartValue was {I}", batchNumber, mappedValue, i);
-            }
-            
-            var remainingEntries = range.End - i;
-            
-            if (i % 10000000 == 0)
-                Logger.Information("Remaining in batch {BathNum}: {I}", batchNumber, remainingEntries);
         }
 
         return lowestValue;
@@ -148,11 +124,13 @@ internal static class Program
     {
         Logger.Debug("STARTING TO MAP {ValueToMap}", valueToMap);
 
+        var originalValue = valueToMap;
+        
         long valueToMapLong = -1;
         
         foreach (var step in steps)
         {
-            Logger.Debug("Running step {StepHeader} with: {@MappingLines}", step.Header, step.MappingLines);
+            Logger.Debug("Running step {StepHeader}", step.Header);
             
             foreach (var mappingLine in step.MappingLines)
             {
@@ -160,27 +138,27 @@ internal static class Program
             
                 // Is the number >= sourceRangeStart && <= sourceRangeStart + rangeLength (In any of the ranges given for this particular header)
                 if (valueToMap >= mappingLine.SourceRangeStart &&
-                    valueToMap <= sourceRangeMaximum)
+                    valueToMap <= mappingLine.SourceRangeMaximum)
                 {
-                    // If so, map using range:
-                    // D - S = val to apply to incoming num
-                    // 52 - 50 = +2
-                    var mapModifyingAmount = (long)mappingLine.DestinationRangeStart - (long)mappingLine.SourceRangeStart;
-
                     Logger.Debug("valueToMap now {ValueToMap}", valueToMap);
-                    Logger.Debug("mappingLine.SourceRangeStart: {SourceStart} | sourceRangeMaximum {SourceRangeMaximum} | mappingLine.DestinationRangeStart {DestinationStart} | rangeLength: {RangeLength}", mappingLine.SourceRangeStart, sourceRangeMaximum, mappingLine.DestinationRangeStart, mappingLine.RangeLength);
-                    Logger.Debug("mapModifyingAmount now {MapModifyingAmount}", mapModifyingAmount);
-
+                    Logger.Debug("mappingLine.SourceRangeStart: {SourceStart}", mappingLine.SourceRangeStart);
+                    Logger.Debug("mappingLine.SourceRangeStart: {SourceRangeMaximum}", mappingLine.SourceRangeMaximum);
+                    Logger.Debug("mappingLine.SourceRangeStart: {DestinationRangeStart}", mappingLine.DestinationRangeStart);
+                    Logger.Debug("mappingLine.SourceRangeStart: {RangeLength}", mappingLine.RangeLength);
+                    Logger.Debug("mappingLine.SourceRangeStart: {ModAmount}", mappingLine.ModifyingAmount);
+                    
                     if (valueToMap < long.MaxValue)
                     {
                         valueToMapLong = (long)valueToMap;
                     
-                        valueToMapLong += mapModifyingAmount;
+                        valueToMapLong += mappingLine.ModifyingAmount;
 
                         valueToMap = (ulong)valueToMapLong;
                     }
                     else
                     {
+                        Logger.Warning("TOO LONG! Start was {StartVal}", originalValue);
+                        
                         throw new Exception("TOO LONG");
                     }
                     
@@ -192,35 +170,22 @@ internal static class Program
         }
         
         // If we checked all the ranges, and it's not in any of them, keep it as the number
-        return (ulong)valueToMap;
+        if (valueToMapLong == -1) Logger.Warning("valueToMapLong was -1, value returned won't be right");
+        
+        try
+        {
+            checked
+            {
+                return (ulong)valueToMapLong;
+            }
+        }
+        catch (OverflowException e)
+        {
+            Logger.Warning(e.Message);  // output: Arithmetic operation resulted in an overflow.
+        }
+        
+        Logger.Warning("Overflow issue");  // output: Arithmetic operation resulted in an overflow.
+
+        throw new Exception("Couldn't return correct value");
     }
-    
-    // private static SeedRange[] GetSeedNumbers(string[] rawLines)
-    // {
-    //     var seedLineStartString = "seeds: ";
-    //     
-    //     var seedNumbers = new List<string>();
-    //     
-    //     foreach (var line in rawLines)
-    //     {
-    //         if (!line.ToLower().StartsWith(seedLineStartString)) continue;
-    //
-    //         seedNumbers = line.Split(' ').ToList();
-    //         
-    //         // Get rid of the startString element
-    //         seedNumbers.RemoveAt(0);                        
-    //         
-    //         Logger.Debug("Seed numbers are: {@SeedNumbers}", seedNumbers);
-    //     }
-    //
-    //     var convertedSeedNumbers = new List<SeedRange>();
-    //
-    //     foreach (var seedNumberString in seedNumbers)
-    //     {
-    //         convertedSeedNumbers.Add(
-    //             new SeedRange(long.Parse(seedNumberString), 1));
-    //     }
-    //     return convertedSeedNumbers.ToArray();
-    //
-    // }
 }
