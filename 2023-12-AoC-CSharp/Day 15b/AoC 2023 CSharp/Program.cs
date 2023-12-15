@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using AoC_2023_CSharp.Models;
+using Serilog;
 using Serilog.Events;
 
 namespace AoC_2023_CSharp;
@@ -6,7 +7,7 @@ namespace AoC_2023_CSharp;
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Information()
             .CreateLogger(); 
     
     public static void Main()
@@ -15,8 +16,6 @@ internal static class Program
         
         var rawLines = RawData.ActualData01
             .Split(",");
-
-        var answerTotal = 0;
         
         // Each step begins with a sequence of letters that indicate the label of the lens on which the step operates.
         // The result of running the HASH algorithm on the label indicates the correct box for that step.
@@ -39,23 +38,144 @@ internal static class Program
         //      lens goes all the way to the front of the box.
         //
         //     Here is the contents of every box after each step in the example initialization sequence above:
+
+        var boxes = new List<List<Lens>>();
+
+        for (int i = 0; i < 256; i++)
+        {
+            boxes.Add(new List<Lens>());
+        }
         
         foreach (var step in rawLines)
         {
             if (step.Contains("="))
+            {
+                var label = step.Split("=")[0];
+                
+                var boxNumber = HashAlgorithm(label);
+
+                var focalLength = step.Split("=")[1];
+
+                if (!BoxContainsLens(boxes[boxNumber], label))
+                {
+                    boxes[boxNumber].Add(new Lens()
+                    {
+                        FocalLength = int.Parse(focalLength),
+                        Label = label
+                    });    
+                }
+                else
+                {
+                    ReplaceLensInBox(boxes[boxNumber], label, focalLength);
+                }
+                    
+            }
             
-            answerTotal += HashAlgorithm(step);
+            if (step.Contains("-"))
+            {
+                var label = step.Split("-")[0];
+                
+                var boxNumber = HashAlgorithm(label);
+
+                for (var i = 0; i < boxes[boxNumber].Count; i++)
+                {
+                    if (boxes[boxNumber][i].Label == label)
+                    {
+                        Logger.Debug("Removing lens with label {Label} from box {BoxNum}", label, boxNumber);
+                        
+                        boxes[boxNumber].RemoveAt(i);
+                    }
+                        
+                }
+            }
+            
+            //answerTotal += HashAlgorithm(step);
 
             //answerTotal += 1;
         }
 
-            
+        DebugLogBoxes(boxes);
+
+        var answerTotal = CalculateTotal(boxes);
         
         Logger.Information("Answer: {AnswerTotal}", answerTotal);
         
         // Make sure if we log on other threads right before the program ends, we can see it
         Log.CloseAndFlush();
         Task.Delay(2000);
+    }
+
+    private static long CalculateTotal(List<List<Lens>> boxes)
+    {
+        var total = 0;
+        
+        for (var boxIndex = 0; boxIndex < boxes.Count; boxIndex++)
+        {
+            var box = boxes[boxIndex];
+            
+            for (var lensIndex = 0; lensIndex < box.Count; lensIndex++)
+            {
+                var thisLensTotal = 1;
+                
+                // One plus the box number of the lens in question.
+                thisLensTotal *= (1 + boxIndex);
+
+                // The slot number of the lens within the box: 1 for the first lens, 2 for the second lens, and so on.
+                thisLensTotal *= (1 + lensIndex);
+
+                // The focal length of the lens.
+                thisLensTotal *= box[lensIndex].FocalLength;
+
+                total += thisLensTotal;
+            }
+        }
+
+        return total;
+    }
+
+    private static void ReplaceLensInBox(List<Lens> box, string label, string newFocalLength)
+    {
+        for (var i = 0; i < box.Count; i++)
+        {
+            var lens = box[i];
+
+            if (lens.Label == label)
+            {
+                lens.FocalLength = int.Parse(newFocalLength);
+                
+                return;
+            }
+        }
+    }
+
+    private static bool BoxContainsLens(List<Lens> box, string label)
+    {
+        foreach (var lens in box)
+        {
+            if (lens.Label == label) 
+                return true;
+        }
+
+        return false;
+    }
+
+    private static void DebugLogBoxes(List<List<Lens>> boxes)
+    {
+        for (var i = 0; i < boxes.Count; i++)
+        {
+            var box = boxes[i];
+            
+            Logger.Debug("In box: {I}", i);
+
+            for (var lensIndex = 0; lensIndex < box.Count; lensIndex++)
+            {
+                var lens = box[lensIndex];
+                
+                Logger.Debug("[{Label} {Focal}]", lens.Label, lens.FocalLength);
+            }
+            
+            Logger.Debug("");
+        }
     }
 
     public static int HashAlgorithm(string stringToHash)
