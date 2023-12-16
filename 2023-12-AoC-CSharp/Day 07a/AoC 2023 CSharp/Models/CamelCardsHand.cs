@@ -30,7 +30,7 @@ public class CamelCardsHand
         // Make list of unique cards 
         foreach (var card in Cards)
         {
-            if (Cards.All(camelCard => camelCard.Value != card.Value))
+            if (Cards.All(camelCard => camelCard.Value == card.Value))
                 uniqueCardsInHand.Add(card);
         }
 

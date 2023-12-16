@@ -8,9 +8,9 @@ public static class RawData
                                          """;
     
     public static string SampleDataPart2 => """
-                                         Time:      71530
-                                         Distance:  940200
-                                         """;
+                                        Time:      71530
+                                        Distance:  940200
+                                        """;
 
     public static string ActualData => """
                                        Time:        38     67     76     73
