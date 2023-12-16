@@ -7,6 +7,6 @@ public static class RawData
                                          """;
 
     public static string ActualData01 => """
-                                       
-                                       """;
+
+                                         """;
 }

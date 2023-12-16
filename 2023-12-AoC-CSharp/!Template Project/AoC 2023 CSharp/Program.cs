@@ -28,7 +28,7 @@ internal static class Program
         Logger.Information("Answer: {AnswerTotal}", answerTotal);
         
         // Make sure if we log on other threads right before the program ends, we can see it
-        Log.CloseAndFlush();
-        Task.Delay(2000);
+        await Log.CloseAndFlushAsync();
+        await Task.Delay(500);
     }
 }
