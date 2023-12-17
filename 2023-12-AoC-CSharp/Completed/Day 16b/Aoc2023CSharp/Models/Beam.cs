@@ -8,7 +8,6 @@ namespace Aoc2023CSharp.Models;
 public class Beam
 {
     private readonly List<Beam> _allBeams;
-    private readonly bool[,] _answerSpaces;
     private readonly int[,] _beamsVisitedCountSpaces;
 
     private readonly ILogger? _logger;
@@ -22,13 +21,11 @@ public class Beam
         BeamDirections directionAtStart, 
         string[] rawDataLines, 
         List<Beam> allBeams, 
-        bool[,] answerSpaces, 
         int[,] beamsVisitedCountSpaces, 
         List<Point>? mirrorBounceSpaces,
         ILogger? logger = null)
     {
         _allBeams = allBeams;
-        _answerSpaces = answerSpaces;
         _beamsVisitedCountSpaces = beamsVisitedCountSpaces;
         _logger = logger;
         _rawDataLines = rawDataLines;
@@ -54,6 +51,8 @@ public class Beam
         }
     }
     
+    private readonly int _maximumBeamsOnOneSpace = 100;
+    
     public int CurrentHeadX { get; private set; }
     public int CurrentHeadY { get; private set; }
     
@@ -73,14 +72,14 @@ public class Beam
     private int _margin = 3;
     
     private bool _hasTakenFirstStep;
-
+    
     public bool TravelOneStep()
     {
         if (CurrentPositionIsWithinBounds())
         {
             _beamsVisitedCountSpaces[CurrentHeadX, CurrentHeadY]++;
         
-            if (_beamsVisitedCountSpaces[CurrentHeadX, CurrentHeadY] > 100)
+            if (_beamsVisitedCountSpaces[CurrentHeadX, CurrentHeadY] > _maximumBeamsOnOneSpace)
             {
                 IsStopped = true;
 
@@ -88,22 +87,6 @@ public class Beam
             }
         }
         
-        // if (MirrorBounceSpaces.Count > 200)
-        //     _logger?.Information("Mirrorbounce count {Count}", MirrorBounceSpaces.Count);
-        //
-        // if (MirrorAtCurrentLocation())
-        // {
-        //     MirrorBounceSpaces.Add(
-        //         new Point(CurrentHeadX, CurrentHeadY));
-        //
-        //     if (BeamHasHitMirrorXTimesBefore(5))
-        //     {
-        //         IsStopped = true;
-        //
-        //         return true;
-        //     }
-        // }
-
         if (_hasTakenFirstStep)
         {
             if (IsStopped) return false;
@@ -125,9 +108,6 @@ public class Beam
         if (CurrentPositionIsWithinBounds())
         {
             var characterAtCurrentPosition = _rawDataLines[CurrentHeadY][CurrentHeadX];
-            
-            // Log square as energized
-            _answerSpaces[CurrentHeadX, CurrentHeadY] = true;
             
             _logger?.Debug("Beam {Index} current char: {CurrentChar}", ThisBeamIndex, characterAtCurrentPosition);
         }
@@ -228,31 +208,31 @@ public class Beam
         if (characterAtCurrentPosition == '/')
         {
             if (CurrentDirection == BeamDirections.Up)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Right)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Down)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Left)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
         }
 
         if (characterAtCurrentPosition == '\\')
         {
             if (CurrentDirection == BeamDirections.Up)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Right)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Down)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Left)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
         }
 
         if (characterAtCurrentPosition == '-')
@@ -260,16 +240,16 @@ public class Beam
             if (CurrentDirection == BeamDirections.Up ||
                 CurrentDirection == BeamDirections.Down)
             {
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             }
                 
             // Just keep goin' (Albeit with a new beam, but it looks the same.
             if (CurrentDirection == BeamDirections.Right)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Right, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Left)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Left, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
         }
 
         if (characterAtCurrentPosition == '|')
@@ -277,16 +257,16 @@ public class Beam
             if (CurrentDirection == BeamDirections.Right ||
                 CurrentDirection == BeamDirections.Left)
             {
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             }
                 
             // Just keep goin' (Albeit with a new beam, but it looks the same.
             if (CurrentDirection == BeamDirections.Up)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Up, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
             
             if (CurrentDirection == BeamDirections.Down)
-                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _answerSpaces, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
+                _allBeams.Add(new Beam(CurrentHeadX, CurrentHeadY, BeamDirections.Down, _rawDataLines, _allBeams, _beamsVisitedCountSpaces, MirrorBounceSpaces, _logger));
         }
     }
 

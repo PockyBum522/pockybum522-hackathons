@@ -1,0 +1,57 @@
+Fun multithreading notes:
+
+30 threads (out of 32 logical processors) seems to run fastest. Likely lots of threads with a couple for overhead.
+
+If there's a lot of short-lived threads, it might be better to give slightly more.
+
+If they're all long-lived, a few fewer threads might be faster.
+
+
+
+See MainViewModel for how to multithread and control thread count (ugly but works)
+
+
+
+See this post for info about getting exceptions:
+https://stackoverflow.com/questions/15522900/how-to-safely-call-an-async-method-in-c-sharp-without-await
+
+
+
+[12:13:11 INF] Threads: 60
+[12:13:11 INF] Final total time elapsed hh:mm:ss.fff: 00:01:26.091
+[12:13:11 INF] Final biggest score: 8318
+
+[12:16:16 INF] Threads: 40
+[12:16:16 INF] Final total time elapsed hh:mm:ss.fff: 00:01:22.855
+[12:16:16 INF] Final biggest score: 8318
+
+[12:20:33 INF] Threads: 35
+[12:20:33 INF] Final total time elapsed hh:mm:ss.fff: 00:01:21.000
+[12:20:33 INF] Final biggest score: 8318
+
+[12:36:16 INF] Threads: 32
+[12:36:16 INF] Final total time elapsed hh:mm:ss.fff: 00:01:23.451
+[12:36:16 INF] Final biggest score: 8318
+
+[12:38:24 INF] Threads: 31
+[12:38:24 INF] Final total time elapsed hh:mm:ss.fff: 00:01:36.322
+[12:38:24 INF] Final biggest score: 8318
+
+[12:02:00 INF] Threads: 30
+[12:02:00 INF] Final total time elapsed hh:mm:ss.fff: 00:01:28.978
+[12:02:00 INF] Final biggest score: 8318
+
+[12:40:56 INF] Threads: 29
+[12:40:56 INF] Final total time elapsed hh:mm:ss.fff: 00:01:35.141
+[12:40:56 INF] Final biggest score: 8318
+
+[12:25:27 INF] Threads: 25
+[12:25:27 INF] Final total time elapsed hh:mm:ss.fff: 00:01:37.319
+[12:25:27 INF] Final biggest score: 8318
+[12:34:19 INF] answersList.Count: 440
+
+[12:34:19 INF] Threads: 20
+[12:34:19 INF] Final total time elapsed hh:mm:ss.fff: 00:01:45.221
+[12:34:19 INF] Final biggest score: 8318
+
+
