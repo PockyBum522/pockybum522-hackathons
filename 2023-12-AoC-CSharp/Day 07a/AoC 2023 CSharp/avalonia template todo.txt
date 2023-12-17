@@ -1,0 +1,10 @@
+Make commant in mainview.axml one line
+
+Install Community.Toolkit.MVVM
+
+Make MainViewModel observableObject instead of baseviewmodel 
+Make mainviewmodel partial class
+
+Fix mainview tab indentation? Looks like using 2 spaces?
+
+Add commented out RxApp.MainThreadScheduler.Schedule(async () => await StartAsyncMethod()); to MainViewModel constructor

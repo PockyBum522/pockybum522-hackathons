@@ -1,3 +1,4 @@
+using System.Runtime.Versioning;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -14,6 +15,7 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
+    [SupportedOSPlatform("windows")]
     public override void OnFrameworkInitializationCompleted()
     {
         // Dependency Injection:
@@ -24,16 +26,14 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel(
-                    loggerConfiguration)
+                DataContext = new MainViewModel(loggerConfiguration)
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel(
-                    loggerConfiguration)
+                DataContext = new MainViewModel(loggerConfiguration)
             };
         }
 
