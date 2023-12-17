@@ -1,16 +1,16 @@
-﻿using Serilog;
-using Serilog.Events;
-
-namespace AoC_2023_CSharp;
+﻿namespace AoC_2023_CSharp;
 
 internal static class Program
 {
     private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
             .MinimumLevel.Information()
             .CreateLogger(); 
+ 
+    private static readonly Stopwatch ElapsedTotal = new();
     
-    public static void Main()
+    public static async Task Main()
     {
+        ElapsedTotal.Start();
         Logger.Information("Starting!");
         
         var rawLines = RawData.SampleData01
@@ -24,7 +24,8 @@ internal static class Program
             
             //answerTotal += 1;
         }
-        
+
+        Logger.Information("{FormattedTimeString}", StopwatchHelper.GetStopwatchFinalTimes(ElapsedTotal));
         Logger.Information("Answer: {AnswerTotal}", answerTotal);
         
         // Make sure if we log on other threads right before the program ends, we can see it

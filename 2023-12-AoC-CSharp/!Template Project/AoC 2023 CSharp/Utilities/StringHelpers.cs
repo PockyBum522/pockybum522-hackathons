@@ -1,5 +1,4 @@
-﻿using Serilog;
-using Serilog.Core;
+﻿using Serilog.Core;
 
 namespace AoC_2023_CSharp.Utilities;
 
