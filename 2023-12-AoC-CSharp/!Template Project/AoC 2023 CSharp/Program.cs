@@ -2,7 +2,8 @@
 
 internal static class Program
 {
-    private static readonly ILogger Logger = LoggerSetup.ConfigureLogger()
+    // ReSharper disable once InconsistentNaming because it's less annoying than having the same name as the class
+    private static readonly ILogger _logger = LoggerSetup.ConfigureLogger()
             .MinimumLevel.Information()
             .CreateLogger(); 
  
@@ -11,7 +12,7 @@ internal static class Program
     public static async Task Main()
     {
         ElapsedTotal.Start();
-        Logger.Information("Starting!");
+        _logger.Information("Starting!");
         
         var rawLines = RawData.SampleData01
             .Split(Environment.NewLine);
@@ -25,8 +26,8 @@ internal static class Program
             //answerTotal += 1;
         }
 
-        Logger.Information("{FormattedTimeString}", StopwatchHelper.GetStopwatchFinalTimes(ElapsedTotal));
-        Logger.Information("Answer: {AnswerTotal}", answerTotal);
+        _logger.Information("{FormattedTimeString}", StopwatchHelper.GetStopwatchFinalTimes(ElapsedTotal));
+        _logger.Information("Answer: {AnswerTotal}", answerTotal);
         
         // Make sure if we log on other threads right before the program ends, we can see it
         await Log.CloseAndFlushAsync();
