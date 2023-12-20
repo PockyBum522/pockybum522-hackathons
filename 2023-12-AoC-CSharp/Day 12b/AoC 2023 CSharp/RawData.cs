@@ -10,6 +10,7 @@ public static class RawData
                                          ????.######..#####. 1,6,5
                                          ?###???????? 3,2,1
                                          """;
+
     public static string ActualData01 => """
                                          ..???.??.? 1,1,1
                                          ?#?##???.???? 2,5,1,1

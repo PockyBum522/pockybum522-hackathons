@@ -1,0 +1,29 @@
+
+16384
+/ ORIGINAL Valid (4)
+
+Original valid (4)
+
+4 x 4 x 4 x 4 x 4
+
+1024
+
+x 4 x 4
+
+16384
+
+
+
+// Make groups of 1's off the numbers given
+
+// Pad groups with 0 between groups
+
+// If a group has a 0 above it, move that group and all to the right of it right 1 space, test again
+
+// brute force incrementally changing the space between each group with binary and test if valid based on 0's above again, then repeat
+
+
+
+?###? ???????? ?###? ???????? ?###? ???????? ?###? ???????? ?###? ???????    3,2,1,3,2,1,3,2,1,3,2,1,3,2,1 - 506250 arrangements
+ 111  11 1 111  11   1 111 11  1    111  11   1    111  11   1
+       
