@@ -8,6 +8,12 @@ public static class StringHelpers
     
     // ReSharper disable once InconsistentNaming because it would be public if every actually used
     private static ILogger? LoggerToUse;  // Make this public and set this if debugging, but should largely be unnecessary
+
+    public static string TrimSymbols(this string toTrim)
+    {
+        return toTrim.Replace("%", "")
+            .Replace("&", "");
+    }
     
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
     
