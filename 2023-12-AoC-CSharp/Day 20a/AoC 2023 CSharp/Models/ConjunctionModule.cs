@@ -4,6 +4,6 @@ public class ConjunctionModule : BaseModule
 {
     public ConjunctionModule(string rawLine, BaseModule parent) : base(rawLine, parent)
     {
-        CurrentState = null;
+        CurrentState = false;           // Per the instructions, conjunction modules start low
     }
 }

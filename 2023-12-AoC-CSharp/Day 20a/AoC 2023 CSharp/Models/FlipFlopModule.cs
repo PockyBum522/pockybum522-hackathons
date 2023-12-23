@@ -4,6 +4,6 @@ public class FlipFlopModule : BaseModule
 {
     public FlipFlopModule(string rawLine, BaseModule parent) : base(rawLine, parent)
     {
-        CurrentState = null;
+        CurrentState = false;           // Per the instructions, flip-flop modules start off
     }
 }
