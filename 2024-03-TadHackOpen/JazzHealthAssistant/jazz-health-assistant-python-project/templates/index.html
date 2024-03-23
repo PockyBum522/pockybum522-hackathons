@@ -1,16 +1,17 @@
 <html>
-<head>
-<title>Flask app</title>
-</head>
-<body>
-<input type="text" id="text1"></input>
-<input type="text" id="text2"></input>
-<input type="button" value="Add" id="button"></input>
-<ul id="ul"></ul>
-<div style="display: block; box-sizing: border-box; height: 285px; width: 570px;" width="570" height="285">
-<canvas id="chart"></canvas>
-</div>
-</body>
+    <head>
+        <title>Flask app</title>
+        <link rel="stylesheet" href="../static/styles/normalize.css" />
+    </head>
+    <body>
+        <input type="text" id="text1" />
+        <input type="text" id="text2" />
+        <input type="button" value="Add" id="button" />
+        <ul id="ul"></ul>
+        <div style="display: block; box-sizing: border-box; height: 285px; width: 570px;" width="570" height="285">
+            <canvas id="chart"></canvas>
+        </div>
+    </body>
 </html>
 <script>
 document.getElementById("button").onclick = function() {
