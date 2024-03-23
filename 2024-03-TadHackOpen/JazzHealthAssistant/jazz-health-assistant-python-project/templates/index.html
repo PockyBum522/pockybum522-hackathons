@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Flask app</title>
+</head>
+<body>
+<input type="text" id="text"></input>
+<input type="button" value="Add" id="button"></input>
+<ul id="ul"></ul>
+<canvas id="chart"></canvas>
+</body>
+</html>
+<script>
+document.getElementById("button").onclick = function() {
+	var text = document.getElementById("text").value;
+	if (text != "") {
+		document.getElementById("ul").insertAdjacentHTML("beforeend", "<li>" + document.getElementById("text").value + "</li>");
+		document.getElementById("text").value = "";
+	}
+}
+new Chart(document.getElementById("line-chart"), {
+	type : 'line',
+	data : {
+		labels : [ 1500, 1600, 1700, 1750, 1800, 1850,
+				1900, 1950, 1999, 2050 ],
+		datasets : [
+				{
+					data : [ 186, 205, 1321, 1516, 2107,
+							2191, 3133, 3221, 4783, 5478 ],
+					label : "America",
+					borderColor : "#3cba9f",
+					fill : false
+				}]
+	},
+	options : {
+		title : {
+			display : true,
+			text : 'Chart JS Line Chart Example'
+		}
+	}
+});
+const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+
+type: 'bar',
+data: {
+  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  datasets: [{
+	label: '# of Votes',
+	data: [12, 19, 3, 5, 2, 3],
+	borderWidth: 1
+  }]
+},
+options: {
+  scales: {
+	y: {
+	  beginAtZero: true
+	}
+  }
+}
+});
+</script>
