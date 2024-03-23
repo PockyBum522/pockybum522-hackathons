@@ -5,26 +5,26 @@ import os
 import logging
 from pyngrok import ngrok
 
-if not os.environ['NGROK_URL']:
-    public_url = ngrok.connect(80)
-    os.environ['NGROK_URL'] = public_url
-else:
-    public_url = os.environ['NGROK_URL']
+# if not os.environ['NGROK_URL']:
+#     public_url = ngrok.connect(80)
+#     os.environ['NGROK_URL'] = public_url
+# else:
+#     public_url = os.environ['NGROK_URL']
 
 if not os.environ['PHONE_NUMBER']:
-    print ("Please set a phone number to make calls from.")
+    print("Please set a phone number to make calls from.")
 else:
     phone_number = os.environ['PHONE_NUMBER']
 
-
-ngrok_tunnel_url = os.environ['NGROK_URL']
+# ngrok_tunnel_url = os.environ['NGROK_URL']
 
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def ai_prompt():
-    return render_template('index.html')
+    return render_template('/index.html')
 
 
 if __name__ == '__main__':
