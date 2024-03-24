@@ -1,23 +1,6 @@
 <html>
-<head>
-<title>Jazz Health Assistant</title>
-</head>
-<body>
-<input type="date" id="date"></input>
-<input type="time" id="time"></input>
-<input type="number" value=0 id="number"></input>
-<input type="button" value="Add" id="button"></input>
-<div>
-<ul id="ul"></ul>
-<div>
-<div style="display: block; box-sizing: border-box; height: 285px; width: 570px;" width="570" height="285">
-<canvas id="chart"></canvas>
-<canvas id="chart2"></canvas>
-<canvas id="chart3"></canvas>
-</div>
-</body>
     <head>
-        <title>Flask app</title>
+        <title>Jazz Health Assistant</title>
         <link rel="stylesheet" href="../static/styles/normalize.css" />
         <link href="//cdn.muicss.com/mui-0.10.3/css/mui.min.css" rel="stylesheet" type="text/css" />
     </head>
@@ -26,17 +9,40 @@
             <table style="width:100%">
                 <tr style="vertical-align:middle;">
                   <td style="color: white;" class="mui--appbar-height mui--text-display1">JAZZ HEALTH ASSISTANT</td>
-                  <td class="mui--appbar-height" align="right"></td>
+                  <td class="mui--appbar-height" align="right">
+                      <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 448 512"><path fill="white" d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+                  </td>
                 </tr>
             </table>
         </div>
-        <div class="mui-container">
-            <input type="text" id="text1" />
-            <input type="text" id="text2" />
-            <input type="button" value="Add" id="button" class="mui-btn mui-btn--primary" />
-            <ul id="ul"></ul>
-            <div style="display: block; box-sizing: border-box; height: 285px; width: 570px;" width="570" height="285">
-                <canvas id="chart"></canvas>
+        <div class="mui-container-fluid">
+            <div class="mui-row">
+                <div class="mui-col-md-4">
+                    <nav>
+                        <ul>
+                            <li>Benchies</li>
+                            <li>Central Park</li>
+                            <li>Lorem</li>
+                            <li>Ipsum</li>
+                            <li>Dolor</li>
+                            <li>Set</li>
+                            <li>Amet</li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="mui-col-md-4">
+                    <input type="date" id="date" />
+                    <input type="time" id="time" />
+                    <input type="number" value=0 id="number" />
+                    <input type="button" value="Add" id="button" class="mui-btn mui-btn--primary" />
+
+                    <div style="display: block; box-sizing: border-box; height: 285px; width: 570px;" width="570" height="285">
+                        <canvas id="chart"></canvas>
+                        <canvas id="chart2"></canvas>
+                        <canvas id="chart3"></canvas>
+                    </div>
+                </div>
+                <div class="mui-col-4"></div>
             </div>
         </div>
     </body>
