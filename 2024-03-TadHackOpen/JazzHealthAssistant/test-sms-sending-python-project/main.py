@@ -77,25 +77,22 @@ def send_message(sender, to, subject, message_text, user_id='me'):
 
 
 if __name__ == '__main__':
-    send_message("14074632925@tmomail.net", "pockybum522@gmail.com",
-                 "Important! Grandma Lisa had a high blood sugar reading of 130 as of March 24th, 2024", "",
-                 user_id='me')
-
     # Show ngrok URL and tunnel
     # print()
     # print(public_url)
     # print()
     #
     # # This should work once
-    #
-    # print()
-    # print()
-    # print('Sending message using ph: ' + SIGNALWIRE_NUMBER)
-    # print()
-    # print()
-    #
-    # success = swClient.messages.create(to='+14074632925', from_=SIGNALWIRE_NUMBER,
-    #                                    body='Important! Grandma Lisa had a high blood sugar reading of 130 as of March 24th, 2024')
+
+    print()
+    print()
+    print('Sending message using ph: ' + SIGNALWIRE_NUMBER)
+    print()
+    print()
+
+    success = swClient.messages.create(to='+14076322207', from_=SIGNALWIRE_NUMBER,
+                                       body='Important! Grandma Lisa had a high blood sugar reading of 130 as of March 24th, 2024')
+
 
     # Run flask server
     # app.run(host="0.0.0.0", port=80)

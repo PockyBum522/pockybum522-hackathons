@@ -64,7 +64,6 @@
 					<label>Oxygenation:</label>
 					<input size="6"type="number" value=0 id="number4" />
 					<br>
-					<label>HI</br>
                     <input type="button" value="Add" id="button" class="mui-btn mui-btn--primary" />
 
                     <div style="display: block; box-sizing: border-box; height: 285px; width: 570px;" width="570" height="285">
@@ -86,9 +85,10 @@
 <script>
 year = 2024;
 month = 3;
-day = 23 - 6;
+day = 24 - 6;
 window.onload = (event) => {
-	document.getElementById('date').value = "2024-03-23";
+	date2 = new Date();
+	document.getElementById('date').value = "2001-01-01";
 	document.getElementById('time').value = "12:00";
 	var url = window.location.href;
 	paramsString = url.split("?")[1];
@@ -137,7 +137,7 @@ document.getElementById("button").onclick = function() {
 var chart = new Chart(document.getElementById("chart"), {
 	type : 'line',
 	data : {
-		labels : [ year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++) ],
+		labels : [ year + "-" + month + "-" + (day++) + ", 15:17", year + "-" + month + "-" + (day++) + ", 15:17", year + "-" + month + "-" + (day++) + ", 15:17", year + "-" + month + "-" + (day++) + ", 15:17", year + "-" + month + "-" + (day++) + ", 15:17", year + "-" + month + "-" + (day++) + ", 15:17" ],
 		datasets : [
 				{
 					label: 'Blood Sugar',
