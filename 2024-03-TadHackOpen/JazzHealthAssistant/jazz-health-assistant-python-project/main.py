@@ -22,7 +22,7 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def ai_prompt():
+def render_index():
     # This should work once
 
     print()
@@ -31,7 +31,10 @@ def ai_prompt():
     print()
     print()
 
-    success = swClient.messages.create(to='+14074632925', from_=SIGNALWIRE_NUMBER, body='Important! Grandma Lisa had a high blood sugar reading as of March 24th, 2024. Please verify with her that insulin is being taken appropriately.')
+    # success = swClient.messages.create(to='+14076322207',
+    success = swClient.messages.create(to='+14074632925',
+                                       from_=SIGNALWIRE_NUMBER,
+                                       body='Important! Grandma Lisa had a high blood sugar reading as of March 24th')
 
     return render_template('/index.html')
 
