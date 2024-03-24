@@ -1,23 +1,10 @@
 from signalwire.voice_response import *
 from flask import Flask, request, render_template
-import sqlite3
 import os
-import logging
 from pyngrok import ngrok
 
-# if not os.environ['NGROK_URL']:
-#     public_url = ngrok.connect(80)
-#     os.environ['NGROK_URL'] = public_url
-# else:
-#     public_url = os.environ['NGROK_URL']
-
-if not os.environ['PHONE_NUMBER']:
-    print("Please set a phone number to make calls from.")
-else:
-    phone_number = os.environ['PHONE_NUMBER']
-
-# ngrok_tunnel_url = os.environ['NGROK_URL']
-
+ngrok.set_auth_token(os.environ['NGROK_AUTH_TOKEN'])
+public_url = ngrok.connect()
 
 app = Flask(__name__)
 
@@ -28,4 +15,10 @@ def ai_prompt():
 
 
 if __name__ == '__main__':
+    # Show ngrok URL and tunnel
+    print()
+    print(public_url)
+    print()
+
+    # Run flask server
     app.run(host="0.0.0.0", port=80)
