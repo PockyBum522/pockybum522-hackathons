@@ -13,7 +13,7 @@ SIGNALWIRE_TOKEN = os.environ['SIGNALWIRE_API_TOKEN']
 SIGNALWIRE_SPACE = os.environ['SIGNALWIRE_SPACE_URL']
 SIGNALWIRE_NUMBER = os.environ['SIGNALWIRE_FROM_NUMBER']
 
-swClient = signalwireClient(SIGNALWIRE_PROJECT_KEY, SIGNALWIRE_TOKEN, signalwire_space_url=SIGNALWIRE_SPACE)
+#swClient = signalwireClient(SIGNALWIRE_PROJECT_KEY, SIGNALWIRE_TOKEN, signalwire_space_url=SIGNALWIRE_SPACE)
 
 ngrok.set_auth_token(os.environ['NGROK_AUTH_TOKEN'])
 public_url = ngrok.connect()
@@ -31,7 +31,7 @@ def ai_prompt():
     print()
     print()
 
-    success = swClient.messages.create(to='+14074632925', from_=SIGNALWIRE_NUMBER, body='Important! Grandma Lisa had a high blood sugar reading as of March 24th, 2024. Please verify with her that insulin is being taken appropriately.')
+   # success = swClient.messages.create(to='+14074632925', from_=SIGNALWIRE_NUMBER, body='Important! Grandma Lisa had a high blood sugar reading as of March 24th, 2024. Please verify with her that insulin is being taken appropriately.')
 
     return render_template('/index.html')
 
