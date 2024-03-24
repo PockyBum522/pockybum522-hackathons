@@ -13,7 +13,7 @@ SIGNALWIRE_TOKEN = os.environ['SIGNALWIRE_API_TOKEN']
 SIGNALWIRE_SPACE = os.environ['SIGNALWIRE_SPACE_URL']
 SIGNALWIRE_NUMBER = os.environ['SIGNALWIRE_FROM_NUMBER']
 
-swClient = signalwireClient(SIGNALWIRE_PROJECT_KEY, SIGNALWIRE_TOKEN, signalwire_space_url=SIGNALWIRE_SPACE)
+#swClient = signalwireClient(SIGNALWIRE_PROJECT_KEY, SIGNALWIRE_TOKEN, signalwire_space_url=SIGNALWIRE_SPACE)
 
 ngrok.set_auth_token(os.environ['NGROK_AUTH_TOKEN'])
 public_url = ngrok.connect()
