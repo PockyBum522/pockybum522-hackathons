@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
     <head>
         <title>Jazz Health Assistant</title>
@@ -49,13 +51,27 @@
                 <div class="mui-col-md-5">
                     <input type="date" id="date" />
                     <input type="time" id="time" />
-                    <input type="number" value=0 id="number" />
+					<br>
+					<label>Blood Sugar:</label>
+                    <input size="6" type="number" value=0 id="number" />
+					<br>
+					<label>Heart Rate:</label>
+					<input size="6" type="number" value=0 id="number2" />
+					<br>
+					<label>Blood Pressure:</label>
+					<input size="6" type="number" value=0 id="number3" />
+					<br>
+					<label>Oxygenation:</label>
+					<input size="6"type="number" value=0 id="number4" />
+					<br>
+					<label>HI</br>
                     <input type="button" value="Add" id="button" class="mui-btn mui-btn--primary" />
 
                     <div style="display: block; box-sizing: border-box; height: 285px; width: 570px;" width="570" height="285">
                         <canvas id="chart"></canvas>
                         <canvas id="chart2"></canvas>
                         <canvas id="chart3"></canvas>
+                        <canvas id="chart4"></canvas>
                     </div>
                 </div>
                 <div class="mui-col-md-4" style="display:flex; flex-direction: column">
@@ -68,30 +84,53 @@
     </body>
 </html>
 <script>
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
-}
 year = 2024;
 month = 3;
 day = 23 - 6;
-document.getElementById('date').value = "2024-03-23";
-document.getElementById('time').value = "12:00";
-document.getElementById('number').value = 80;
+window.onload = (event) => {
+	document.getElementById('date').value = "2024-03-23";
+	document.getElementById('time').value = "12:00";
+	var url = window.location.href;
+	paramsString = url.split("?")[1];
+	const searchParams = new URLSearchParams(paramsString);
+	if (searchParams.has("blood_sugar") && searchParams.has("heart_rate") && searchParams.has("blood_pressure") && searchParams.has("oxygenation")) {
+		var date = document.getElementById("date");
+		var time = document.getElementById("time");
+		var number = document.getElementById("number");
+		var number2 = document.getElementById("number2");
+		var number3 = document.getElementById("number3");
+		var number4 = document.getElementById("number4");
+		chart.data.labels.push(date.value + ", " + time.value);
+		chart.data.datasets[0].data.push(parseInt(number.value));
+		chart.update();
+		chart2.data.labels.push(date.value + ", " + time.value);
+		chart2.data.datasets[0].data.push(parseInt(number.value));
+		chart2.update();
+		chart3.data.labels.push(date.value + ", " + time.value);
+		chart3.data.datasets[0].data.push(parseInt(number.value));
+		chart3.update();
+		chart4.data.labels.push(date.value + ", " + time.value);
+		chart4.data.datasets[0].data.push(parseInt(number.value));
+		chart4.update();
+	}
+};
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
 document.getElementById("button").onclick = function() {
 	var date = document.getElementById("date");
 	var time = document.getElementById("time");
 	var number = document.getElementById("number");
-	if (date.value != "" && time.value != "") {
-		document.getElementById("ul").insertAdjacentHTML("beforeend", "<li>" + date.value + "</li>");
-		chart.data.labels.push(date.value + ", " + time.value);
-		chart.data.datasets[0].data.push(parseInt(number.value));
-		chart.update();
-		// date.value = "";
-		// time.value = "";
-		// number.value = "";
-	}
+	var number2 = document.getElementById("number2");
+	var number3 = document.getElementById("number3");
+	var number4 = document.getElementById("number4");
+	var url = window.location.href;
+	url = url.split("?")[0];
+	url += "?blood_sugar=" + number.value + "&heart_rate=" + number2.value + "&blood_pressure=" + number3.value + "&oxygenation=" + number4.value;
+	window.location.href = url;
 }
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -102,8 +141,8 @@ var chart = new Chart(document.getElementById("chart"), {
 		datasets : [
 				{
 					label: 'Blood Sugar',
-					data : [ getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130) ],
-					borderColor : "#3cba9f",
+					data : [ 95.05951972479879, 119.13063295135505, 99.61713515096622, 125.97611799346262, 85.06110922618167, 120.53671354278359 ],
+					borderColor : "#006600",
 					fill : false
 				}]
 	},
@@ -121,8 +160,8 @@ var chart2 = new Chart(document.getElementById("chart2"), {
 		datasets : [
 				{
 					label: 'Heart Rate',
-					data : [ getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130) ],
-					borderColor : "#354d73",
+					data : [ 101.0990555218859, 88.46873011846654, 123.03031075638688, 93.03155323686507, 84.39814780540829, 113.57256597885714 ],
+					borderColor : "#4c0000",
 					fill : false
 				}]
 	},
@@ -140,8 +179,27 @@ var chart3 = new Chart(document.getElementById("chart3"), {
 		datasets : [
 				{
 					label: 'Blood Pressure',
-					data : [ getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130), getRandomArbitrary(80, 130) ],
-					borderColor : "#c51d34",
+					data : [ 81.64892015990839, 87.586697833649, 81.26296059169827, 83.41291394917286, 113.05583376065528, 125.22925797963268 ],
+					borderColor : "#b20000",
+					fill : false
+				}]
+	},
+	options : {
+		title : {
+			display : true,
+			text : 'Chart JS Line Chart Example'
+		}
+	}
+});
+var chart4 = new Chart(document.getElementById("chart4"), {
+	type : 'line',
+	data : {
+		labels : [ year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++), year + "-" + month + "-" + (day++) ],
+		datasets : [
+				{
+					label: 'Oxygenation',
+					data : [ 95.76288095613018, 113.84493854151579, 124.89937998954017, 112.57443730661632, 116.9821014087757, 119.02094425121996 ],
+					borderColor : "#0021f3",
 					fill : false
 				}]
 	},
