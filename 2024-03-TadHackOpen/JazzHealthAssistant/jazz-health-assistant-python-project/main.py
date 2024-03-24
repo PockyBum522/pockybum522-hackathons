@@ -3,6 +3,7 @@ from flask import Flask, request, render_template
 import os
 from pyngrok import ngrok
 
+# Set up ngrok tunnel
 ngrok.set_auth_token(os.environ['NGROK_AUTH_TOKEN'])
 public_url = ngrok.connect()
 
