@@ -22,19 +22,24 @@ app = Flask(__name__)
 
 @app.route("/")
 def render_index():
-    # This should work once
 
-    print()
-    print()
-    print('Sending message using ph: ' + SIGNALWIRE_NUMBER)
-    print()
-    print()
+    blood_sugar = request.args.get('blood_sugar')
 
-    message = 'Grandma Lisa had high blood sugar reading of 160 on March 24th'
+    if blood_sugar is None:
+        print("Blood sugar arg is: NoneType")
 
-    success = swClient.messages.create(to='+14074632925',
-                                       from_=SIGNALWIRE_NUMBER,
-                                       body=message)
+    if blood_sugar is not None and int(blood_sugar) > 130:
+        print()
+        print()
+        print('Sending message using ph: ' + SIGNALWIRE_NUMBER)
+        print()
+        print()
+
+        message = 'Grandma Lisa had high blood sugar reading of: ' + blood_sugar + ' on March 24th\n\nPlease check that insulin is being used on schedule'
+
+        success = swClient.messages.create(to='+14074632925',
+                                           from_=SIGNALWIRE_NUMBER,
+                                           body=message)
 
     return render_template('/index.html')
 
