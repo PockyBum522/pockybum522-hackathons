@@ -112,14 +112,18 @@
 year = 2024;
 month = 3;
 day = 24 - 6;
+blood_sugar = 0;
+heart_rate = 0;
+blood_pressure = 0;
+oxygenation = 0;
 window.onload = (event) => {
-	date2 = new Date();
 	document.getElementById('date').value = "2001-01-01";
 	document.getElementById('time').value = "12:00";
 	var url = window.location.href;
 	paramsString = url.split("?")[1];
 	const searchParams = new URLSearchParams(paramsString);
 	if (searchParams.has("blood_sugar") && searchParams.has("heart_rate") && searchParams.has("blood_pressure") && searchParams.has("oxygenation")) {
+		console.log(searchParams);
 		var date = document.getElementById("date");
 		var time = document.getElementById("time");
 		var number = document.getElementById("number");
@@ -127,16 +131,16 @@ window.onload = (event) => {
 		var number3 = document.getElementById("number3");
 		var number4 = document.getElementById("number4");
 		chart.data.labels.push(date.value + ", " + time.value);
-		chart.data.datasets[0].data.push(parseInt(number.value));
+		chart.data.datasets[0].data.push(parseInt(searchParams.get("blood_sugar")));
 		chart.update();
 		chart2.data.labels.push(date.value + ", " + time.value);
-		chart2.data.datasets[0].data.push(parseInt(number.value));
+		chart2.data.datasets[0].data.push(parseInt(searchParams.get("heart_rate")));
 		chart2.update();
 		chart3.data.labels.push(date.value + ", " + time.value);
-		chart3.data.datasets[0].data.push(parseInt(number.value));
+		chart3.data.datasets[0].data.push(parseInt(searchParams.get("blood_pressure")));
 		chart3.update();
 		chart4.data.labels.push(date.value + ", " + time.value);
-		chart4.data.datasets[0].data.push(parseInt(number.value));
+		chart4.data.datasets[0].data.push(parseInt(searchParams.get("oxygenation")));
 		chart4.update();
 	}
 };
@@ -147,9 +151,13 @@ document.getElementById("button").onclick = function() {
 	var date = document.getElementById("date");
 	var time = document.getElementById("time");
 	var number = document.getElementById("number");
+	var blood_sugar = number.value;
 	var number2 = document.getElementById("number2");
+	var heart_rate = number2.value
 	var number3 = document.getElementById("number3");
+	var blood_pressure = number3.value
 	var number4 = document.getElementById("number4");
+	var oxygenation = number4.value
 	var url = window.location.href;
 	url = url.split("?")[0];
 	url += "?blood_sugar=" + number.value + "&heart_rate=" + number2.value + "&blood_pressure=" + number3.value + "&oxygenation=" + number4.value;
