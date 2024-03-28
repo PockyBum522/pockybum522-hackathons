@@ -1,0 +1,4 @@
+Flask==3.0.0
+signalwire==2.1.0
+pyngrok==7.0.5
+python-dotenv~=1.0.1
