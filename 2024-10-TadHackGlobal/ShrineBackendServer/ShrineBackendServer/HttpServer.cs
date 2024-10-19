@@ -8,10 +8,11 @@ namespace ShrineBackendServer;
 
 public class HttpServer
 {
-    private readonly bool _sendTestEvents = true;
-    
-    public static List<Event> Events = [];
-    
+    public static List<Event> Events { get; } = [];
+    public static DateTimeOffset CoinPlacedTime { get; set; } = DateTimeOffset.MaxValue;
+
+    private readonly bool _sendTestEvents = false;
+
     public HttpServer(int port)
     {
         StartListener();

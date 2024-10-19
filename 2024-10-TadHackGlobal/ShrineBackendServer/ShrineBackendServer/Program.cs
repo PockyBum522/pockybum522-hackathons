@@ -18,6 +18,7 @@ public static class Program
         
         Task.Run(StartNfcReadWatchLoop);
         Task.Run(StartHttpServer);
+        Task.Run(SpeechRecognizer.StartSpeechRecognitionLoop);
 
         await Task.Delay(3000);
         
@@ -27,7 +28,7 @@ public static class Program
         HttpServer.Events.Add(
             new Event(){ Type = "ParishionerEnteredShrine" });
 
-        Console.WriteLine("Press any key to exit...");
+        Console.WriteLine("Press enter again when you want to exit the server...");
         Console.ReadLine();
         
         Environment.Exit(0);
@@ -52,6 +53,8 @@ public static class Program
                 if (lastUidSeen == uidString) continue;
                 
                 lastUidSeen = uidString;
+                
+                HttpServer.CoinPlacedTime = DateTimeOffset.Now;
                 
                 HttpServer.Events.Add(
                     new Event(){ Type = "CoinPlacedOnAltar", Data = uidString });
