@@ -1,0 +1,9 @@
+Scene 1 (Idle): Ethereal Wubbling
+Scene 2 (User detected/Button pressed to start presentation): Wubbling is energized for 10 seconds
+Scene 3 (Instructions to consider a prayer): Wubbling is reduced, a green hue is applied and the scene gradually fades out to hint at time limit
+Scene 4 (Begin prayer; instructions to speak aloud): Spoken words appear on screen in blurred/indistinct form
+Scene 5 (Prompt to place coin down): Screen blanks out to solid color, a white circle appears in center of screen
+Scene 6 (Saving prayer): Indistinct spoken words appear in random places on screen and begin swirling into circle
+Scene 7 (Prompt to take coin out into world): Wubbling energizes and calms
+Scene 8 (User prompted to exit): Scene fades out to nothing
+
