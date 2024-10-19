@@ -77,6 +77,7 @@ public class HttpServer
                 stream.Write(Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\n"));
                 stream.Write(Encoding.ASCII.GetBytes("Access-Control-Allow-Origin: *\n"));
                 stream.Write(Encoding.ASCII.GetBytes("Access-Control-Allow-Headers: *\n"));
+                stream.Write(Encoding.ASCII.GetBytes("Content-Type: text/plain\n"));
                 stream.Write(Encoding.ASCII.GetBytes("\n"));
                 
                 // Send back a response.
