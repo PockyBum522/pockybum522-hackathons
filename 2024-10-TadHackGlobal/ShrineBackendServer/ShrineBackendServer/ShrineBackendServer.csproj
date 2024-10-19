@@ -7,4 +7,25 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Crapto1Sharp" Version="1.2.2" />
+        <PackageReference Include="ManagedLibnfc" Version="1.0.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\..\..\..\..\home\david\.nuget\packages\managedlibnfc\1.0.1\runtimes\libnfc.conf">
+        <Link>NfcRead\resources\libnfc.conf</Link>
+      </Content>
+      <Content Include="..\..\..\..\..\..\..\home\david\.nuget\packages\managedlibnfc\1.0.1\runtimes\win-x86\native\libnfc.dll">
+        <Link>NfcRead\resources\libnfc.dll</Link>
+      </Content>
+      <Content Include="..\..\..\..\..\..\..\home\david\.nuget\packages\managedlibnfc\1.0.1\runtimes\win-x86\native\libusb0.dll">
+        <Link>NfcRead\resources\libusb0.dll</Link>
+      </Content>
+      <Content Include="..\..\..\..\..\..\..\home\david\.nuget\packages\managedlibnfc\1.0.1\runtimes\win-x86\native\pcre3.dll">
+        <Link>NfcRead\resources\pcre3.dll</Link>
+      </Content>
+    </ItemGroup>
+
 </Project>
