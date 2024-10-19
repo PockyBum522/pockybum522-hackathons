@@ -1,26 +1,43 @@
 ﻿using System.Security.Authentication;
+using ShrineBackendServer.Models;
 using ShrineBackendServer.NfcRead;
 
 namespace ShrineBackendServer;
 
 public static class Program
 {
-    private static string _lastTagSeenUidString = "";
-    
-    public static void Main()
+    public static async Task Main()
     {
-        // After a reboot, or upon unplugging/replugging the NFC reader,
-        // you will need to run the following before using the NFC reader:
-        //
-        // sudo modprobe -r pn533_usb
-        // sudo modprobe -r pn533
+        /*
+            After a reboot, or upon unplugging/replugging the NFC reader,
+            you will need to run the following before using the NFC reader:
+
+            sudo modprobe -r pn533_usb
+            sudo modprobe -r pn533
+        */
         
-        StartNfcReadWatchLoop();
+        Task.Run(StartNfcReadWatchLoop);
+        Task.Run(StartHttpServer);
+
+        await Task.Delay(3000);
+        
+        Console.WriteLine("Press enter when a parishioner enters the shrine...");
+        Console.ReadLine();
+        
+        HttpServer.Events.Add(
+            new Event(){ Type = "ParishionerEnteredShrine" });
+
+        Console.WriteLine("Press any key to exit...");
+        Console.ReadLine();
+        
+        Environment.Exit(0);
     }
 
     private static void StartNfcReadWatchLoop()
     {
-        Console.WriteLine("Please tap an NFC tag to the reader when ready...");
+        Console.WriteLine("NFC Reader loop starting...");
+    
+        var lastUidSeen = "";
         
         while (true)
         {
@@ -30,22 +47,21 @@ public static class Program
                 var uidString = nfcReader.GetUid();
 
                 // If we didn't throw AuthenticationException above, then valid tag was found:
-                AddTagFoundEventToEventsList(uidString);
+                
+                // If it's not a new UID, skip the rest of the code
+                if (lastUidSeen == uidString) continue;
+                
+                lastUidSeen = uidString;
+                
+                HttpServer.Events.Add(
+                    new Event(){ Type = "CoinPlacedOnAltar", Data = uidString });
+                
+                // Console.WriteLine($"Tag found with ID in NFC reader watch loop: {uidString}");
             }
             catch (AuthenticationException) { }  // No tag found, will retry on next loop 
         }
         
         // ReSharper disable once FunctionNeverReturns because it's not supposed to
-    }
-
-    private static void AddTagFoundEventToEventsList(string uidString)
-    {
-        // Only do the following if it's a new tag seen (only do things once)
-        if (uidString == _lastTagSeenUidString) return; 
-        
-        _lastTagSeenUidString = uidString;
-            
-        Console.WriteLine($"Tag found with ID: {uidString}");
     }
 
     private static void StartHttpServer()

@@ -6,20 +6,22 @@ using ShrineBackendServer.Models;
 
 namespace ShrineBackendServer;
 
-internal class HttpServer
+public class HttpServer
 {
-    private int _testCounter = 0; 
+    private readonly bool _sendTestEvents = true;
     
-    public List<Event> Events = [];
-    public DateTimeOffset LastConnection = DateTimeOffset.Now;
+    public static List<Event> Events = [];
     
     public HttpServer(int port)
     {
         StartListener();
     }
 
-    private void StartListener()
+    private async Task StartListener()
     {
+        var testCounter = 0; 
+        var lastConnection = DateTimeOffset.Now;
+            
         try
         {
             // set the TcpListener on port 13000
@@ -36,12 +38,12 @@ internal class HttpServer
             //Enter the listening loop
             while (true)
             {
-                Console.Write("Waiting for a connection... ");
+                //Console.Write("Waiting for a connection... ");
 
                 // Perform a blocking call to accept requests.
                 // You could also use server.AcceptSocket() here.
                 var client = server.AcceptTcpClient();
-                Console.WriteLine("Connected!");
+                //Console.WriteLine("Connected!");
 
                 // Get a stream object for reading and writing
                 var stream = client.GetStream();
@@ -51,16 +53,16 @@ internal class HttpServer
                 // Loop to receive all the data sent by the client.
                 i = stream.Read(bytes, 0, bytes.Length);
 
-                Console.WriteLine($"i: {i}");
+                //Console.WriteLine($"i: {i}");
                 
                 // Translate data bytes to an ASCII string.
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                Console.WriteLine(String.Format("Received: {0}", data));
+                //Console.WriteLine(String.Format("Received: {0}", data));
 
                 // Process the data sent by the client.
                 data = data.ToUpper();
 
-                AddTestEventsOnDelay();
+                if (_sendTestEvents) AddTestEventsOnDelay(ref testCounter, ref lastConnection);
                 
                 while (Events.Count > 10)
                 {
@@ -82,7 +84,7 @@ internal class HttpServer
                 //Console.WriteLine(String.Format("Sent: {0}", data));
                 
                 // Shutdown and end connection
-                Console.WriteLine("Closing connection");
+                //Console.WriteLine("Closing connection");
                 client.Close();
             }
         }
@@ -91,55 +93,57 @@ internal class HttpServer
             Console.WriteLine("SocketException: {0}", e);
         }
 
-        Console.WriteLine("Hit enter to continue...");
-        Console.Read();
+        // Console.WriteLine("Hit enter to continue...");
+        // Console.Read();
+
+        await Task.Delay(int.MaxValue);
     }
 
-    private void AddTestEventsOnDelay()
+    private void AddTestEventsOnDelay(ref int testCounter, ref DateTimeOffset lastConnection)
     {
-        if (LastConnection < DateTimeOffset.Now.Subtract(TimeSpan.FromSeconds(5)))
+        if (lastConnection < DateTimeOffset.Now.Subtract(TimeSpan.FromSeconds(5)))
         {
             Events.Clear();
 
-            _testCounter = 0;
+            testCounter = 0;
         }
         
-        LastConnection = DateTimeOffset.Now;
+        lastConnection = DateTimeOffset.Now;
         
-        _testCounter++;
+        testCounter++;
         
-        if (_testCounter == 20) Events.Add(new Event(){Type="PersonEnteredShrine"});
+        if (testCounter == 20) Events.Add(new Event(){Type="PersonEnteredShrine"});
         
-        if (_testCounter == 30) Events.Add(new Event(){Type="CoinPlaced", Data="53C4AF8C014F80"});
+        if (testCounter == 30) Events.Add(new Event(){Type="CoinPlaced", Data="53C4AF8C014F80"});
         
-        if (_testCounter == 40) Events.Add(new Event(){Type="NewWordsSpoken", Data="I"});
-        if (_testCounter == 44) Events.Add(new Event(){Type="NewWordsSpoken", Data="fear"});
-        if (_testCounter == 48) Events.Add(new Event(){Type="NewWordsSpoken", Data="demons"});
-        if (_testCounter == 52) Events.Add(new Event(){Type="NewWordsSpoken", Data="because"});
-        if (_testCounter == 60) Events.Add(new Event(){Type="NewWordsSpoken", Data="hey"});
-        if (_testCounter == 66) Events.Add(new Event(){Type="NewWordsSpoken", Data="demons"});
-        if (_testCounter == 76) Events.Add(new Event(){Type="NewWordsSpoken", Data="it's"});
-        if (_testCounter == 80) Events.Add(new Event(){Type="NewWordsSpoken", Data="me"});
-        if (_testCounter == 84) Events.Add(new Event(){Type="NewWordsSpoken", Data="ya"});
-        if (_testCounter == 90) Events.Add(new Event(){Type="NewWordsSpoken", Data="boy."});
-        if (_testCounter == 92) Events.Add(new Event(){Type="NewWordsSpoken", Data="But"});
-        if (_testCounter == 94) Events.Add(new Event(){Type="NewWordsSpoken", Data="you"});
-        if (_testCounter == 100) Events.Add(new Event(){Type="NewWordsSpoken", Data="know."});
-        if (_testCounter == 104) Events.Add(new Event(){Type="NewWordsSpoken", Data="I"});
-        if (_testCounter == 108) Events.Add(new Event(){Type="NewWordsSpoken", Data="mighta"});
-        if (_testCounter == 112) Events.Add(new Event(){Type="NewWordsSpoken", Data="owed"});
-        if (_testCounter == 116) Events.Add(new Event(){Type="NewWordsSpoken", Data="them"});
-        if (_testCounter == 120) Events.Add(new Event(){Type="NewWordsSpoken", Data="money"});
-        if (_testCounter == 124) Events.Add(new Event(){Type="NewWordsSpoken", Data="or"});
-        if (_testCounter == 128) Events.Add(new Event(){Type="NewWordsSpoken", Data="something"});
-        if (_testCounter == 132) Events.Add(new Event(){Type="NewWordsSpoken", Data="and"});
-        if (_testCounter == 134) Events.Add(new Event(){Type="NewWordsSpoken", Data="forgotten"});
-        if (_testCounter == 140) Events.Add(new Event(){Type="NewWordsSpoken", Data="about"});
-        if (_testCounter == 144) Events.Add(new Event(){Type="NewWordsSpoken", Data="so"});
-        if (_testCounter == 150) Events.Add(new Event(){Type="NewWordsSpoken", Data="they"});
-        if (_testCounter == 154) Events.Add(new Event(){Type="NewWordsSpoken", Data="might"});
-        if (_testCounter == 160) Events.Add(new Event(){Type="NewWordsSpoken", Data="be"});
-        if (_testCounter == 166) Events.Add(new Event(){Type="NewWordsSpoken", Data="mad."});
+        if (testCounter == 40) Events.Add(new Event(){Type="NewWordsSpoken", Data="I"});
+        if (testCounter == 44) Events.Add(new Event(){Type="NewWordsSpoken", Data="fear"});
+        if (testCounter == 48) Events.Add(new Event(){Type="NewWordsSpoken", Data="demons"});
+        if (testCounter == 52) Events.Add(new Event(){Type="NewWordsSpoken", Data="because"});
+        if (testCounter == 60) Events.Add(new Event(){Type="NewWordsSpoken", Data="hey"});
+        if (testCounter == 66) Events.Add(new Event(){Type="NewWordsSpoken", Data="demons"});
+        if (testCounter == 76) Events.Add(new Event(){Type="NewWordsSpoken", Data="it's"});
+        if (testCounter == 80) Events.Add(new Event(){Type="NewWordsSpoken", Data="me"});
+        if (testCounter == 84) Events.Add(new Event(){Type="NewWordsSpoken", Data="ya"});
+        if (testCounter == 90) Events.Add(new Event(){Type="NewWordsSpoken", Data="boy."});
+        if (testCounter == 92) Events.Add(new Event(){Type="NewWordsSpoken", Data="But"});
+        if (testCounter == 94) Events.Add(new Event(){Type="NewWordsSpoken", Data="you"});
+        if (testCounter == 100) Events.Add(new Event(){Type="NewWordsSpoken", Data="know."});
+        if (testCounter == 104) Events.Add(new Event(){Type="NewWordsSpoken", Data="I"});
+        if (testCounter == 108) Events.Add(new Event(){Type="NewWordsSpoken", Data="mighta"});
+        if (testCounter == 112) Events.Add(new Event(){Type="NewWordsSpoken", Data="owed"});
+        if (testCounter == 116) Events.Add(new Event(){Type="NewWordsSpoken", Data="them"});
+        if (testCounter == 120) Events.Add(new Event(){Type="NewWordsSpoken", Data="money"});
+        if (testCounter == 124) Events.Add(new Event(){Type="NewWordsSpoken", Data="or"});
+        if (testCounter == 128) Events.Add(new Event(){Type="NewWordsSpoken", Data="something"});
+        if (testCounter == 132) Events.Add(new Event(){Type="NewWordsSpoken", Data="and"});
+        if (testCounter == 134) Events.Add(new Event(){Type="NewWordsSpoken", Data="forgotten"});
+        if (testCounter == 140) Events.Add(new Event(){Type="NewWordsSpoken", Data="about"});
+        if (testCounter == 144) Events.Add(new Event(){Type="NewWordsSpoken", Data="so"});
+        if (testCounter == 150) Events.Add(new Event(){Type="NewWordsSpoken", Data="they"});
+        if (testCounter == 154) Events.Add(new Event(){Type="NewWordsSpoken", Data="might"});
+        if (testCounter == 160) Events.Add(new Event(){Type="NewWordsSpoken", Data="be"});
+        if (testCounter == 166) Events.Add(new Event(){Type="NewWordsSpoken", Data="mad."});
 
         var vconDialog = new Dialog()
         {
@@ -179,7 +183,7 @@ internal class HttpServer
         
         var vconJsonString = JsonConvert.SerializeObject(testVcon);
         
-        if (_testCounter == 186) Events.Add(new Event(){Type="VconWithSentiment", Data=vconJsonString});
+        if (testCounter == 186) Events.Add(new Event(){Type="VconWithSentiment", Data=vconJsonString});
         
     }
 }
