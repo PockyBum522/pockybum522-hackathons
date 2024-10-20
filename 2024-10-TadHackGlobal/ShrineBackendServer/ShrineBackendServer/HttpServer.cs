@@ -13,12 +13,12 @@ public class HttpServer
     public static List<Event> Events { get; } = [];
     public static DateTimeOffset CoinPlacedTime { get; set; } = DateTimeOffset.MaxValue;
     
-    public HttpServer(int port)
+    public HttpServer()
     {
         StartListener();
     }
 
-    private async Task StartListener()
+    private void StartListener()
     {
         var testCounter = 0; 
         var lastConnection = DateTimeOffset.Now;
@@ -89,6 +89,7 @@ public class HttpServer
         // ReSharper disable once FunctionNeverReturns
     }
 
+    // ReSharper disable once CognitiveComplexity because sometimes it's just wrong
     private void AddTestEventsOnDelay(ref int testCounter, ref DateTimeOffset lastConnection)
     {
         if (lastConnection < DateTimeOffset.Now.Subtract(TimeSpan.FromSeconds(5)))
@@ -135,6 +136,14 @@ public class HttpServer
         if (testCounter == 160) Events.Add(new Event(){Type="NewWordsSpoken", Data="be"});
         if (testCounter == 166) Events.Add(new Event(){Type="NewWordsSpoken", Data="mad."});
 
+        var vconJsonString = GetVconJsonString();
+
+        if (testCounter == 186) Events.Add(new Event(){Type="VconWithSentiment", Data=vconJsonString});
+        
+    }
+
+    private static string GetVconJsonString()
+    {
         var vconDialog = new Dialog()
         {
             Alg = "SHA-512",
@@ -172,8 +181,6 @@ public class HttpServer
         testVcon.Analysis.Add(vconAnalysis);
         
         var vconJsonString = JsonConvert.SerializeObject(testVcon);
-        
-        if (testCounter == 186) Events.Add(new Event(){Type="VconWithSentiment", Data=vconJsonString});
-        
+        return vconJsonString;
     }
 }

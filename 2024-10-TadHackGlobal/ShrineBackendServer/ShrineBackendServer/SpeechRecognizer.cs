@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using OpenAI.Chat;
 using ShrineBackendServer.Models;
 
 namespace ShrineBackendServer;
@@ -12,9 +13,10 @@ public class SpeechRecognizer
         Console.WriteLine("Starting Speech Streaming Test");
 
         var hasRecognitionInitialized = false;
+        var hasRecognitionStarted = false;
 
         var lastWordsStartSection = "afwiegha4hgawebhsdifhaw";
-        var lastWordsFull = "";
+        var fullSpokenWords = "";
         
         var speechRecognitionProcessInfo = new ProcessStartInfo()
         {
@@ -50,6 +52,12 @@ public class SpeechRecognizer
             
             if (HttpServer.CoinPlacedTime >= DateTimeOffset.Now.Subtract(TimeSpan.FromSeconds(5))) continue;
             
+            if (newWordsLine.StartsWith("text: ") && !hasRecognitionStarted)
+            {
+                hasRecognitionStarted = true;
+                Console.WriteLine("Recognition has begun, they should start speaking");
+            } 
+            
             // Make sure we only operate on lines that contain the speech we want
             if (!newWordsLine.StartsWith("text: ")) continue;
             
@@ -69,7 +77,9 @@ public class SpeechRecognizer
                         Console.WriteLine($"MAKING AND SENDING NEW WORD: {newWord}");
 
                     if (string.IsNullOrWhiteSpace(newWord)) continue;
-                    
+
+                    fullSpokenWords += newWord + " ";;
+                        
                     HttpServer.Events.Add(
                         new Event()
                         {
@@ -96,6 +106,8 @@ public class SpeechRecognizer
                     if (_speechRecognizerDebug)
                         Console.WriteLine($"MAKING AND SENDING NEW WORD: {newWord}");
                     
+                    fullSpokenWords += newWord + " ";
+                    
                     HttpServer.Events.Add(
                         new Event()
                         {
@@ -107,8 +119,8 @@ public class SpeechRecognizer
                 lastWordsStartSection += newWordsLine;
             }
 
-            if (_speechRecognizerDebug)
-                Console.WriteLine();
+            //if (_speechRecognizerDebug)
+            //Console.WriteLine(fullSpokenWords + '\n');
         }
 
         // ReSharper disable once FunctionNeverReturns
