@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace ShrineBackendServer.Models.Vcon;
+namespace ShrineServerAndGui.Models.Vcon;
 
 public class Vcon
 {

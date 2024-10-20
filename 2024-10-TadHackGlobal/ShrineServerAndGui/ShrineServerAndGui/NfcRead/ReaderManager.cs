@@ -1,9 +1,10 @@
+using System;
 using System.Security.Authentication;
 using ManagedLibnfc;
 
 // ReSharper disable CognitiveComplexity because it's not my code and I don't care
 
-namespace ShrineBackendServer.NfcRead;
+namespace ShrineServerAndGui.NfcRead;
 
 internal class ReaderManager
 {

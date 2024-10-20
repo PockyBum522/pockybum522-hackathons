@@ -1,10 +1,14 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ShrineBackendServer.Models;
+using ShrineServerAndGui.Models;
 
-namespace ShrineBackendServer;
+namespace ShrineServerAndGui;
 
 public class HttpServer
 {

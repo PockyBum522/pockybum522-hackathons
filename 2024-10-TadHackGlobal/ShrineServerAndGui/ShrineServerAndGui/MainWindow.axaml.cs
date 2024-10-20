@@ -1,14 +1,23 @@
-﻿using System.Globalization;
+using System;
 using System.Security.Authentication;
-using OpenAI.Chat;
-using ShrineBackendServer.Models;
-using ShrineBackendServer.NfcRead;
+using System.Threading;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using ShrineServerAndGui.Models;
+using ShrineServerAndGui.NfcRead;
 
-namespace ShrineBackendServer;
+namespace ShrineServerAndGui;
 
-public static class Program
+public partial class MainWindow : Window
 {
-    public static async Task Main()
+    public MainWindow()
+    {
+        InitializeComponent();
+
+        StartMainWorkers();
+    }
+
+    private async Task StartMainWorkers()
     {
         /*
             After a reboot, or upon unplugging/replugging the NFC reader,
@@ -77,6 +86,7 @@ public static class Program
         
         Environment.Exit(0);
     }
+
 
     private static void StartNfcReadWatchLoop()
     {
