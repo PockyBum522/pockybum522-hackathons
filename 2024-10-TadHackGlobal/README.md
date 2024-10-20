@@ -51,3 +51,9 @@ https://www.thingiverse.com/thing:3469588
 
 ManagedLibNFC:
 https://github.com/kgamecarter/ManagedLibnfc
+
+AvaloniaUI:
+https://avaloniaui.net/
+
+Newtonsoft Json:
+https://www.newtonsoft.com/json
