@@ -2,7 +2,7 @@
 
 ## A huge thank you to: 
 
-The sponsors, without whom TadHack would not be possible, and Alan (also without whom TadHack would not be possible) for putting on TadHack, and for the following projects which were used in our project:
+The sponsors, without whom TadHack would not be possible, and Alan (also without whom TadHack would not be possible) for putting on TadHack, and thank you to the following projects which were used in our project:
 
 XState:
 https://xstate.js.org/
