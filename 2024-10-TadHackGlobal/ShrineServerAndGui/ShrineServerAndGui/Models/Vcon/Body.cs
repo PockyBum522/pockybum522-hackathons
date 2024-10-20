@@ -1,6 +1,7 @@
+using System;
 using Newtonsoft.Json;
 
-namespace ShrineBackendServer.Models.Vcon;
+namespace ShrineServerAndGui.Models.Vcon;
 
 public class Body
 {

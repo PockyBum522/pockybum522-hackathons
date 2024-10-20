@@ -1,4 +1,6 @@
-namespace ShrineBackendServer.Models;
+using System;
+
+namespace ShrineServerAndGui.Models;
 
 public class Event
 {

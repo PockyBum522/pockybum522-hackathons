@@ -1,8 +1,9 @@
+using System;
 using System.Diagnostics;
-using OpenAI.Chat;
-using ShrineBackendServer.Models;
+using System.Threading.Tasks;
+using ShrineServerAndGui.Models;
 
-namespace ShrineBackendServer;
+namespace ShrineServerAndGui;
 
 public class SpeechRecognizer
 {

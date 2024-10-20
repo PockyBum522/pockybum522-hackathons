@@ -1,8 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ShrineBackendServer.Models;
-using ShrineBackendServer.Models.Vcon;
+using ShrineServerAndGui.Models.Vcon;
 
-namespace ShrineBackendServer;
+namespace ShrineServerAndGui;
 
 public class VconCreator
 {
