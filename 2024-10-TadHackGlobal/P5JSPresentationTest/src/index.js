@@ -3,18 +3,99 @@ import { createMachine, assign, createActor } from "xstate"
 import axios from "axios";
 import './styles.css';
 import './normalize.css';
+import inkVideo from "../assets/ink_in_water.mp4";
+import energeticVideo from "../assets/energetic_field.mp4";
+import blueEnergyVideo from "../assets/blue_energy.mp4";
+import gentleEnergyFieldVideo from "../assets/gentle_energy_field.mp4";
+import blueEnergeticParticlesVideo from "../assets/blue_energetic_particles.mp4";
+import greenEnergyFieldVideo from "../assets/green_energy_field.mp4";
+import slowedGreenEnergyFieldVideo from "../assets/slowed_green_energy_field.mp4";
+import slowedGreenEnergyFieldFadeoutVideo from "../assets/slowed_green_energy_field_fadeout.mp4";
 
 const sceneTimings = {
     'SCENE_ONE': 86400,
-    'SCENE_TWO': 1,
-    'SCENE_THREE': 2,
-    'SCENE_FOUR': 3,
+    'SCENE_TWO': 15,
+    'SCENE_THREE': 30,
+    'SCENE_FOUR': 30,
     'SCENE_FIVE': 86400,
-    'SCENE_SIX': 5,
-    'SCENE_SEVEN': 6,
-    'SCENE_EIGHT': 7,
-    'DEFAULT': 8,
+    'SCENE_SIX': 30,
+    'SCENE_SEVEN': 30,
+    'SCENE_EIGHT': 30,
+    'DEFAULT': 86400,
 }
+
+const sceneDefaultConfigs = {
+    'SCENE_ONE': {
+        'videoFLag': false,
+        'x': 10,
+        'y': 15,
+    },
+    'SCENE_TWO': {
+        'x': 10,
+        'y': 15,
+    },
+    'SCENE_THREE': {
+        'x': 10,
+        'y': 15,
+    },
+    'SCENE_FOUR': {
+        'x': 10,
+        'y': 15,
+    },
+    'SCENE_FIVE': {
+        'x': 10,
+        'y': 15,
+    },
+    'SCENE_SIX': {
+        'x': 10,
+        'y': 15,
+    },
+    'SCENE_SEVEN': {
+        'x': 10,
+        'y': 15,
+    },
+    'SCENE_EIGHT': {
+        'x': 10,
+        'y': 15,
+    }
+}
+
+let sceneConfigs = {
+    'SCENE_ONE': {
+        'videoFlag': false,
+        'x': 0,
+        'y': 0,
+    },
+    'SCENE_TWO': {
+        'x': 0,
+        'y': 0,
+    },
+    'SCENE_THREE': {
+        'x': 0,
+        'y': 0,
+    },
+    'SCENE_FOUR': {
+        'x': 0,
+        'y': 0,
+    },
+    'SCENE_FIVE': {
+        'x': 0,
+        'y': 0,
+    },
+    'SCENE_SIX': {
+        'x': 0,
+        'y': 0,
+    },
+    'SCENE_SEVEN': {
+        'x': 0,
+        'y': 0,
+    },
+    'SCENE_EIGHT': {
+        'x': 0,
+        'y': 0,
+    }
+}
+
 
 window.onload = function() {
     console.log("Window Loaded");
@@ -126,8 +207,15 @@ let newEventsList = new Set();
 let lastTimestampsList = new Set();
 let newTimestampsList = new Set();
 
+
+
 // scenes 1 and 5 have no associated timer
 let sceneTimers = [];
+
+function setSceneConfigsToDefault() {
+    sceneConfigs = structuredClone(sceneDefaultConfigs);
+    //console.log(sceneConfigs);
+}
 
 function findVconsInEvents(events) {
     //console.log(events);
@@ -143,7 +231,37 @@ function findVconsInEvents(events) {
     return vCons;
 }
 
+function findWordsInEvents(events) {
+    let words = [];
+
+    events.forEach(event => {
+        if (event.Type === "NewWordsSpoken") {
+            words.push(event.Data);
+        }
+    });
+
+    return words;
+}
+
 new p5((p) => {
+
+    let sceneVideos = [
+        p.createVideo(inkVideo).position(0, 0).pause().hide(),
+        p.createVideo(energeticVideo).position(0, 0).pause().hide(),
+        p.createVideo(blueEnergyVideo).position(0, 0).pause().hide(),
+        p.createVideo(gentleEnergyFieldVideo).position(0, 0).pause().hide(),
+        p.createVideo(blueEnergeticParticlesVideo).position(0, 0).pause().hide(),
+        p.createVideo(greenEnergyFieldVideo).position(0, 0).pause().hide(),
+        p.createVideo(slowedGreenEnergyFieldVideo).position(0, 0).pause().hide(),
+        p.createVideo(slowedGreenEnergyFieldFadeoutVideo).position(0, 0).pause().hide()
+    ];
+
+    const removeAllVideos = () => {
+        for (let video in sceneVideos) {
+            console.log(video);
+            video.remove();
+        }
+    }
 
     p.keyPressed = () => {
         if (p.key === ' ') {
@@ -157,6 +275,8 @@ new p5((p) => {
                 type: 'ADVANCE',
                 advanceBy: 1
             });
+
+            // removeAllVideos(sceneVideos);
         }
 
         if (p.keyCode === 37) {
@@ -164,8 +284,9 @@ new p5((p) => {
                 type: 'BACKTRACK',
                 advanceBy: -1
             });
-        }
 
+            // removeAllVideos(sceneVideos);
+        }
     }
 
     p.windowResized = () => {
@@ -175,46 +296,57 @@ new p5((p) => {
     p.setup = async () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
 
-        checkServerTimeout = setInterval(async() => {
-            const response = await axios.get("http://192.168.1.24:5001/", {
-                headers: {
-                    'Access-Control-Allow-Origin': "*",
-                    'Content-Type': 'application/json;charset=utf-8',
-                }
-            });
+        //setSceneConfigsToDefault();
 
-            newEventsList = new Set(response.data);
-
-            // create timestamps set from new events
-            newEventsList.forEach(event => {
-               newTimestampsList.add(event.Timestamp);
-            });
-
-            // create timestamps set from last events
-            lastEventsList.forEach(event => {
-                lastTimestampsList.add(event.Timestamp);
-            })
-
-            // console.log(newTimestampsList);
-            // console.log(lastTimestampsList);
-            console.log(lastEventsList);
-            console.log(newEventsList);
-
-            if (lastTimestampsList.difference(newTimestampsList).size < newTimestampsList.size) {
-                console.log("out of sync; update lastEventsList");
-                lastEventsList = new Set([...newEventsList]);
-            }
-
-        }, serverCheckIntervalTime);
+        // try {
+        //     checkServerTimeout = setInterval(async () => {
+        //         const response = await axios.get("http://192.168.1.24:5001/", {
+        //             headers: {
+        //                 'Access-Control-Allow-Origin': "*",
+        //                 'Content-Type': 'application/html;charset=utf-8',
+        //             }
+        //         });
+        //
+        //         newEventsList = new Set(response.data);
+        //
+        //         // create timestamps set from new events
+        //         newEventsList.forEach(event => {
+        //             newTimestampsList.add(event.Timestamp);
+        //         });
+        //
+        //         // create timestamps set from last events
+        //         lastEventsList.forEach(event => {
+        //             lastTimestampsList.add(event.Timestamp);
+        //         })
+        //
+        //         // console.log(newTimestampsList);
+        //         // console.log(lastTimestampsList);
+        //         console.log(lastEventsList);
+        //         console.log(newEventsList);
+        //
+        //         console.log(`lastTimestampsList Size: ${lastTimestampsList.size}, newTimestampsList Size: ${newTimestampsList.size}`);
+        //         console.log(`lastTimestampsList \\ newTimestampsList ${lastTimestampsList.difference(newTimestampsList).size}`);
+        //         if (lastTimestampsList.difference(newTimestampsList).size < newTimestampsList.size) {
+        //             console.log("out of sync; update lastEventsList");
+        //             lastEventsList = new Set([...newEventsList]);
+        //         }
+        //
+        //     }, serverCheckIntervalTime);
+        // } catch(e) {
+        //     console.error(e);
+        // }
 
         console.log(sceneActor.getSnapshot().context.sceneNumber);
     };
 
     p.draw = () => {
-        p.background(220);
+        p.background(0);
         let sceneNumber = sceneActor.getSnapshot().context.sceneNumber;
 
         let vCons = findVconsInEvents(newEventsList);
+        let spokenWords = findWordsInEvents(newEventsList);
+
+        console.log(spokenWords);
 
         p.push();
             p.textSize(30);
@@ -223,57 +355,82 @@ new p5((p) => {
 
         if (sceneNumber === 1) {
             p.push();
+                console.log(`Scene One Video Flag: ${sceneConfigs.SCENE_ONE.videoFlag}`);
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("This scene will contain a soothing ambience", p.windowWidth/2, p.windowHeight/2);
+                //p.text("This scene will contain a soothing ambience", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 2) {
+            sceneVideos[sceneNumber - 2].hide();
+
             p.push();
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("This scene will contain an energized ambience", p.windowWidth/2, p.windowHeight/2);
+                //p.text("This scene will contain an energized ambience", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 3) {
+            sceneVideos[sceneNumber - 2].hide();
             p.push();
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("This scene will fade out over the course of 30 seconds", p.windowWidth/2, p.windowHeight/2);
+                //p.text("This scene will fade out over the course of 30 seconds", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 4) {
+            sceneVideos[sceneNumber - 2].hide();
             p.push();
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("This scene will contain words that appear indistinctly", p.windowWidth/2, p.windowHeight/2);
+                //p.text("This scene will contain words that appear indistinctly", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 5) {
+            sceneVideos[sceneNumber - 2].hide();
             p.push();
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("This scene will contain a white circle that appears in center of screen", p.windowWidth/2, p.windowHeight/2);
+                //p.text("This scene will contain a white circle that appears in center of screen", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 6) {
+            sceneVideos[sceneNumber - 2].hide();
             p.push();
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("Spoken words appear in random places on screen and begin swirling into circle", p.windowWidth/2, p.windowHeight/2);
+                //p.text("Spoken words appear in random places on screen and begin swirling into circle", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 7) {
+            sceneVideos[sceneNumber - 2].hide();
             p.push();
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("Prompt to take coin out into world", p.windowWidth/2, p.windowHeight/2);
+                //p.text("Prompt to take coin out into world", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 8) {
+            sceneVideos[sceneNumber - 2].hide();
             p.push();
+                sceneVideos[sceneNumber - 1].show();
+                sceneVideos[sceneNumber - 1].play();
                 p.textSize(50);
-                p.text("Scene fades to nothing", p.windowWidth/2, p.windowHeight/2);
+                //p.text("Scene fades to nothing", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
     };

@@ -1,5 +1,6 @@
 const path = require('path');
 
+
 module.exports = {
     entry: './src/index.js',
     output: {
@@ -25,6 +26,10 @@ module.exports = {
                     'style-loader',
                     'css-loader',
                 ]
+            },
+            {
+                test: /\.(?:mp4|mov)$/i,
+                type: 'asset/resource',
             }
         ],
     },
