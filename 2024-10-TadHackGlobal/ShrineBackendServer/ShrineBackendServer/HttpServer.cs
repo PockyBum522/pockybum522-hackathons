@@ -8,11 +8,11 @@ namespace ShrineBackendServer;
 
 public class HttpServer
 {
+    private readonly bool _sendTestEvents = true;
+
     public static List<Event> Events { get; } = [];
     public static DateTimeOffset CoinPlacedTime { get; set; } = DateTimeOffset.MaxValue;
-
-    private readonly bool _sendTestEvents = false;
-
+    
     public HttpServer(int port)
     {
         StartListener();
@@ -22,83 +22,71 @@ public class HttpServer
     {
         var testCounter = 0; 
         var lastConnection = DateTimeOffset.Now;
+        
+        // set the TcpListener on port 13000
+        var port = 5001;
+        var server = new TcpListener(IPAddress.Any, port);
+
+        // Start listening for client requests
+        server.Start();
+
+        // Buffer for reading data
+        var bytes = new byte[1024];
+
+        //Enter the listening loop
+        while (true)
+        {
+            // Console.Write("Waiting for a connection... ");
+
+            // Perform a blocking call to accept requests.
+            // You could also use server.AcceptSocket() here.
+            var client = server.AcceptTcpClient();
             
-        try
-        {
-            // set the TcpListener on port 13000
-            var port = 5001;
-            var server = new TcpListener(IPAddress.Any, port);
+            // Console.WriteLine("Connected!");
 
-            // Start listening for client requests
-            server.Start();
+            // Get a stream object for reading and writing
+            var stream = client.GetStream();
+            
+            // Receive all the data sent by the client.
+            var i = stream.Read(bytes, 0, bytes.Length);
 
-            // Buffer for reading data
-            var bytes = new byte[1024];
-            string data;
+            //Console.WriteLine($"i: {i}");
+            // Translate data bytes to an ASCII string.
+            var data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+            
+            // Console.WriteLine(String.Format("Received: {0}", data));
 
-            //Enter the listening loop
-            while (true)
+            // Process the data sent by the client.
+            data = data.ToUpper();
+
+            if (_sendTestEvents) AddTestEventsOnDelay(ref testCounter, ref lastConnection);
+            
+            while (Events.Count > 10)
             {
-                //Console.Write("Waiting for a connection... ");
-
-                // Perform a blocking call to accept requests.
-                // You could also use server.AcceptSocket() here.
-                var client = server.AcceptTcpClient();
-                //Console.WriteLine("Connected!");
-
-                // Get a stream object for reading and writing
-                var stream = client.GetStream();
-
-                int i;
-
-                // Loop to receive all the data sent by the client.
-                i = stream.Read(bytes, 0, bytes.Length);
-
-                //Console.WriteLine($"i: {i}");
-                
-                // Translate data bytes to an ASCII string.
-                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                //Console.WriteLine(String.Format("Received: {0}", data));
-
-                // Process the data sent by the client.
-                data = data.ToUpper();
-
-                if (_sendTestEvents) AddTestEventsOnDelay(ref testCounter, ref lastConnection);
-                
-                while (Events.Count > 10)
-                {
-                    Events.Remove(Events.First());
-                }
-                
-                var jsonString = JsonConvert.SerializeObject(Events, Formatting.Indented);
-                
-                var msg = Encoding.ASCII.GetBytes(jsonString);
-
-                // Send headers
-                stream.Write(Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\n"));
-                stream.Write(Encoding.ASCII.GetBytes("Access-Control-Allow-Origin: *\n"));
-                stream.Write(Encoding.ASCII.GetBytes("Access-Control-Allow-Headers: *\n"));
-                stream.Write(Encoding.ASCII.GetBytes("Content-Type: text/plain\n"));
-                stream.Write(Encoding.ASCII.GetBytes("\n"));
-                
-                // Send back a response.
-                stream.Write(msg, 0, msg.Length);
-                //Console.WriteLine(String.Format("Sent: {0}", data));
-                
-                // Shutdown and end connection
-                //Console.WriteLine("Closing connection");
-                client.Close();
+                Events.Remove(Events.First());
             }
-        }
-        catch (SocketException e)
-        {
-            Console.WriteLine("SocketException: {0}", e);
-        }
+            
+            var jsonString = JsonConvert.SerializeObject(Events, Formatting.Indented);
+            
+            var msg = Encoding.ASCII.GetBytes(jsonString);
 
-        // Console.WriteLine("Hit enter to continue...");
-        // Console.Read();
-
-        await Task.Delay(int.MaxValue);
+            // Send headers
+            stream.Write(Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\n"));
+            stream.Write(Encoding.ASCII.GetBytes("Access-Control-Allow-Origin: *\n"));
+            stream.Write(Encoding.ASCII.GetBytes("Access-Control-Allow-Headers: *\n"));
+            stream.Write(Encoding.ASCII.GetBytes("Content-Type: text/plain\n"));
+            stream.Write(Encoding.ASCII.GetBytes("\n"));
+            
+            // Send back a response.
+            stream.Write(msg, 0, msg.Length);
+            // Console.WriteLine(String.Format("Sent: {0}", data));
+            
+            // Shutdown and end connection
+            // Console.WriteLine("Closing connection");
+            client.Close();
+        }
+        
+        // ReSharper disable once FunctionNeverReturns
     }
 
     private void AddTestEventsOnDelay(ref int testCounter, ref DateTimeOffset lastConnection)
