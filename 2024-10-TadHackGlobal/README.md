@@ -29,3 +29,13 @@ As they leave, The Technosage instructs them that they may later want to tap the
 The parishioner, whenever they choose to do this, will find that the server has generated a static site/webpage with their transcript and visual effects on the page that are based on ChatGPT's sentiment analysis. Once the server generates this, it is uploaded to hosting which is how the parishioner can access it with the coin, as when they placed the coin on the altar, the server recorded the ID of the NFC tag that it saw so that it can upload the associated transcription that was spoken when that particular coin was on the altar, for later  reflection by the parishioner. 
 
 
+Thank you to: Alan for putting on TadHack, the sponsors, and for the following which were used in our project:
+
+Coin model:
+https://www.thingiverse.com/thing:5695821
+
+Speech to text:
+https://github.com/pengzhendong/streaming-sensevoice/
+
+(NFC reader cover) Altar model:
+https://www.thingiverse.com/thing:3469588
