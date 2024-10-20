@@ -104,7 +104,7 @@ window.onload = function() {
 const sceneMachine = createMachine(
     {
         context: {
-            sceneNumber: 1,
+            sceneNumber: 0,
         },
         on: {
             ADVANCE: {
@@ -164,9 +164,9 @@ sceneActor.subscribe((state) => {
 
     console.log(`Current scene number: ${state.context.sceneNumber}`);
 
-    if (sceneTimers[state.context.sceneNumber - 1] != null) {
-        sceneTimers[state.context.sceneNumber - 1].clearTimeout();
-        sceneTimers[state.context.sceneNumber - 1].setTimeout(() => {
+    if (sceneTimers[state.context.sceneNumber] != null) {
+        sceneTimers[state.context.sceneNumber].clearTimeout();
+        sceneTimers[state.context.sceneNumber].setTimeout(() => {
             sceneActor.send( {
                 type: 'ADVANCE',
                 advanceBy: 1
@@ -174,8 +174,8 @@ sceneActor.subscribe((state) => {
         }, sceneTiming * 1000);
     } else {
         // if the previous scene timer is still running, kill the timer
-        if (sceneTimers[state.context.sceneNumber - 2] != null) {
-            sceneTimers[state.context.sceneNumber - 2].clearTimeout();
+        if (sceneTimers[state.context.sceneNumber - 1] != null) {
+            sceneTimers[state.context.sceneNumber - 1].clearTimeout();
         }
         sceneTimers.push(setTimeout(() => {
             sceneActor.send( {
@@ -208,8 +208,6 @@ let lastTimestampsList = new Set();
 let newTimestampsList = new Set();
 
 
-
-// scenes 1 and 5 have no associated timer
 let sceneTimers = [];
 
 function setSceneConfigsToDefault() {
@@ -241,6 +239,18 @@ function findWordsInEvents(events) {
     });
 
     return words;
+}
+
+function findInitializeInEvents(events) {
+    let initializes = [];
+
+    events.forEach(event => {
+        if (event.Type === "InitializeEverything") {
+            initializes.push(event.Data);
+        }
+    });
+
+    return initializes;
 }
 
 new p5((p) => {
@@ -275,8 +285,6 @@ new p5((p) => {
                 type: 'ADVANCE',
                 advanceBy: 1
             });
-
-            // removeAllVideos(sceneVideos);
         }
 
         if (p.keyCode === 37) {
@@ -284,8 +292,6 @@ new p5((p) => {
                 type: 'BACKTRACK',
                 advanceBy: -1
             });
-
-            // removeAllVideos(sceneVideos);
         }
     }
 
@@ -298,43 +304,59 @@ new p5((p) => {
 
         //setSceneConfigsToDefault();
 
-        // try {
-        //     checkServerTimeout = setInterval(async () => {
-        //         const response = await axios.get("http://192.168.1.24:5001/", {
-        //             headers: {
-        //                 'Access-Control-Allow-Origin': "*",
-        //                 'Content-Type': 'application/html;charset=utf-8',
-        //             }
-        //         });
-        //
-        //         newEventsList = new Set(response.data);
-        //
-        //         // create timestamps set from new events
-        //         newEventsList.forEach(event => {
-        //             newTimestampsList.add(event.Timestamp);
-        //         });
-        //
-        //         // create timestamps set from last events
-        //         lastEventsList.forEach(event => {
-        //             lastTimestampsList.add(event.Timestamp);
-        //         })
-        //
-        //         // console.log(newTimestampsList);
-        //         // console.log(lastTimestampsList);
-        //         console.log(lastEventsList);
-        //         console.log(newEventsList);
-        //
-        //         console.log(`lastTimestampsList Size: ${lastTimestampsList.size}, newTimestampsList Size: ${newTimestampsList.size}`);
-        //         console.log(`lastTimestampsList \\ newTimestampsList ${lastTimestampsList.difference(newTimestampsList).size}`);
-        //         if (lastTimestampsList.difference(newTimestampsList).size < newTimestampsList.size) {
-        //             console.log("out of sync; update lastEventsList");
-        //             lastEventsList = new Set([...newEventsList]);
-        //         }
-        //
-        //     }, serverCheckIntervalTime);
-        // } catch(e) {
-        //     console.error(e);
-        // }
+        try {
+            checkServerTimeout = setInterval(async () => {
+                const response = await axios.get("http://192.168.1.118:5001/", {
+                    headers: {
+                        'Access-Control-Allow-Origin': "*",
+                        'Content-Type': 'application/html;charset=utf-8',
+                    }
+                });
+
+                newEventsList = new Set(response.data);
+
+                // create timestamps set from new events
+                newEventsList.forEach(event => {
+                    newTimestampsList.add(event.Timestamp);
+                });
+
+                // create timestamps set from last events
+                lastEventsList.forEach(event => {
+                    lastTimestampsList.add(event.Timestamp);
+                })
+
+                console.log(lastEventsList);
+                console.log(newEventsList);
+
+                console.log(`lastTimestampsList Size: ${lastTimestampsList.size}, newTimestampsList Size: ${newTimestampsList.size}`);
+                console.log(`lastTimestampsList \\ newTimestampsList ${lastTimestampsList.difference(newTimestampsList).size}`);
+                if (lastTimestampsList.difference(newTimestampsList).size < newTimestampsList.size) {
+                    console.log("out of sync; update lastEventsList");
+                    lastEventsList = new Set([...newEventsList]);
+                }
+
+                let initializeCheck = findInitializeInEvents(newEventsList);
+
+                if (initializeCheck.length > 0 && sceneActor.getSnapshot().context.sceneNumber === 0) {
+                    sceneActor.send( {
+                        type: 'ADVANCE',
+                        advanceBy: 1
+                    });
+                }
+
+                let parishionerEnteredCheck = findInitializeInEvents(newEventsList);
+
+                if (parishionerEnteredCheck.length > 0 && sceneActor.getSnapshot().context.sceneNumber === 1) {
+                    sceneActor.send( {
+                        type: 'ADVANCE',
+                        advanceBy: 1
+                    });
+                }
+
+                }, serverCheckIntervalTime);
+            } catch(e) {
+                console.error(e);
+            }
 
         console.log(sceneActor.getSnapshot().context.sceneNumber);
     };
@@ -356,79 +378,81 @@ new p5((p) => {
         if (sceneNumber === 1) {
             p.push();
                 console.log(`Scene One Video Flag: ${sceneConfigs.SCENE_ONE.videoFlag}`);
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
                 //p.text("This scene will contain a soothing ambience", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 2) {
-            sceneVideos[sceneNumber - 2].hide();
+            sceneVideos[sceneNumber - 1].hide();
 
             p.push();
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
                 //p.text("This scene will contain an energized ambience", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 3) {
-            sceneVideos[sceneNumber - 2].hide();
+            sceneVideos[sceneNumber - 1].hide();
             p.push();
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
                 //p.text("This scene will fade out over the course of 30 seconds", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 4) {
-            sceneVideos[sceneNumber - 2].hide();
+            sceneVideos[sceneNumber - 1].hide();
             p.push();
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
+                p.text("SUP DAVID");
+
                 //p.text("This scene will contain words that appear indistinctly", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 5) {
-            sceneVideos[sceneNumber - 2].hide();
+            sceneVideos[sceneNumber - 1].hide();
             p.push();
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
                 //p.text("This scene will contain a white circle that appears in center of screen", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 6) {
-            sceneVideos[sceneNumber - 2].hide();
+            sceneVideos[sceneNumber - 1].hide();
             p.push();
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
                 //p.text("Spoken words appear in random places on screen and begin swirling into circle", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 7) {
-            sceneVideos[sceneNumber - 2].hide();
+            sceneVideos[sceneNumber - 1].hide();
             p.push();
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
                 //p.text("Prompt to take coin out into world", p.windowWidth/2, p.windowHeight/2);
             p.pop();
         }
 
         if (sceneNumber === 8) {
-            sceneVideos[sceneNumber - 2].hide();
+            sceneVideos[sceneNumber - 1].hide();
             p.push();
-                sceneVideos[sceneNumber - 1].show();
-                sceneVideos[sceneNumber - 1].play();
+                sceneVideos[sceneNumber].show();
+                sceneVideos[sceneNumber].play();
                 p.textSize(50);
                 //p.text("Scene fades to nothing", p.windowWidth/2, p.windowHeight/2);
             p.pop();
