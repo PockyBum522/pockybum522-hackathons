@@ -5,6 +5,11 @@ namespace ShrineBackendServer;
 public class OpenAiRequester
 {
     private static ChatClient? _openAiClient;
+
+    public OpenAiRequester()
+    {
+        _openAiClient ??= new(model: "gpt-4o", apiKey: SECRETS.OpenAiApiKey); 
+    }
     
     public double AnalyzeSentiment(string textToAnalyze)
     {
