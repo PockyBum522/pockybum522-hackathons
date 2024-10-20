@@ -19,7 +19,9 @@ public class HttpServer
     }
 
     private void StartListener()
-    {
+    { 
+        var vconCreator = new VconCreator();
+        
         var testCounter = 0; 
         var lastConnection = DateTimeOffset.Now;
         
@@ -41,33 +43,43 @@ public class HttpServer
             // Perform a blocking call to accept requests.
             // You could also use server.AcceptSocket() here.
             var client = server.AcceptTcpClient();
-            
+
             // Console.WriteLine("Connected!");
 
             // Get a stream object for reading and writing
             var stream = client.GetStream();
-            
+
             // Receive all the data sent by the client.
             var i = stream.Read(bytes, 0, bytes.Length);
 
             //Console.WriteLine($"i: {i}");
             // Translate data bytes to an ASCII string.
             var data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-            
+
             // Console.WriteLine(String.Format("Received: {0}", data));
 
             // Process the data sent by the client.
             data = data.ToUpper();
 
-            if (_sendTestEvents) AddTestEventsOnDelay(ref testCounter, ref lastConnection);
-            
+            if (_sendTestEvents) Task.Run(() => 
+                AddTestEventsOnDelay(ref testCounter, ref lastConnection, vconCreator));
+
             while (Events.Count > 10)
             {
                 Events.Remove(Events.First());
             }
-            
-            var jsonString = JsonConvert.SerializeObject(Events, Formatting.Indented);
-            
+
+            var jsonString = "";
+
+            try
+            {
+                jsonString = JsonConvert.SerializeObject(Events, Formatting.Indented);
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Invalid operation attempting to make json string, will retry");
+            }
+
             var msg = Encoding.ASCII.GetBytes(jsonString);
 
             // Send headers
@@ -76,11 +88,11 @@ public class HttpServer
             stream.Write(Encoding.ASCII.GetBytes("Access-Control-Allow-Headers: *\n"));
             stream.Write(Encoding.ASCII.GetBytes("Content-Type: text/plain\n"));
             stream.Write(Encoding.ASCII.GetBytes("\n"));
-            
+
             // Send back a response.
             stream.Write(msg, 0, msg.Length);
             // Console.WriteLine(String.Format("Sent: {0}", data));
-            
+
             // Shutdown and end connection
             // Console.WriteLine("Closing connection");
             client.Close();
@@ -90,7 +102,7 @@ public class HttpServer
     }
 
     // ReSharper disable once CognitiveComplexity because sometimes it's just wrong
-    private void AddTestEventsOnDelay(ref int testCounter, ref DateTimeOffset lastConnection)
+    private void AddTestEventsOnDelay(ref int testCounter, ref DateTimeOffset lastConnection, VconCreator vconCreator)
     {
         if (lastConnection < DateTimeOffset.Now.Subtract(TimeSpan.FromSeconds(5)))
         {
@@ -103,84 +115,51 @@ public class HttpServer
         
         testCounter++;
         
-        if (testCounter == 20) Events.Add(new Event(){Type="PersonEnteredShrine"});
+        if (testCounter == 10) Events.Add(new Event(){Type="InitializeEverything"});
         
-        if (testCounter == 30) Events.Add(new Event(){Type="CoinPlaced", Data="53C4AF8C014F80"});
+        if (testCounter == 20) Events.Add(new Event(){Type="ParishionerEnteredShrine"});
         
-        if (testCounter == 40) Events.Add(new Event(){Type="NewWordsSpoken", Data="I"});
-        if (testCounter == 44) Events.Add(new Event(){Type="NewWordsSpoken", Data="fear"});
-        if (testCounter == 48) Events.Add(new Event(){Type="NewWordsSpoken", Data="demons"});
-        if (testCounter == 52) Events.Add(new Event(){Type="NewWordsSpoken", Data="because"});
-        if (testCounter == 60) Events.Add(new Event(){Type="NewWordsSpoken", Data="hey"});
-        if (testCounter == 66) Events.Add(new Event(){Type="NewWordsSpoken", Data="demons"});
-        if (testCounter == 76) Events.Add(new Event(){Type="NewWordsSpoken", Data="it's"});
-        if (testCounter == 80) Events.Add(new Event(){Type="NewWordsSpoken", Data="me"});
-        if (testCounter == 84) Events.Add(new Event(){Type="NewWordsSpoken", Data="ya"});
-        if (testCounter == 90) Events.Add(new Event(){Type="NewWordsSpoken", Data="boy."});
-        if (testCounter == 92) Events.Add(new Event(){Type="NewWordsSpoken", Data="But"});
-        if (testCounter == 94) Events.Add(new Event(){Type="NewWordsSpoken", Data="you"});
-        if (testCounter == 100) Events.Add(new Event(){Type="NewWordsSpoken", Data="know."});
-        if (testCounter == 104) Events.Add(new Event(){Type="NewWordsSpoken", Data="I"});
-        if (testCounter == 108) Events.Add(new Event(){Type="NewWordsSpoken", Data="mighta"});
-        if (testCounter == 112) Events.Add(new Event(){Type="NewWordsSpoken", Data="owed"});
-        if (testCounter == 116) Events.Add(new Event(){Type="NewWordsSpoken", Data="them"});
-        if (testCounter == 120) Events.Add(new Event(){Type="NewWordsSpoken", Data="money"});
-        if (testCounter == 124) Events.Add(new Event(){Type="NewWordsSpoken", Data="or"});
-        if (testCounter == 128) Events.Add(new Event(){Type="NewWordsSpoken", Data="something"});
-        if (testCounter == 132) Events.Add(new Event(){Type="NewWordsSpoken", Data="and"});
-        if (testCounter == 134) Events.Add(new Event(){Type="NewWordsSpoken", Data="forgotten"});
-        if (testCounter == 140) Events.Add(new Event(){Type="NewWordsSpoken", Data="about"});
-        if (testCounter == 144) Events.Add(new Event(){Type="NewWordsSpoken", Data="so"});
-        if (testCounter == 150) Events.Add(new Event(){Type="NewWordsSpoken", Data="they"});
-        if (testCounter == 154) Events.Add(new Event(){Type="NewWordsSpoken", Data="might"});
-        if (testCounter == 160) Events.Add(new Event(){Type="NewWordsSpoken", Data="be"});
-        if (testCounter == 166) Events.Add(new Event(){Type="NewWordsSpoken", Data="mad."});
-
-        var vconJsonString = GetVconJsonString();
-
-        if (testCounter == 186) Events.Add(new Event(){Type="VconWithSentiment", Data=vconJsonString});
+        if (testCounter == 30) Events.Add(new Event(){Type="CoinPlacedOnAltar", Data="53C4AF8C014F80"});
         
-    }
+        if (testCounter == 40) Events.Add(new Event(){Type="NewWordSpoken", Data="I"});
+        if (testCounter == 44) Events.Add(new Event(){Type="NewWordSpoken", Data="fear"});
+        if (testCounter == 48) Events.Add(new Event(){Type="NewWordSpoken", Data="demons"});
+        if (testCounter == 52) Events.Add(new Event(){Type="NewWordSpoken", Data="because"});
+        if (testCounter == 60) Events.Add(new Event(){Type="NewWordSpoken", Data="hey"});
+        if (testCounter == 66) Events.Add(new Event(){Type="NewWordSpoken", Data="demons"});
+        if (testCounter == 76) Events.Add(new Event(){Type="NewWordSpoken", Data="it's"});
+        if (testCounter == 80) Events.Add(new Event(){Type="NewWordSpoken", Data="me"});
+        if (testCounter == 84) Events.Add(new Event(){Type="NewWordSpoken", Data="ya"});
+        if (testCounter == 90) Events.Add(new Event(){Type="NewWordSpoken", Data="boy."});
+        if (testCounter == 92) Events.Add(new Event(){Type="NewWordSpoken", Data="But"});
+        if (testCounter == 94) Events.Add(new Event(){Type="NewWordSpoken", Data="you"});
+        if (testCounter == 100) Events.Add(new Event(){Type="NewWordSpoken", Data="know."});
+        if (testCounter == 104) Events.Add(new Event(){Type="NewWordSpoken", Data="I"});
+        if (testCounter == 108) Events.Add(new Event(){Type="NewWordSpoken", Data="mighta"});
+        if (testCounter == 112) Events.Add(new Event(){Type="NewWordSpoken", Data="owed"});
+        if (testCounter == 116) Events.Add(new Event(){Type="NewWordSpoken", Data="them"});
+        if (testCounter == 120) Events.Add(new Event(){Type="NewWordSpoken", Data="money"});
+        if (testCounter == 124) Events.Add(new Event(){Type="NewWordSpoken", Data="or"});
+        if (testCounter == 128) Events.Add(new Event(){Type="NewWordSpoken", Data="something"});
+        if (testCounter == 132) Events.Add(new Event(){Type="NewWordSpoken", Data="and"});
+        if (testCounter == 134) Events.Add(new Event(){Type="NewWordSpoken", Data="forgotten"});
+        if (testCounter == 140) Events.Add(new Event(){Type="NewWordSpoken", Data="about"});
+        if (testCounter == 144) Events.Add(new Event(){Type="NewWordSpoken", Data="so"});
+        if (testCounter == 150) Events.Add(new Event(){Type="NewWordSpoken", Data="they"});
+        if (testCounter == 154) Events.Add(new Event(){Type="NewWordSpoken", Data="might"});
+        if (testCounter == 160) Events.Add(new Event(){Type="NewWordSpoken", Data="be"});
+        if (testCounter == 166) Events.Add(new Event(){Type="NewWordSpoken", Data="mad."});
 
-    private static string GetVconJsonString()
-    {
-        var vconDialog = new Dialog()
+        if (testCounter == 170)
         {
-            Alg = "SHA-512",
-            Duration = 30.0,
-            Parties = [0],
-            Start = DateTime.Now
-        };
-
-        var vconParty = new Party()
-        {
-            Name = "Parishioner"
-        };
-
-        var vconAnalysis = new Analysis()
-        {
-            Type = "transcript",
-            Dialog = 0,
-            Vendor = "Temple of Computing",
-            Encoding = "none"
-        };
-        
-        vconAnalysis.Body.Add(
-            new Body()
+            Task.Run(async () =>
             {
-                Speaker = "Parishioner",
-                Message = "I fear demons because hey demons it's me ya boy. But you know. I mighta owed them money or something and forgotten about so they might be mad.",
-                Emotion = 0.2362
-                
+                var vconJsonString = vconCreator.GetVconJsonString(
+                    "I fear demons because hey demons it's me ya boy. But you know. " +
+                    "I mighta owed them money or something and forgotten about so they might be mad.");
+
+                Events.Add(new Event(){Type="VconWithSentiment", Data=await vconJsonString}); 
             });
-        
-        var testVcon = new Vcon();
-        
-        testVcon.Dialog.Add(vconDialog);
-        testVcon.Parties.Add(vconParty);
-        testVcon.Analysis.Add(vconAnalysis);
-        
-        var vconJsonString = JsonConvert.SerializeObject(testVcon);
-        return vconJsonString;
+        }
     }
 }
