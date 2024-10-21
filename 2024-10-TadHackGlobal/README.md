@@ -1,5 +1,11 @@
 # The Shrine 
 
+## A huge thank you to: 
+
+The sponsors, without whom TadHack would not be possible, and Alan (also without whom TadHack would not be possible) for putting on TadHack, and check the bottom of this document for credit to projects that were used in the making of The Shrine
+
+## Description
+
 ...is an attempt at a secular yet spritual experience. We affectionately refer to it as being at the imaginary Temple of Computing.
 
 The hack works as follows:
@@ -28,4 +34,26 @@ As they leave, The Technosage instructs them that they may later want to tap the
 
 The parishioner, whenever they choose to do this, will find that the server has generated a static site/webpage with their transcript and visual effects on the page that are based on ChatGPT's sentiment analysis. Once the server generates this, it is uploaded to hosting which is how the parishioner can access it with the coin, as when they placed the coin on the altar, the server recorded the ID of the NFC tag that it saw so that it can upload the associated transcription that was spoken when that particular coin was on the altar, for later  reflection by the parishioner. 
 
+# Thank you to the following projects
+(which were used in our project)
 
+XState:
+https://xstate.js.org/
+
+Coin model:
+https://www.thingiverse.com/thing:5695821
+
+Speech to text:
+https://github.com/pengzhendong/streaming-sensevoice/
+
+(NFC reader cover) Altar model:
+https://www.thingiverse.com/thing:3469588
+
+ManagedLibNFC:
+https://github.com/kgamecarter/ManagedLibnfc
+
+AvaloniaUI:
+https://avaloniaui.net/
+
+Newtonsoft Json:
+https://www.newtonsoft.com/json
