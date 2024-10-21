@@ -55,4 +55,16 @@ for (let i = 0; i < maxScenes; i++) {
     sceneTimers.push(0);
 }
 
+new p5((p) => {
+    p.setup = () => {
+        p.createCanvas(200, 200);
+
+        //testing scene timers
+    };
+
+    p.draw = () => {
+        p.background(155);
+    };
+});
+
 // ----***** END *****-----
