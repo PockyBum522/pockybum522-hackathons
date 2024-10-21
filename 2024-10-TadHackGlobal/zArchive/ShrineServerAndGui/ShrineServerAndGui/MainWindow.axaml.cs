@@ -3,6 +3,7 @@ using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ShrineServerAndGui.Models;
 using ShrineServerAndGui.NfcRead;
 
@@ -10,10 +11,14 @@ namespace ShrineServerAndGui;
 
 public partial class MainWindow : Window
 {
+    public static UserControl? CurrentView { get; set; }
+    
     public MainWindow()
     {
         InitializeComponent();
 
+        CurrentView = new LightsCoalescingView();
+        
         StartMainWorkers();
     }
 
