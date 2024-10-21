@@ -3,7 +3,7 @@ import { createMachine, assign, createActor } from "xstate"
 import axios from "axios";
 import './styles.css';
 import './normalize.css';
-import inkVideo from "../assets/ink_in_water.mp4";
+import inkVideo from '../assets/ink_in_water.mp4';
 import energeticVideo from "../assets/energetic_field.mp4";
 import blueEnergyVideo from "../assets/blue_energy.mp4";
 import gentleEnergyFieldVideo from "../assets/gentle_energy_field.mp4";
