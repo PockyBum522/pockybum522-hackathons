@@ -2,7 +2,11 @@ import p5 from 'p5';
 import { createMachine, assign, setup, createActor } from "xstate"
 import axios from "axios";
 
-// redo the state machine in TS
+//TODO: refactor sections into different files
+
+// ----***** State Machine Section *****-----
+
+let sceneTimers: Array<number> = [];
 
 interface SceneContext {
     sceneCount: number;
@@ -32,3 +36,23 @@ const sceneMachine = setup({
 });
 
 
+
+const sceneActor = createActor(sceneMachine).start();
+
+sceneActor.subscribe((state) => {
+
+});
+
+
+// ----***** END *****-----
+
+
+// ----***** P5JS Section *****-----
+
+const maxScenes:number = 8;
+
+for (let i = 0; i < maxScenes; i++) {
+    sceneTimers.push(0);
+}
+
+// ----***** END *****-----
