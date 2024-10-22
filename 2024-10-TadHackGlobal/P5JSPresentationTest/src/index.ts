@@ -20,19 +20,24 @@ interface SceneEvents {
 
 const sceneMachine = setup({
     types: {
-        context: {} as { sceneCount: number },
+        context: {} as { sceneCount: number, changeAmount: number },
         events: {} as
-            | { changeAmount: number; type: 'CHANGE_SCENE' }
+            | { type: 'CHANGE_SCENE'; changeAmount: number; }
+            | { type: 'REWIND_PRESENTATION', changeAmount: number }
     },
     actions: {
         increment: assign({
             sceneCount: ({ context, event }) => context.sceneCount + event.changeAmount
+        }),
+        rewind: assign({
+            sceneCount: ({ context }) => context.sceneCount = 0
         })
     }
 }).createMachine({
-    context: { sceneCount: 0 },
+    context: { sceneCount: 0, changeAmount: 0 },
     on: {
         "CHANGE_SCENE": { actions: 'increment' },
+        "REWIND_PRESENTATION": { actions: 'rewind' }
     }
 });
 
@@ -41,7 +46,7 @@ const sceneMachine = setup({
 const sceneActor = createActor(sceneMachine).start();
 
 sceneActor.subscribe((state) => {
-
+    console.log(state.context.sceneCount);
 });
 
 
@@ -65,6 +70,36 @@ function clearAllSceneTimers() {
 }
 
 new p5((p) => {
+
+
+    p.keyPressed = () => {
+
+        let sceneCount = sceneActor.getSnapshot().context.sceneCount;
+        
+        if (p.key === ' ' && sceneCount >= maxScenes) {
+            console.log("rewind to beginning");
+            sceneActor.send({
+                type: 'REWIND_PRESENTATION',
+                changeAmount: 0
+            });
+        }
+
+        if (p.key === ' ' && sceneCount >= 0 && sceneCount < maxScenes) {
+            console.log("advance a scene");
+            sceneActor.send({
+                type: 'CHANGE_SCENE',
+                changeAmount: 1
+            });
+        }
+
+        if (p.keyCode === 37 && sceneCount > 0) {
+            sceneActor.send({
+                type: 'CHANGE_SCENE',
+                changeAmount: -1
+            });
+        }
+    }
+
     p.setup = () => {
         p.createCanvas(200, 200);
 
@@ -77,8 +112,6 @@ new p5((p) => {
         sceneTimers[4] = window.setTimeout(() => { console.log(`sceneTimer 4 fires`)}, 5000);
         sceneTimers[5] = window.setTimeout(() => { console.log(`sceneTimer 5 fires`)}, 6000);
         sceneTimers[6] = window.setTimeout(() => { console.log(`sceneTimer 6 fires`)}, 7000);
-
-
     };
 
     p.draw = () => {
