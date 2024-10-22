@@ -20,7 +20,7 @@ interface SceneEvents {
 
 const sceneMachine = setup({
     types: {
-        context: {} as { sceneCount: number, changeAmount: number },
+        context: {} as SceneContext,
         events: {} as
             | { type: 'CHANGE_SCENE'; changeAmount: number; }
             | { type: 'REWIND_PRESENTATION', changeAmount: number }
@@ -75,7 +75,7 @@ new p5((p) => {
     p.keyPressed = () => {
 
         let sceneCount = sceneActor.getSnapshot().context.sceneCount;
-        
+
         if (p.key === ' ' && sceneCount >= maxScenes) {
             console.log("rewind to beginning");
             sceneActor.send({
@@ -103,15 +103,7 @@ new p5((p) => {
     p.setup = () => {
         p.createCanvas(200, 200);
 
-        //testing scene timers
-
-        sceneTimers[0] = window.setTimeout(() => { console.log(`sceneTimer 0 fires`)}, 1000);
-        sceneTimers[1] = window.setTimeout(() => { console.log(`sceneTimer 1 fires`)}, 2000);
-        sceneTimers[2] = window.setTimeout(() => { clearAllSceneTimers() }, 3000);
-        sceneTimers[3] = window.setTimeout(() => { console.log(`sceneTimer 3 fires`)}, 4000);
-        sceneTimers[4] = window.setTimeout(() => { console.log(`sceneTimer 4 fires`)}, 5000);
-        sceneTimers[5] = window.setTimeout(() => { console.log(`sceneTimer 5 fires`)}, 6000);
-        sceneTimers[6] = window.setTimeout(() => { console.log(`sceneTimer 6 fires`)}, 7000);
+        
     };
 
     p.draw = () => {
