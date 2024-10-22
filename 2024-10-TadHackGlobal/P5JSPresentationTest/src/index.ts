@@ -4,6 +4,7 @@ import axios from "axios";
 
 //TODO: refactor sections into different files
 
+//TODO: Also refactor the state machine into its own class
 // ----***** State Machine Section *****-----
 
 let sceneTimers: Array<number> = [];
