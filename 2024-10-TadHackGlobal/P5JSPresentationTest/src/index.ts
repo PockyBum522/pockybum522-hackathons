@@ -57,7 +57,7 @@ sceneActor.subscribe((state) => {
 
 // TODO: Refactor this into a class
 
-const maxScenes:number = 8;
+const maxScenes:number = 9;
 
 for (let i = 0; i < maxScenes; i++) {
     sceneTimers.push(0);
@@ -69,8 +69,23 @@ function clearAllSceneTimers() {
     }
 }
 
+async function openServerStream() {
+    const serverEvents = await axios.get('http://localhost:5001', {
+        responseType: 'stream'
+    }).then((data) => {
+        console.log(data);
+    });
+}
+
 new p5((p) => {
 
+    // start listening on the server
+
+    const stream = openServerStream();
+
+    stream.then((data) => {
+        console.log(data);
+    });
 
     p.keyPressed = () => {
 
@@ -103,7 +118,7 @@ new p5((p) => {
     p.setup = () => {
         p.createCanvas(200, 200);
 
-        
+
     };
 
     p.draw = () => {
