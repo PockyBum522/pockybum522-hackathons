@@ -1,45 +1,53 @@
-using System;
+﻿using System.Globalization;
 using System.Security.Authentication;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using ShrineServerAndGui.Models;
-using ShrineServerAndGui.NfcRead;
+using OpenAI.Chat;
+using ShrineBackendServer.Models;
+using ShrineBackendServer.NfcRead;
 
-namespace ShrineServerAndGui;
+namespace ShrineBackendServer;
 
-public partial class MainWindow : Window
+public static class Program
 {
-    public MainWindow()
-    {
-        InitializeComponent();
+    private const bool TestServerOnly = true;
+    public const bool SendFakeEventsAutomatically = true;
 
-        StartMainWorkers();
-    }
-
-    private async Task StartMainWorkers()
+    public static async Task Main()
     {
         /*
             After a reboot, or upon unplugging/replugging the NFC reader,
             you will need to run the following before using the NFC reader:
 
-            sudo modprobe -r pn533_usb
-            sudo modprobe -r pn533
+            sudo modprobe -r pn533_usb && sudo modprobe -r pn533
         */
         
         Console.WriteLine("Please wait, your religious experience is loading...");
         
-        Task.Run(() =>
+        if (!TestServerOnly)
         {
-            try
+            Task.Run(() =>
             {
-                StartNfcReadWatchLoop();
-            }
-            catch (Exception ex)
+                try
+                {
+                    StartNfcReadWatchLoop();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception in StartNfcReadWatchLoop: {ex.Message}");
+                } 
+            });
+            
+            Task.Run(async () =>
             {
-                Console.WriteLine($"Exception in StartNfcReadWatchLoop: {ex.Message}");
-            } 
-        });
+                try
+                {
+                    await SpeechRecognizer.StartSpeechRecognitionLoop();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception in StartSpeechRecognitionLoop: {ex.Message}");
+                } 
+            });
+        }
         
         Task.Run(() =>
         {
@@ -52,20 +60,6 @@ public partial class MainWindow : Window
                 Console.WriteLine($"Exception in StartHttpServer: {ex.Message}");
             } 
         });
-        
-        Task.Run(async () =>
-        {
-            try
-            {
-                await SpeechRecognizer.StartSpeechRecognitionLoop();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception in StartSpeechRecognitionLoop: {ex.Message}");
-            } 
-        });
-        
-        await Task.Delay(10000);
         
         Console.WriteLine("Religious experience is now ready...");
         
@@ -81,12 +75,13 @@ public partial class MainWindow : Window
         HttpServer.Events.Add(
             new Event(){ Type = "ParishionerEnteredShrine" });
         
-        Console.WriteLine("Press enter again when you want to exit the server...");
+        Console.WriteLine();
+        
+        Console.WriteLine("Press enter to exit the server...");
         Console.ReadLine();
         
         Environment.Exit(0);
     }
-
 
     private static void StartNfcReadWatchLoop()
     {
@@ -110,7 +105,9 @@ public partial class MainWindow : Window
                 
                 HttpServer.CoinPlacedTime = DateTimeOffset.Now;
 
-                Console.WriteLine($"Coin with UID: {uidString} has been placed on the altar");
+                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine($"Coin has been placed on the altar");
                 
                 HttpServer.Events.Add(
                     new Event(){ Type = "CoinPlacedOnAltar", Data = uidString });

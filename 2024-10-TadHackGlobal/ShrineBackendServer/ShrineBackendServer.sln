@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShrineBackendServer", "ShrineBackendServer\ShrineBackendServer.csproj", "{BE95CCC7-B87D-493C-A51B-890A74BFEFBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE95CCC7-B87D-493C-A51B-890A74BFEFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE95CCC7-B87D-493C-A51B-890A74BFEFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE95CCC7-B87D-493C-A51B-890A74BFEFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE95CCC7-B87D-493C-A51B-890A74BFEFBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
