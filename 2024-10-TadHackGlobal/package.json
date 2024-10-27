@@ -1,9 +1,11 @@
 {
   "dependencies": {
     "source-map-loader": "^5.0.0",
-    "ts-loader": "^9.5.1"
+    "ts-loader": "^9.5.1",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
-    "@types/p5": "^1.7.6"
+    "@types/p5": "^1.7.6",
+    "@types/ws": "^8.5.12"
   }
 }
