@@ -57,6 +57,10 @@ sceneActor.subscribe((state) => {
 
 // TODO: Refactor this into a class
 
+let checkServerTimeout: NodeJS.Timeout | null = null;
+let newEventsList:Set<string> = new Set();
+let lastEventsList:Set<string> = new Set();
+
 const maxScenes:number = 9;
 
 for (let i = 0; i < maxScenes; i++) {
@@ -69,22 +73,24 @@ function clearAllSceneTimers() {
     }
 }
 
-async function openServerStream() {
-    const serverEvents = await axios.get('http://localhost:5001', {
-        responseType: 'stream'
-    }).then((data) => {
-        console.log(data);
-    });
-}
-
 new p5((p) => {
 
-    // start listening on the server
+    const ws = new WebSocket('ws://127.0.0.1:5000/ws');
 
-    const stream = openServerStream();
+    ws.onopen = ((event:Event) => {
+        console.log('Connected to server');
 
-    stream.then((data) => {
-        console.log(data);
+        ws.send('Hello, server!');
+    });
+
+    ws.onmessage = ((message:MessageEvent) => {
+        console.log(`Received message from server: ${JSON.stringify(message.data)}`);
+        let msg = JSON.stringify(message.data);
+        console.log(msg);
+    });
+
+    ws.onclose = ((close:CloseEvent) => {
+        console.log('Disconnected from server');
     });
 
     p.keyPressed = () => {
