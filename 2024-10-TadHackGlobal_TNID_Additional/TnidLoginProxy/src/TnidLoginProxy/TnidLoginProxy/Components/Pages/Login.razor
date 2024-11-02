@@ -1,0 +1,93 @@
+@page "/login"
+@using TnidLoginProxy.TnidApi
+@rendermode InteractiveServer
+@* @using TnidLoginProxy.TnidApi *@
+
+@*
+    1. Make div with textbox for user's phone number and "Login to TNID" button, 
+    this div will be shown initially and hidden when IsUserLoggedIn == true
+    2. Make second div with "User logged in: Yep" and "Name of user logged in: {Shared.LoggedInUserFriendlyName}" 
+    this div will only be shown when IsUserLoggedIn == true
+*@
+
+<PageTitle>Login</PageTitle>
+
+<section id="login-section" class="@( _isUserLoggedIn ? "d-none" : "d-block")">
+    <label>Login</label>
+    <p role="status">
+        Phone number of TNID account to look up: 
+    </p>
+    <input id="login-phone-number-input" @bind="_phoneNumber"/>
+    
+    @* <button @onclick="MakeApiRequest">Login to TNID</button> *@
+    <button @onclick="MakeApiRequest">Log In With TNID</button>
+</section>
+
+<section id="main-section" class="@(!_isUserLoggedIn ? "d-none" : "d-block")">
+    <div id="main">
+        <p>Authentication request (connection) from TNID matched to @_phoneNumber's associated user id</p>
+        <p>This means your TNID Login has been verified!</p>
+        <p>We have now logged @_loggedInUserName into @_companyName</p>
+    </div>
+</section>
+
+@code {
+
+    private string _phoneNumber = "";
+
+    // private readonly bool isUserLoggedIn = Shared.IsUserLoggedIn;
+    private bool _isUserLoggedIn = false;
+    private string _loggedInUserName = "";
+    private string _companyName = "Dartmouth Ave Creations";
+
+    private async Task MakeApiRequest()
+    {
+        // var userTnidPhone = "14075554529";
+        var userSearchResponse = (await TnidPeopleSearcher.SearchByPhoneNumber(_phoneNumber)).Data;
+        
+        // var userFirstName = (string)userSearchResponse.users[0].firstName.ToString();
+        // var userLastName = (string)userSearchResponse.users[0].lastName.ToString();
+        
+        _loggedInUserName= (string)(userSearchResponse.users[0].username.ToString());
+        
+        var userTnidId = TnidResponseParser.GetUserId(userSearchResponse);
+        
+        // Send request from user with given phone number to the company to authorize login with the company
+        _ = await TnidPersonToCompanyConnectionManager.SendConnectionRequest(userTnidId, "CUSTOMER");
+        
+        var listConnectionRequestsForCompany = await GetRequestsForDartmouthAveCreations();
+        
+        var isUserConnectionRequestFound = false;
+
+        var pendingCompanyRequests = listConnectionRequestsForCompany.pendingB2cConnectionRequests;
+        
+        foreach (var pendingRequest in pendingCompanyRequests)
+        {
+            var pendingRequestUserId = (string)(pendingRequest.invitedUser.id.ToString());
+        
+            if (pendingRequestUserId == userTnidId)
+                isUserConnectionRequestFound = true;
+        }
+        
+        if (isUserConnectionRequestFound)
+        {
+            Console.WriteLine("User id for given phone number was found in company connection requests, so they are attempting to get authenticated");
+        
+            _isUserLoggedIn = true;
+        }
+        else
+        {
+            Console.WriteLine("User id for given phone number was NOT found in company connection requests, they WILL NOT be authenticated.");
+        }
+    }
+    
+    private async Task<dynamic> GetRequestsForDartmouthAveCreations()
+    {
+        var connectionAttemptResponse = await TnidCompanyConnectionManager.ListConnectionRequests();
+    
+        Console.WriteLine(connectionAttemptResponse.Data);
+    
+        return connectionAttemptResponse.Data;
+    }
+
+}

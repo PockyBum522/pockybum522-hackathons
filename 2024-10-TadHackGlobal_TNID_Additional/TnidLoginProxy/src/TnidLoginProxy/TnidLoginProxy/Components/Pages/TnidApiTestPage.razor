@@ -1,0 +1,65 @@
+﻿@page "/tnid-api-test"
+@using TnidLoginProxy.TnidApi
+@rendermode InteractiveServer
+
+<PageTitle>Tnid Api Test Page</PageTitle>
+
+<h1>Testing:</h1>
+
+<p role="status">User full name from TNID API: @fullName</p>
+
+@* <button class="btn btn-primary" @onclick="MakeApiRequest">Click me</button> *@
+
+@code {
+
+	private string fullName = "";
+
+	// private async Task MakeApiRequest()
+	// {
+		// var userdTnidPhone = "14075554529";
+		// var userSearchResponse = (await TnidPeopleSearcher.SearchByPhoneNumber(userdTnidPhone)).Data;
+		//
+		// // var userFirstName = (string)userSearchResponse.users[0].firstName.ToString();
+		// // var userLastName = (string)userSearchResponse.users[0].lastName.ToString();
+		//
+		// Shared.LoggedInUserName = (string)(userSearchResponse.users[0].username.ToString());
+		//
+		// var userTnidId = TnidResponseParser.GetUserId(userSearchResponse);
+		//
+		// // Send request from user with given phone number to the company to authorize login with the company
+		// _ = await TnidPersonToCompanyConnectionManager.SendConnectionRequest(userTnidId, "CUSTOMER");
+		//
+		// var listConnectionRequestsForCompany = await GetRequestsForDartmouthAveCreations();
+		//
+		// var isUserConnectionRequestFound = false;
+		//
+		// foreach (var pendingRequest in listConnectionRequestsForCompany.pendingB2cConnectionRequests)
+		// {
+		// 	var pendingRequestUserId = (string)(pendingRequest.invitedUser.id.ToString());
+		//
+		// 	if (pendingRequestUserId == userTnidId)
+		// 		isUserConnectionRequestFound = true;
+		// }
+		//
+		// if (isUserConnectionRequestFound)
+		// {
+		// 	Console.WriteLine("User id for given phone number was found in company connection requests, so they are attempting to get authenticated");
+		//
+		// 	Shared.IsUserLoggedIn = true;
+		// }
+		// else
+		// {
+		// 	Console.WriteLine("User id for given phone number was NOT found in company connection requests, they WILL NOT be authenticated.");
+		// }
+	}
+
+@* 	private async Task<dynamic> GetRequestsForDartmouthAveCreations() *@
+@* 	{ *@
+@* 		var connectionAttemptResponse = await TnidCompanyConnectionManager.ListConnectionRequests(); *@
+@* *@
+@* 		Console.WriteLine(connectionAttemptResponse.Data); *@
+@* *@
+@* 		return connectionAttemptResponse.Data; *@
+@* 	} *@
+@* } *@
+ 
