@@ -11,7 +11,7 @@ static class Program
 {
     internal static void Main(string[] args)
     {
-        // var imagePath = "/home/jurrd3/repos/pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg"; // Local image path
+        var imagePath = GetImagePathPerMachine(Environment.UserName);
         
         // Fake OpenAI Query
         // var jsonResponse = await QueryOpenAi(imagePath);
@@ -19,52 +19,23 @@ static class Program
         // var nativeResponse = JsonConvert.DeserializeObject<OpenAiResponse>(jsonResponse);
         // Console.WriteLine(nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
         
-        // EXIF Data extraction from image (like extracting vanilla)
-        // var exifData = ExifDataExtractor.FromImage(imagePath);
-        // Console.WriteLine($"lat: { exifData.GpsLatitude }, long: { exifData.GpsLongitude }, date: { exifData.TakenAt }");
-        
         // var nativeVcon = JsonConvert.DeserializeObject<VconRoot>(ExampleData.ExampleVcon);
         //
         // Console.WriteLine(nativeVcon.Parties);
-
-        var testVcon = new VconRoot();
-
-        testVcon.Parties.Add(
-            new Party()
-            {
-                Name = "OpenAI",
-                Role = "LLM"
-            }
-        );
         
-        testVcon.Dialog.Add(
-            new Dialog()
-            {
-                Body = "P/NO. SN20P34496     FRU NO. 01YP680\\nLCFC P/N  PK131671B00\\nSG-90850-XUA  01  NUM-BL US",
-                MimeType = "text/plain",
-                Parties = [0],
-                Start = DateTime.Now,
-                Type = "text"
-            }
-        );
+        // EXIF Data extraction from image (like extracting vanilla)
+        var exifData = ExifDataExtractor.FromImage(imagePath);
+        Console.WriteLine($"lat: { exifData.GpsLatitude }, long: { exifData.GpsLongitude }, date: { exifData.TakenAt }");
         
-        testVcon.Attachments.Add(
-            new Attachment()
-            {
-                Type = "tags",
-                Body = [
-                    "location:28.644655, -81.465546"
-                ],
-                Encoding = "json"
-            }
-        );
+        var testVcon = GenerateInitialVconForNote(
+            "P/NO. SN20P34496     FRU NO. 01YP680\\nLCFC P/N  PK131671B00\\nSG-90850-XUA  01  NUM-BL US", exifData);
         
         var testVconJson = JsonConvert.SerializeObject(testVcon);
         Console.WriteLine(testVconJson);
     }
     
     [PublicAPI]
-    static async Task<string> QueryOpenAi(string imagePath)
+    private static async Task<string> QueryOpenAi(string imagePath)
     {
 
         var imageBytes = await File.ReadAllBytesAsync(imagePath);
@@ -105,5 +76,59 @@ static class Program
         var result = await response.Content.ReadAsStringAsync();
         // Console.WriteLine("Response:\n" + result);
         return result;
+    }
+
+    private static VconRoot GenerateInitialVconForNote(string vconBody, ImageExifData exifData)
+    {
+        var generatedVcon = new VconRoot();
+
+        generatedVcon.Parties.Add(
+            new Party()
+            {
+                Name = "OpenAi",
+                Role = "Transcriber"
+            }
+        );
+        
+        generatedVcon.Dialog.Add(
+            new Dialog()
+            {
+                Body = vconBody,
+                MimeType = "text/plain",
+                Parties = [0],
+                Start = exifData.TakenAt,
+                Type = "text"
+            }
+        );
+        
+        generatedVcon.Attachments.Add(
+            new Attachment()
+            {
+                Type = "tags",
+                Body = [$"location:{exifData.GpsLatitude}, -{exifData.GpsLongitude}"],
+                Encoding = "json"
+            }
+        );
+
+        return generatedVcon;
+    }
+    
+    private static string GetImagePathPerMachine(string userName)
+    {
+        // Local image path on Jurrd's machine
+        var jaredReposPath = "/home/jurrd3/repos";
+
+        var davidReposPath = "/media/secondary/repos";
+        
+        var imagePathInRepo =
+            "pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg";
+        
+        if (userName.Contains("david", StringComparison.InvariantCultureIgnoreCase))
+            return Path.Join(davidReposPath, imagePathInRepo);
+
+        if (userName.Contains("jurrd", StringComparison.InvariantCultureIgnoreCase))
+            return Path.Join(jaredReposPath, imagePathInRepo);
+        
+        return "";
     }
 }
