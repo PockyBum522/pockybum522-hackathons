@@ -122,13 +122,23 @@ static class Program
         
         var imagePathInRepo =
             "pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg";
+
+        var builtFullPath = "ERROR"; 
         
         if (userName.Contains("david", StringComparison.InvariantCultureIgnoreCase))
-            return Path.Join(davidReposPath, imagePathInRepo);
-
-        if (userName.Contains("jurrd", StringComparison.InvariantCultureIgnoreCase))
-            return Path.Join(jaredReposPath, imagePathInRepo);
+        {
+            builtFullPath = Path.Join(davidReposPath, imagePathInRepo);
         
-        return "";
+            Console.WriteLine($"Detected as running on one of David's machines - using full path: {builtFullPath}");
+        }
+         
+        if (userName.Contains("jurrd", StringComparison.InvariantCultureIgnoreCase))
+        {
+            builtFullPath = Path.Join(jaredReposPath, imagePathInRepo);
+            
+            Console.WriteLine($"Detected as running on one of Jurrd's machines - using full path: {builtFullPath}");
+        }
+        
+        return builtFullPath;
     }
 }
