@@ -14,17 +14,21 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // var jsonResponse = await QueryOpenAI();
-        var jsonResponse = ExampleData.ExampleOpenAIJsonResponse;
-
-        var nativeResponse = JsonConvert.DeserializeObject<OpenAIResponse>(jsonResponse);
+        var imagePath = "/home/jurrd3/repos/pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg"; // Local image path
         
+        // Fake OpenAI Query
+        // var jsonResponse = await QueryOpenAI(imagePath);
+        var jsonResponse = ExampleData.ExampleOpenAIJsonResponse;
+        var nativeResponse = JsonConvert.DeserializeObject<OpenAIResponse>(jsonResponse);
         Console.WriteLine(nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
+        
+        // EXIF Data extraction from image (like extracting vanilla)
+        var exifData = ExifHelper.ExtractFromImage(imagePath);
+        Console.WriteLine($"lat: { exifData.GpsLatitude }, long: { exifData.GpsLongitude }, date: { exifData.TakenAt }");
     }
     
-    static async Task<string> QueryOpenAI()
+    static async Task<string> QueryOpenAI(string imagePath)
     {
-        var imagePath = "/home/jurrd3/repos/pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg"; // Local image path
 
         byte[] imageBytes = await File.ReadAllBytesAsync(imagePath);
         string base64Image = Convert.ToBase64String(imageBytes);
