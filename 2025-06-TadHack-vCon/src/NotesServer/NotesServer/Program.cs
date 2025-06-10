@@ -30,7 +30,7 @@ static class Program
         var testVcon = GenerateInitialVconForNote(
             "P/NO. SN20P34496     FRU NO. 01YP680\\nLCFC P/N  PK131671B00\\nSG-90850-XUA  01  NUM-BL US", exifData);
         
-        var testVconJson = JsonConvert.SerializeObject(testVcon);
+        var testVconJson = JsonConvert.SerializeObject(testVcon, Formatting.Indented);
         Console.WriteLine(testVconJson);
     }
     
