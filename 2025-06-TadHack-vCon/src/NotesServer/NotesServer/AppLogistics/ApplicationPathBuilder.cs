@@ -60,5 +60,5 @@ public static class ApplicationPathBuilder
         }
         
         return builtFullPath;
-    }
+    }    
 }
