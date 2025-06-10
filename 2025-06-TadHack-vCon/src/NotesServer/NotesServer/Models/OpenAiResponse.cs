@@ -2,25 +2,25 @@ using Newtonsoft.Json;
 
 namespace NotesServer.Models;
 
-public class OpenAIResponse
+public class OpenAiResponse
 {
-    [JsonProperty("id")]
-    public string Id { get; set; }
+    [JsonProperty("id")] 
+    public string Id { get; set; } = "";
 
     [JsonProperty("object")]
-    public string Object { get; set; }
+    public string Object { get; set; } = "";
 
     [JsonProperty("created")]
     public long Created { get; set; }
 
     [JsonProperty("model")]
-    public string Model { get; set; }
+    public string Model { get; set; } = "";
 
-    [JsonProperty("choices")]
-    public List<Choice> Choices { get; set; }
+    [JsonProperty("choices")] 
+    public List<Choice> Choices { get; set; } = new();
 
     [JsonProperty("usage")]
-    public Usage Usage { get; set; }
+    public Usage Usage { get; set; } = new();
 }
 
 public class Choice
@@ -29,19 +29,19 @@ public class Choice
     public int Index { get; set; }
 
     [JsonProperty("message")]
-    public Message Message { get; set; }
+    public Message Message { get; set; } = new();
 
     [JsonProperty("finish_reason")]
-    public string FinishReason { get; set; }
+    public string FinishReason { get; set; } = "";
 }
 
 public class Message
 {
     [JsonProperty("role")]
-    public string Role { get; set; }
+    public string Role { get; set; } = "";
 
     [JsonProperty("content")]
-    public string Content { get; set; }
+    public string Content { get; set; } = "";
 }
 
 public class Usage

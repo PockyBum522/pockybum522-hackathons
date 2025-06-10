@@ -1,25 +1,22 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
-using System.IO;
-using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using NotesServer.Models;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace NotesServer;
 
-class Program
+static class Program
 {
-    static async Task Main(string[] args)
+    internal static void Main(string[] args)
     {
-        var imagePath = "/home/jurrd3/repos/pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg"; // Local image path
+        // var imagePath = "/home/jurrd3/repos/pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg"; // Local image path
         
         // Fake OpenAI Query
-        // var jsonResponse = await QueryOpenAI(imagePath);
-        // var jsonResponse = ExampleData.ExampleOpenAIJsonResponse;
-        // var nativeResponse = JsonConvert.DeserializeObject<OpenAIResponse>(jsonResponse);
+        // var jsonResponse = await QueryOpenAi(imagePath);
+        // var jsonResponse = ExampleData.ExampleOpenAiJsonResponse;
+        // var nativeResponse = JsonConvert.DeserializeObject<OpenAiResponse>(jsonResponse);
         // Console.WriteLine(nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
         
         // EXIF Data extraction from image (like extracting vanilla)
@@ -30,20 +27,20 @@ class Program
         //
         // Console.WriteLine(nativeVcon.Parties);
 
-        var testVcon = new VconRoot();
+        var testVcon = new VconRoot
+        {
+            Vcon = "0.0.1",
+            CreatedAt = DateTime.Now
+        };
 
-        testVcon.Vcon = "0.0.1";
-        
-        testVcon.CreatedAt = DateTime.Now;
-        
-        
+
         testVcon.Parties.Add(
             new Party()
             {
                 Name = "OpenAI",
                 Role = "LLM"
             }
-            );
+        );
         
         testVcon.Dialog.Add(
             new Dialog()
@@ -54,7 +51,7 @@ class Program
                 Start = DateTime.Now,
                 Type = "text"
             }
-            );
+        );
         
         testVcon.Attachments.Add(
             new Attachment()
@@ -65,17 +62,18 @@ class Program
                 ],
                 Encoding = "json"
             }
-            );
+        );
         
         var testVconJson = JsonConvert.SerializeObject(testVcon);
         Console.WriteLine(testVconJson);
     }
     
-    static async Task<string> QueryOpenAI(string imagePath)
+    [PublicAPI]
+    static async Task<string> QueryOpenAi(string imagePath)
     {
 
-        byte[] imageBytes = await File.ReadAllBytesAsync(imagePath);
-        string base64Image = Convert.ToBase64String(imageBytes);
+        var imageBytes = await File.ReadAllBytesAsync(imagePath);
+        var base64Image = Convert.ToBase64String(imageBytes);
 
         var payload = new
         {
@@ -99,17 +97,17 @@ class Program
             }
         };
 
-        string jsonPayload = JsonSerializer.Serialize(payload);
+        var jsonPayload = JsonSerializer.Serialize(payload);
 
         using var client = new HttpClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SECRETS.OpenAIAPIKey);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SECRETS.OpenAiApiKey);
 
         var response = await client.PostAsync(
             "https://api.openai.com/v1/chat/completions",
             new StringContent(jsonPayload, Encoding.UTF8, "application/json")
         );
 
-        string result = await response.Content.ReadAsStringAsync();
+        var result = await response.Content.ReadAsStringAsync();
         // Console.WriteLine("Response:\n" + result);
         return result;
     }

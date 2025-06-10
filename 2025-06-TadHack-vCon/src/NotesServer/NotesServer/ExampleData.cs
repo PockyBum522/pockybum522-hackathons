@@ -39,7 +39,7 @@ public class ExampleData
                                      }
                                      """;
     
-  public static string ExampleOpenAIJsonResponse = """
+  public static string ExampleOpenAiJsonResponse = """
                                                    {
                                                      "id": "chatcmpl-BggpLQYHwrwBR9nngI3AHzDOHrwTX",
                                                      "object": "chat.completion",
