@@ -2,6 +2,43 @@ namespace NotesServer;
 
 public class ExampleData
 {
+  public static string ExampleVcon = """
+                                     {
+                                       "uuid": "01975767-27e2-8620-9dd8-dd37220d739c",
+                                       "vcon": "0.0.1",
+                                       "created_at": "2025-06-10T01:14:27.682416+00:00",
+                                       "redacted": {},
+                                       "group": [],
+                                       "parties": [
+                                         {
+                                           "name": "OpenAI",
+                                           "role": "LLM"
+                                         }
+                                       ],
+                                       "dialog": [
+                                         {
+                                           "type": "text",
+                                           "start": "2025-06-10T01:14:27.682967+00:00",
+                                           "parties": [
+                                             0
+                                           ],
+                                           "mimetype": "text/plain",
+                                           "body": "P/NO. SN20P34496     FRU NO. 01YP680\nLCFC P/N  PK131671B00\nSG-90850-XUA  01  NUM-BL US"
+                                         }
+                                       ],
+                                       "attachments": [
+                                         {
+                                           "type": "tags",
+                                           "body": [
+                                             "location:28.644655, -81.465546"
+                                           ],
+                                           "encoding": "json"
+                                         }
+                                       ],
+                                       "analysis": []
+                                     }
+                                     """;
+    
   public static string ExampleOpenAIJsonResponse = """
                                                    {
                                                      "id": "chatcmpl-BggpLQYHwrwBR9nngI3AHzDOHrwTX",

@@ -18,13 +18,57 @@ class Program
         
         // Fake OpenAI Query
         // var jsonResponse = await QueryOpenAI(imagePath);
-        var jsonResponse = ExampleData.ExampleOpenAIJsonResponse;
-        var nativeResponse = JsonConvert.DeserializeObject<OpenAIResponse>(jsonResponse);
-        Console.WriteLine(nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
+        // var jsonResponse = ExampleData.ExampleOpenAIJsonResponse;
+        // var nativeResponse = JsonConvert.DeserializeObject<OpenAIResponse>(jsonResponse);
+        // Console.WriteLine(nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
         
         // EXIF Data extraction from image (like extracting vanilla)
-        var exifData = ExifHelper.ExtractFromImage(imagePath);
-        Console.WriteLine($"lat: { exifData.GpsLatitude }, long: { exifData.GpsLongitude }, date: { exifData.TakenAt }");
+        // var exifData = ExifHelper.ExtractFromImage(imagePath);
+        // Console.WriteLine($"lat: { exifData.GpsLatitude }, long: { exifData.GpsLongitude }, date: { exifData.TakenAt }");
+        
+        // var nativeVcon = JsonConvert.DeserializeObject<VconRoot>(ExampleData.ExampleVcon);
+        //
+        // Console.WriteLine(nativeVcon.Parties);
+
+        var testVcon = new VconRoot();
+
+        testVcon.Vcon = "0.0.1";
+        
+        testVcon.CreatedAt = DateTime.Now;
+        
+        
+        testVcon.Parties.Add(
+            new Party()
+            {
+                Name = "OpenAI",
+                Role = "LLM"
+            }
+            );
+        
+        testVcon.Dialog.Add(
+            new Dialog()
+            {
+                Body = "P/NO. SN20P34496     FRU NO. 01YP680\\nLCFC P/N  PK131671B00\\nSG-90850-XUA  01  NUM-BL US",
+                MimeType = "text/plain",
+                Parties = [0],
+                Start = DateTime.Now,
+                Type = "text"
+            }
+            );
+        
+        testVcon.Attachments.Add(
+            new Attachment()
+            {
+                Type = "tags",
+                Body = [
+                    "location:28.644655, -81.465546"
+                ],
+                Encoding = "json"
+            }
+            );
+        
+        var testVconJson = JsonConvert.SerializeObject(testVcon);
+        Console.WriteLine(testVconJson);
     }
     
     static async Task<string> QueryOpenAI(string imagePath)
