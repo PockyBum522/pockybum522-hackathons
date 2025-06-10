@@ -15,6 +15,9 @@ public class MarkdownFileWriter
 
     public void WriteNewNote(string path, List<VconRoot> noteContent)
     {
+        // Make sure this exists
+        Directory.CreateDirectory(path);
+        
         // Get date/time of oldest vcon
         var sortedByDate = noteContent.OrderBy(x => x.CreatedAt);
 
