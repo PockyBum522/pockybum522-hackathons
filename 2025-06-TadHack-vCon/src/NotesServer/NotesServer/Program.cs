@@ -12,12 +12,13 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        await QueryOpenAI();
+        // var jsonResponse = await QueryOpenAI();
+        var jsonResponse = ExampleData.ExampleOpenAIJsonResponse;
     }
     
-    static async Task QueryOpenAI()
+    static async Task<string> QueryOpenAI()
     {
-        var apiKey = "your-api-key-here"; // Replace with your OpenAI API key
+        
         var imagePath = "/home/jurrd3/repos/pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg"; // Local image path
 
         byte[] imageBytes = await File.ReadAllBytesAsync(imagePath);
@@ -32,7 +33,7 @@ class Program
                     role = "user",
                     content = new object[]
                     {
-                        new { type = "text", text = "What is in this image?" },
+                        new { type = "text", text = "This is a documentation image taken for someone's notes. Please transcribe the most prominent text in this image. Format your response as only the transcribed text with no other words in your response." },
                         new {
                             type = "image_url",
                             image_url = new {
@@ -48,7 +49,7 @@ class Program
         string jsonPayload = JsonSerializer.Serialize(payload);
 
         using var client = new HttpClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SECRETS.OpenAIAPIKey);
 
         var response = await client.PostAsync(
             "https://api.openai.com/v1/chat/completions",
@@ -56,6 +57,7 @@ class Program
         );
 
         string result = await response.Content.ReadAsStringAsync();
-        Console.WriteLine("Response:\n" + result);
+        // Console.WriteLine("Response:\n" + result);
+        return result;
     }
 }
