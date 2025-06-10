@@ -29,6 +29,8 @@ public class ExifDataExtractor
         returnData.GpsLatitude = latTag.ToFloat().ToString(CultureInfo.InvariantCulture);
         returnData.GpsLongitude = longTag.ToFloat().ToString(CultureInfo.InvariantCulture);
         
+        _logger.Debug("Extracted exif data is: {@ExifData}", returnData);
+        
         return returnData;
     }
 }

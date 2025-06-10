@@ -39,6 +39,8 @@ public class NoteVconBuilder(ILogger logger)
             }
         );
 
+        _logger.Debug("Generated initial note vcon: {@VconRoot}", generatedVcon);
+        
         return generatedVcon;
     }
 }

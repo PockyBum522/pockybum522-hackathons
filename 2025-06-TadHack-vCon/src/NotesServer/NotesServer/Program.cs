@@ -1,18 +1,13 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NotesServer.AppLogistics;
-using NotesServer.Models;
 using Serilog;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace NotesServer;
 
-static class Program
+internal static class Program
 {
-    private static ILogger _logger = BuildLogger();
-    private static ApplicationPathBuilder _appPathBuilder;
+    private static readonly ILogger _logger = BuildLogger();
+    private static ApplicationPathBuilder? _appPathBuilder;
 
     internal static void Main(string[] args)
     {
@@ -47,6 +42,8 @@ static class Program
     
     private static ILogger BuildLogger()
     {
+        if (_appPathBuilder is null) throw new NullReferenceException($"{nameof(_appPathBuilder)} is not initialized");
+        
         var appLogger = new LoggerConfiguration()
             .Enrich.WithProperty("VconNotesServerApplication", "VconNotesServerSerilogContext")
             //.MinimumLevel.Information()
