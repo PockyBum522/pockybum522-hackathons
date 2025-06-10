@@ -1,12 +1,20 @@
 using System.Globalization;
 using ExifLibrary;
 using NotesServer.Models;
+using Serilog;
 
 namespace NotesServer;
 
-public static class ExifDataExtractor
+public class ExifDataExtractor
 {
-    public static ImageExifData FromImage(string filePath)
+    private readonly ILogger _logger;
+
+    public ExifDataExtractor(ILogger logger)
+    {
+        _logger = logger;
+    }
+    
+    public ImageExifData FromImage(string filePath)
     {
         var returnData =  new ImageExifData();
         var file = ImageFile.FromFile(filePath);
