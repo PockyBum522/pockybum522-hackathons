@@ -6,17 +6,17 @@ namespace NotesServer;
 
 internal static class Program
 {
-    private static readonly ILogger _logger = BuildLogger();
-    private static ApplicationPathBuilder? _appPathBuilder;
+    private static ILogger? _logger;
 
     internal static void Main(string[] args)
     {
+        _logger = BuildLogger();
+        
         // New up things that we need to inject logger into
-        _appPathBuilder = new ApplicationPathBuilder(_logger);
         var exifExtractor = new ExifDataExtractor(_logger);
         var noteVconBuilder = new NoteVconBuilder(_logger);
         
-        var imagePath = _appPathBuilder.GetExampleImagePathPerMachine(Environment.UserName);
+        var imagePath = ApplicationPathBuilder.GetExampleImagePathPerMachine(Environment.UserName);
         
         // Working deserialization of fake OpenAI Query JSON so we don't use tokens while experimenting:
         // var jsonResponse = await QueryOpenAi(imagePath);
@@ -42,14 +42,12 @@ internal static class Program
     
     private static ILogger BuildLogger()
     {
-        if (_appPathBuilder is null) throw new NullReferenceException($"{nameof(_appPathBuilder)} is not initialized");
-        
         var appLogger = new LoggerConfiguration()
             .Enrich.WithProperty("VconNotesServerApplication", "VconNotesServerSerilogContext")
             //.MinimumLevel.Information()
             .MinimumLevel.Debug()
             .WriteTo.File(
-                Path.Join(_appPathBuilder.GetLogPathPerMachine(Environment.UserName), "log_.log"), rollingInterval: RollingInterval.Day)
+                Path.Join(ApplicationPathBuilder.GetLogPathPerMachine(Environment.UserName), "log_.log"), rollingInterval: RollingInterval.Day)
             .WriteTo.Debug()
             .CreateLogger();
 
