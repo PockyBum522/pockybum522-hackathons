@@ -27,12 +27,7 @@ static class Program
         //
         // Console.WriteLine(nativeVcon.Parties);
 
-        var testVcon = new VconRoot
-        {
-            Vcon = "0.0.1",
-            CreatedAt = DateTime.Now
-        };
-
+        var testVcon = new VconRoot();
 
         testVcon.Parties.Add(
             new Party()

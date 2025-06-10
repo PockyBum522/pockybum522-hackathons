@@ -8,7 +8,7 @@ public class VconRoot
     public Guid Uuid { get; set; } = Guid.NewGuid();
 
     [JsonProperty("vcon")] 
-    public string Vcon { get; set; } = "";
+    public string Vcon { get; set; } = "0.0.1";
 
     [JsonProperty("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
