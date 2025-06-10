@@ -20,7 +20,7 @@ static class Program
         // Console.WriteLine(nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
         
         // EXIF Data extraction from image (like extracting vanilla)
-        // var exifData = ExifHelper.ExtractFromImage(imagePath);
+        // var exifData = ExifDataExtractor.FromImage(imagePath);
         // Console.WriteLine($"lat: { exifData.GpsLatitude }, long: { exifData.GpsLongitude }, date: { exifData.TakenAt }");
         
         // var nativeVcon = JsonConvert.DeserializeObject<VconRoot>(ExampleData.ExampleVcon);
