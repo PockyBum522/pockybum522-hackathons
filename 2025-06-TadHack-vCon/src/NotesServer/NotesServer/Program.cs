@@ -2,9 +2,11 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using NotesServer.Models;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace NotesServer;
 
@@ -14,11 +16,14 @@ class Program
     {
         // var jsonResponse = await QueryOpenAI();
         var jsonResponse = ExampleData.ExampleOpenAIJsonResponse;
+
+        var nativeResponse = JsonConvert.DeserializeObject<OpenAIResponse>(jsonResponse);
+        
+        Console.WriteLine(nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
     }
     
     static async Task<string> QueryOpenAI()
     {
-        
         var imagePath = "/home/jurrd3/repos/pockybum522-hackathons/2025-06-TadHack-vCon/example-input/model-numbers-easier/PXL_20250516_132015872.jpg"; // Local image path
 
         byte[] imageBytes = await File.ReadAllBytesAsync(imagePath);
