@@ -1,10 +1,10 @@
-1) Take a single-ass picture
+1) ~~Take a single-ass picture~~ 
 	1) Load a picture in such a way that it can be sent to an LLM
 	2) Find an LLM that takes pictures and can be asked questions about the picture that can be called using an API
 	3) Test through an API call - uploading a picture and asking questions about it
-2) Determine what is the most prominent data
+2) ~~Determine what is the most prominent data
 	1) Test API call (same task as above)
-3) Return most prominent data as transcribed vCon
+3) ~~Return most prominent data as transcribed vCon
 	1) Look at example vCons and figure out things that we want to store
 		1) Date/time
 		2) GPS location
