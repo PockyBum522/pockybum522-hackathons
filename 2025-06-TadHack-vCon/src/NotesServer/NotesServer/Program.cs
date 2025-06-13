@@ -9,7 +9,7 @@ internal static class Program
 {
     private static ILogger? _logger;
 
-    internal static void Main(string[] args)
+    internal static async Task Main(string[] args)
     {
         _logger = BuildLogger();
         
@@ -17,12 +17,23 @@ internal static class Program
         var exifExtractor = new ExifDataExtractor(_logger);
         var noteVconBuilder = new NoteVconBuilder(_logger);
         var markdownFileWriter = new MarkdownFileWriter(_logger);
+        var openAiClient = new OpenAiClient(_logger);
+
+        var initialFilesCount = Directory.GetFiles("/media/secondary/temp/SyncedPictures", "*.jpg").Length;
+        var newFilesCount = initialFilesCount;
         
-        var imagePath = ApplicationPathBuilder.GetExampleImagePathPerMachine(Environment.UserName);
+        while (newFilesCount == initialFilesCount)
+        {
+            newFilesCount = Directory.GetFiles("/media/secondary/temp/SyncedPictures", "*.jpg").Length;
+        }
         
-        // Working deserialization of fake OpenAI Query JSON so we don't use tokens while experimenting:
-        // var jsonResponse = await QueryOpenAi(imagePath);      // Uncomment this if you want to use tokens and get a real response
-        var jsonResponse = ExampleData.ExampleOpenAiJsonResponse;
+        // Get newest file
+        var directory = new DirectoryInfo("/media/secondary/temp/SyncedPictures");
+        var imagePath = (from f in directory.GetFiles() orderby f.LastWriteTime descending select f).First().FullName;  // This line is an abomination against god and man 
+        
+        var jsonResponse = await openAiClient.QueryOpenAi(imagePath);      // Uncomment this if you want to use tokens and get a real response
+        
+        //var jsonResponse = ExampleData.ExampleOpenAiJsonResponse;
         var nativeResponse = JsonConvert.DeserializeObject<OpenAiResponse>(jsonResponse);
         _logger.Debug("Response from OpenAI: {ResponseContent}", nativeResponse.Choices.FirstOrDefault().Message.Content); // David is a bad influence
         
@@ -34,7 +45,7 @@ internal static class Program
         var testVcon = noteVconBuilder.GenerateInitialVconForNote(nativeResponse.Choices.FirstOrDefault().Message.Content, exifData);
         
         var testVconJson = JsonConvert.SerializeObject(testVcon, Formatting.Indented);
-        _logger.Debug("Test vCon JSON: {TestVconJson}", testVconJson);
+        _logger.Debug("vCon JSON: {TestVconJson}", testVconJson);
 
         var notesFolderPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Notes");
         
