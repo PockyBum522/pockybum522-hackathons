@@ -11,7 +11,9 @@ MVP:
     
     [X] Grab our VCON C# model and have that handy to serialize/deserialize easily later (David)
 
-    [ ] Shows GPS coords real time --- (David)
+    [X] Shows GPS coords real time --- (David)
+
+    [ ] Show calculated distance from waypoint in real time (David)
 
     [ ] Can play a sound upon trigger --- (Jared)
 
