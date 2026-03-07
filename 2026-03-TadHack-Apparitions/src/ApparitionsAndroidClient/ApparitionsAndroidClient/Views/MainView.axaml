@@ -6,18 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ApparitionsAndroidClient.Views.MainView"
              x:DataType="vm:MainViewModel"
-             Loaded="Control_OnLoaded"
-             >
-    
-    
-    
-    
-    
-    <!-- <Interaction.Behaviors> -->
-    <!--     <EventTriggerBehavior EventName="Loaded"> -->
-    <!--         <InvokeCommandAction Command="{Binding onViewLoadedCommand}" /> -->
-    <!--     </EventTriggerBehavior> -->
-    <!-- </Interaction.Behaviors> -->
+             Loaded="Control_OnLoaded" >
     
     <Design.DataContext>
         <vm:MainViewModel />    <!-- This only sets the DataContext for the previewer in an IDE, to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
