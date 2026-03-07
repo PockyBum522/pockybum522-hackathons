@@ -8,10 +8,12 @@
 MVP:
 
     [X] Get app running on our phones and building on both computers to be able to test
+    
+    [ ] Grab our VCON C# model and have that handy to serialize/deserialize easily later (David)
 
     [ ] Shows GPS coords real time
 
-    [ ] Can play a sound upon trigger
+    [ ] Can play a sound upon trigger (Jared)
 
     [ ] Can change volume of the sound upon trigger
 
@@ -21,7 +23,7 @@ MVP:
 
     [ ] Text scrolling of what is being said 
 
-    [ ] Grab our VCON C# model and have that handy to serialize/deserialize easily later
+    
 
   
 EP:
