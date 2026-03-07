@@ -1,5 +1,7 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content.PM;
+using Android.Media;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Maui;
@@ -23,6 +25,8 @@ public class MainActivity : AvaloniaMainActivity<App>
 {
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
+        
+        
         return base.CustomizeAppBuilder(builder)
             .UseMaui<MauiApplication>(this)
             .WithInterFont();
