@@ -17,6 +17,7 @@ public partial class MainViewModel : ViewModelBase
     private string _greeting = "Welcome to Avalonia!";
 
     private string _gpsLocation = "No location yet";
+    private string _locationRequestSuccess = "No location yet";
     
     private GpsCoordinates _currentLocation = new(0, 0);
     private GpsCoordinates _gpsByShop = new(28.594340, -81.381630);
@@ -24,6 +25,8 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private async Task onViewLoaded(object sender)
     {
+        await InitializeLocationListener();
+        
         while (true)
         {
             Dispatcher.UIThread.Invoke(uiThreadWork);
@@ -36,15 +39,16 @@ public partial class MainViewModel : ViewModelBase
 
     private void uiThreadWork()
     {
-        _count++;
-        
-        // Greeting = $"Now we have loaded: #{_count}";
         Greeting = _gpsLocation;
     }
     
     private async Task nonUiThreadWork()
     {
-        _currentLocation = await GetLocation();
+        var rawLocation = await Geolocation.GetLocationAsync();
+        
+        if (rawLocation is null) throw new NullReferenceException("rawLocation is null");
+        
+        _currentLocation = new GpsCoordinates(rawLocation.Latitude, rawLocation.Longitude);
         
         _gpsLocation = $"""
                         Lat: {_currentLocation.Latitude}, 
@@ -52,17 +56,36 @@ public partial class MainViewModel : ViewModelBase
 
                         Calculated distance:
                         {GpsCoordinateDistanceCalculator.GetDistance(_currentLocation, _gpsByShop, 'F')} feet
+
+                        Count: 
+                        {_count}
+
+                        Success on listening init:
+                        {_locationRequestSuccess}
                         """;
         
-        await Task.Delay(1000);
+        _count++;
+        
+        await Task.Delay(2000);
     }
     
-    private static async Task<GpsCoordinates> GetLocation()
+    private async Task InitializeLocationListener()
     {
-        var location = await Geolocation.GetLocationAsync();
-
-        if (location is null) throw new NullReferenceException("GPS location was null, abandon hope");
+        //Geolocation.LocationChanged += Geolocation_LocationChanged;
         
-        return new GpsCoordinates(location.Latitude, location.Longitude); 
+        // Using GeolocationAccuracy.Medium as a balance between accuracy and power consumption. Developers can adjust this value to High or Low based on their specific requirements.
+        var request = new GeolocationListeningRequest(GeolocationAccuracy.Best);
+        var success = await Geolocation.StartListeningForegroundAsync(request);
+
+        string status = success
+            ? "Started listening for foreground location"
+            : "Couldn't start listening";
+        
+        _locationRequestSuccess = status;
+    }
+    
+    void Geolocation_LocationChanged(object? sender, GeolocationLocationChangedEventArgs e)
+    {
+        _currentLocation = new GpsCoordinates(e.Location.Latitude, e.Location.Longitude);
     }
 }

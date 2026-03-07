@@ -9,6 +9,7 @@ using Avalonia.Maui;
 [assembly: UsesFeature("android.hardware.location", Required = true)]
 [assembly: UsesFeature("android.hardware.location.gps", Required = true)]
 [assembly: UsesFeature("android.hardware.location.network", Required = true)]
+[assembly: UsesPermission(Android.Manifest.Permission.AccessBackgroundLocation)]
 
 namespace ApparitionsAndroidClient.Android;
 
