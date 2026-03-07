@@ -7,31 +7,31 @@
 
 MVP:
 
-    - Get app running on our phones and building on both computers to be able to test
+    [X] Get app running on our phones and building on both computers to be able to test
 
-    - Shows GPS coords real time
+    [ ] Shows GPS coords real time
 
-    - Can play a sound upon trigger
+    [ ] Can play a sound upon trigger
 
-    - Can change volume of the sound upon trigger
+    [ ] Can change volume of the sound upon trigger
 
-    - MCP and vCons to synthesize voices
+    [ ] MCP and vCons to synthesize voices
 
-    - Specific filterable scenarios per location
+    [ ] Specific filterable scenarios per location
 
-    - Text scrolling of what is being said 
+    [ ] Text scrolling of what is being said 
 
-    - Grab our VCON C# model and have that handy to serialize/deserialize easily later
+    [ ] Grab our VCON C# model and have that handy to serialize/deserialize easily later
 
   
 EP:
 
-    - Camera overlay that can apply effects (to match atmosphere)
+    [ ] Camera overlay that can apply effects (to match atmosphere)
 
-    - Take vCons in to build the stories
+    [ ] Take vCons in to build the stories
 
-    - Import vCons that have story built up in the vCons
+    [ ] Import vCons that have story built up in the vCons
 
-    - UI Frontend that builds stories that load up the vCons
+    [ ] UI Frontend that builds stories that load up the vCons
 
 
