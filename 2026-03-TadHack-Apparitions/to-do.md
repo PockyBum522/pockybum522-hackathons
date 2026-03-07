@@ -9,7 +9,7 @@ MVP:
 
     [X] Get app running on our phones and building on both computers to be able to test
     
-    [ ] Grab our VCON C# model and have that handy to serialize/deserialize easily later (David)
+    [X] Grab our VCON C# model and have that handy to serialize/deserialize easily later (David)
 
     [ ] Shows GPS coords real time
 
