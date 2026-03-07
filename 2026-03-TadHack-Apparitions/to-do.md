@@ -11,9 +11,9 @@ MVP:
     
     [X] Grab our VCON C# model and have that handy to serialize/deserialize easily later (David)
 
-    [ ] Shows GPS coords real time
+    [ ] Shows GPS coords real time --- (David)
 
-    [ ] Can play a sound upon trigger (Jared)
+    [ ] Can play a sound upon trigger --- (Jared)
 
     [ ] Can change volume of the sound upon trigger
 
