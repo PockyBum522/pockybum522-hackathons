@@ -24,6 +24,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Microsoft.Maui.Controls" />
     <PackageReference Include="Microsoft.Maui.Essentials" />
+    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Xaml.Behaviors.Interactions" />
   </ItemGroup>
 
