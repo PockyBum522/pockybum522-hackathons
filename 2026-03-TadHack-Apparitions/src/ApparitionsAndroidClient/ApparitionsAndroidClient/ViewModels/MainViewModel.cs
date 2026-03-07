@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Avalonia.Interactivity;
+using ApparitionsAndroidClient.Models;
+using ApparitionsAndroidClient.Utilities;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices.Sensors;
 
 namespace ApparitionsAndroidClient.ViewModels;
@@ -15,8 +15,11 @@ public partial class MainViewModel : ViewModelBase
     
     [ObservableProperty]
     private string _greeting = "Welcome to Avalonia!";
+
+    private string _gpsLocation = "No location yet";
     
-    private string _gpsLocation = "Welcome to Avalonia!";
+    private GpsCoordinates _currentLocation = new(0, 0);
+    private GpsCoordinates _gpsByShop = new(28.594340, -81.381630);
     
     [RelayCommand]
     private async Task onViewLoaded(object sender)
@@ -27,6 +30,8 @@ public partial class MainViewModel : ViewModelBase
 
             await nonUiThreadWork();
         }
+     
+        // ReSharper disable once FunctionNeverReturns
     }
 
     private void uiThreadWork()
@@ -34,22 +39,30 @@ public partial class MainViewModel : ViewModelBase
         _count++;
         
         // Greeting = $"Now we have loaded: #{_count}";
-        Greeting = _gpsLocation + " - " + _count;
+        Greeting = _gpsLocation;
     }
     
     private async Task nonUiThreadWork()
     {
-        _gpsLocation = await GetCachedLocation();
+        _currentLocation = await GetLocation();
         
-        await Task.Delay(1500);
-    }
+        _gpsLocation = $"""
+                        Lat: {_currentLocation.Latitude}, 
+                        Long: {_currentLocation.Longitude}
 
-    public static async Task<string> GetCachedLocation()
+                        Calculated distance:
+                        {GpsCoordinateDistanceCalculator.GetDistance(_currentLocation, _gpsByShop, 'F')} feet
+                        """;
+        
+        await Task.Delay(1000);
+    }
+    
+    private static async Task<GpsCoordinates> GetLocation()
     {
-        var location = await Geolocation.Default.GetLocationAsync();
+        var location = await Geolocation.GetLocationAsync();
 
         if (location is null) throw new NullReferenceException("GPS location was null, abandon hope");
         
-        return $"Latitude: {location.Latitude} {Environment.NewLine}Longitude: {location.Longitude} {Environment.NewLine}Altitude: {location.Altitude} {Environment.NewLine}";
+        return new GpsCoordinates(location.Latitude, location.Longitude); 
     }
 }
