@@ -1,0 +1,45 @@
+* vCons and VR
+
+
+* Art and Speech
+
+* Student Note Summarizer w/ Individuals Notated Fom Speech to Text Recording of Classoom + Summary and Analysis of Student Progress
+
+* Interactive ORT
+  - Especially if it fux wit da mind
+  - Something digital that is adding on to the space that you are used to as reality
+  - Augmented reality, but likes it better when it's not just AR through devices, but rather that there is a dimensionality beyond what is able to be felt/heard/touched that is being created by technology
+  - Geocaching as art?????
+    - Go to a place and look for a thing - not exciting??? (but actually yes!)
+    - Geocaching is not about just traveling to a place and getting within range and finding it, but there's a bigger aspect to it: it's about shared experience!
+    - logbook!
+    - Geocaching is an overlay on reality
+    - Jared Idea: Voice Geocaching? - vCons really good for this!
+    - AR without electronics? (Gather pieces of a QR code hidden around, then put pieces back to computer then scan it)
+- Museum assistant - comparative paintings + transpose elements of design to similar paintings
+- Solution to Male Loneliness Epidemic (purely code)
+- Mass Surveillance Magic Trick
+- IR Camera Trickery + Magic QR Code (with Infrared!)
+
+
+* APPARITIONS !?
+- MVP - Go to certain place and hear a voice as you get closer to the source. Multiple sources will tell a narrative. Multiple sources can be bundled into scenarios that can be filtered to particular areas. Voice synthesis can be used to create different characters.
+
+- Tech Stack: Avalonia + C#
+
+
+MVP:
+
+* Working Android App
+  - Shows GPS coords real time
+  - Can play a sound upon trigger
+  - Can change volume of the sound upon trigger
+  - MCP and vCons to synthesize voices
+  - Specific filterable scenarios per location
+  - Text scrolling of what is being said 
+  
+EP:
+* Camera overlay that can apply effects (to match atmosphere)
+* Take vCons in to build the stories
+* Import vCons that have story built up in the vCons
+* UI Frontend that builds stories that load up the vCons
