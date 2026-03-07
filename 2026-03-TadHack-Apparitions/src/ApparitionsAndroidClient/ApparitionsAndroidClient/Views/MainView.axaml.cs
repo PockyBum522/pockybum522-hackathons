@@ -14,7 +14,7 @@ public partial class MainView : UserControl
 
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
     {
-        MainViewModel? myViewModel = (MainViewModel)DataContext;
+        var myViewModel = (MainViewModel?)DataContext;
 
         if (myViewModel is null) throw new NullReferenceException("Mainviewmodel be screwed up yo");
         
