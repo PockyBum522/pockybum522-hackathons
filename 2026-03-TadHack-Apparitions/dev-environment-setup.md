@@ -8,11 +8,11 @@ Dev environment setup:
     
     - Set android SDK path in Rider > Settings > Build, execution, and deployment > Android to be /home/david/Android/Sdk
     
-    - https://download.oracle.com/java/25/archive/jdk-25.0.1_linux-x64_bin.deb
+    - https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
     
-    - sudo dpkg -i jdk-25.0.1_linux-x64_bin.deb
+    - sudo dpkg -i jdk-21_linux-x64_bin.deb
 
-    - Set JDK location in Build, execution and deployment to /usr/lib/jvm/jdk-25.0.1-oracle-x64/
+    - Set JDK location in Build, execution and deployment to /usr/lib/jvm/jdk-21.0.10-oracle-x64/
 
     - Go into MainActivity.cs and the issues under "Problems" should go away
     
