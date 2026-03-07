@@ -35,5 +35,7 @@ EP:
     [ ] Import vCons that have story built up in the vCons
 
     [ ] UI Frontend that builds stories that load up the vCons
+    
+    [ ] Ability to stream text from vCon to generated voice
 
 
