@@ -20,5 +20,12 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Xaml.Behaviors.Interactions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Maui.Essentials">
+      <HintPath>..\..\..\..\..\..\..\..\home\david\.nuget\packages\microsoft.maui.essentials\11.0.0-preview.1.26107.1\lib\netstandard2.1\Microsoft.Maui.Essentials.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
