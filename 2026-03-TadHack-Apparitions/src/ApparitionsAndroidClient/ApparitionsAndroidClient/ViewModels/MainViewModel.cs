@@ -51,24 +51,5 @@ public partial class MainViewModel : ViewModelBase
         if (location is null) throw new NullReferenceException("GPS location was null, abandon hope");
         
         return $"Latitude: {location.Latitude} {Environment.NewLine}Longitude: {location.Longitude} {Environment.NewLine}Altitude: {location.Altitude} {Environment.NewLine}";
-    
-        // catch (FeatureNotSupportedException fnsEx)
-        // {
-        //     // Handle not supported on device exception
-        // }
-        // catch (FeatureNotEnabledException fneEx)
-        // {
-        //     // Handle not enabled on device exception
-        // }
-        // catch (PermissionException pEx)
-        // {
-        //     // Handle permission exception
-        // }
-        // catch (Exception ex)
-        // {
-        //     // Unable to get location
-        // }
-
-        return "None";
     }
 }
