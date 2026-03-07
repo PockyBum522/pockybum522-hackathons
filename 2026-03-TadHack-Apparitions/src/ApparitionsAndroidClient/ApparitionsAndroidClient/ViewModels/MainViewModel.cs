@@ -15,7 +15,9 @@ public partial class MainViewModel : ViewModelBase
     
     [ObservableProperty]
     private string _greeting = "Welcome to Avalonia!";
-
+    
+    private string _gpsLocation = "Welcome to Avalonia!";
+    
     [RelayCommand]
     private async Task onViewLoaded(object sender)
     {
@@ -31,20 +33,24 @@ public partial class MainViewModel : ViewModelBase
     {
         _count++;
         
-        Greeting = $"Now we have loaded: #{_count}";
+        // Greeting = $"Now we have loaded: #{_count}";
+        Greeting = _gpsLocation + " - " + _count;
     }
     
     private async Task nonUiThreadWork()
     {
-        await Task.Delay(500);
+        _gpsLocation = await GetCachedLocation();
+        
+        await Task.Delay(1500);
     }
 
     public static async Task<string> GetCachedLocation()
     {
-        var location = await Geolocation.Default.GetLastKnownLocationAsync();
+        var location = await Geolocation.Default.GetLocationAsync();
 
-        if (location != null)
-            return $"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}";
+        if (location is null) throw new NullReferenceException("GPS location was null, abandon hope");
+        
+        return $"Latitude: {location.Latitude} {Environment.NewLine}Longitude: {location.Longitude} {Environment.NewLine}Altitude: {location.Altitude} {Environment.NewLine}";
     
         // catch (FeatureNotSupportedException fnsEx)
         // {
