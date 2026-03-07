@@ -9,7 +9,7 @@ MVP:
 
 * Working Android App
 
-  - Get an app running on my phone, probably using avalonia
+  - Get app running on our phones and building on both computers to be able to test
   
   - Shows GPS coords real time
   
