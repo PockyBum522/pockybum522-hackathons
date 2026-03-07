@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
+using Avalonia.Maui;
 
 [assembly: UsesPermission(Android.Manifest.Permission.AccessCoarseLocation)]
 [assembly: UsesPermission(Android.Manifest.Permission.AccessFineLocation)]
@@ -21,6 +22,8 @@ public class MainActivity : AvaloniaMainActivity<App>
 {
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
-        return base.CustomizeAppBuilder(builder).WithInterFont();
+        return base.CustomizeAppBuilder(builder)
+            .UseMaui<MauiApplication>(this)
+            .WithInterFont();
     }
 }
