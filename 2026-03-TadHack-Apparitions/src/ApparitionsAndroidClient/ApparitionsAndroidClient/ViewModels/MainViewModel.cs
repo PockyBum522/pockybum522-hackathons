@@ -11,21 +11,32 @@ namespace ApparitionsAndroidClient.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private int _count = 0;
+    
     [ObservableProperty]
     private string _greeting = "Welcome to Avalonia!";
 
     [RelayCommand]
     private async Task onViewLoaded(object sender)
     {
-        for (var i = 0; i < 999999; i++)
+        while (true)
         {
-            Dispatcher.UIThread.Invoke(() =>
-            {   
-                Greeting = $"Now we have loaded: #{i}";
-            });
-            
-            await Task.Delay(500);
+            Dispatcher.UIThread.Invoke(uiThreadWork);
+
+            await nonUiThreadWork();
         }
+    }
+
+    private void uiThreadWork()
+    {
+        _count++;
+        
+        Greeting = $"Now we have loaded: #{_count}";
+    }
+    
+    private async Task nonUiThreadWork()
+    {
+        await Task.Delay(500);
     }
 
     public static async Task<string> GetCachedLocation()
