@@ -13,13 +13,17 @@ MVP:
 
     [X] Shows GPS coords real time --- (David)
 
-    [ ] Show calculated distance from waypoint in real time (David)
+    [X] Show calculated distance from waypoint in real time --- (David)
+
+    [ ] Add smoothing to location --- (David)
 
     [ ] Can play a sound upon trigger --- (Jared)
 
-    [ ] Can change volume of the sound upon trigger
+    [ ] Can change volume of the sound upon trigger --- (Jared)
 
     [ ] MCP and vCons to synthesize voices
+
+    [ ] Can increase/decrease/change audio being played based on real physical world location --- (Jared)
 
     [ ] Specific filterable scenarios per location
 
