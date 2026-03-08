@@ -19,6 +19,12 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private string _locationListenerStatus = "GPS location listener not started";
 
+    [ObservableProperty]
+    private bool _debugControlsVisible;
+    
+    [ObservableProperty]
+    private bool _scrollingTextControlsVisible;
+
     private float _currentPlayerVolume = 1.0f;
 
     private readonly Location _gpsByShop = new (28.594340, -81.381630);
@@ -27,10 +33,13 @@ public partial class MainViewModel : ViewModelBase
     
     private MediaPlayer? _player;
 
-    [RelayCommand]
+    [RelayCommand, SupportedOSPlatform("Android")]
     private async Task onViewLoaded(object sender)
     {
         await InitializeLocationListener();
+        
+        // ScrollingTextControlsVisible = true;
+        DebugControlsVisible = true;
         
         while (true)
         {
@@ -39,7 +48,8 @@ public partial class MainViewModel : ViewModelBase
         
         // ReSharper disable once FunctionNeverReturns because it's not supposed to
     }
-
+    
+    [SupportedOSPlatform("Android")]
     private async Task uiThreadWork()
     {
         await UpdateLocation();
