@@ -32,7 +32,7 @@
                 <Button Content="Play Sound Test"
                         Margin="10,10"
                         IsEnabled="True"
-                        Command="{Binding playSoundTestCommand}" />
+                        Command="{Binding playSoundCommand}" />
 
                 <Button Content="Stop Sound Test" 
                         Margin="10,10"
@@ -43,10 +43,15 @@
         </StackPanel>
         
         <!-- Scrolling text -->
-        <DockPanel IsVisible="{Binding ScrollingTextControlsVisible}">
-            <TextBlock Text="Scrolling standin!" />
+        <Canvas IsVisible="{Binding ScrollingTextControlsVisible}">
+            
+            <TextBlock Text="{Binding ScrollingText }"
+                       Margin="10,0,0,0"
+                       FontStyle="Italic"
+                       FontSize="20"
+                       Canvas.Top="{Binding TopScrollValue}" />
                 
-        </DockPanel>
+        </Canvas>
     </Grid>
     
 </UserControl>

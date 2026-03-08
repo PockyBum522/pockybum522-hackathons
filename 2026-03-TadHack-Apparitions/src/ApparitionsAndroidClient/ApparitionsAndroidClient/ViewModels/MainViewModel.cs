@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Android.Media;
+using ApparitionsAndroidClient.Models;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,33 +15,50 @@ namespace ApparitionsAndroidClient.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private static readonly VconRoot CurrentVcon = DemoVcons.GrandfatherTreeByGarageVcon;
+    //private static readonly VconRoot CurrentVcon = DemoVcons.LarryVcon;
+    
+    [ObservableProperty]
+    private bool _debugControlsVisible;             // See constructor to set these
+    
+    [ObservableProperty]
+    private bool _scrollingTextControlsVisible;     // See constructor to set these
+
     [ObservableProperty]
     private string _gpsInfo = "No GPS fix acquired yet";
     
     [ObservableProperty]
     private string _locationListenerStatus = "GPS location listener not started";
 
+    [ObservableProperty] private string _scrollingText = CurrentVcon.Dialog.First().Body;
+        
     [ObservableProperty]
-    private bool _debugControlsVisible;
+    private int _topScrollValue = 940;
     
-    [ObservableProperty]
-    private bool _scrollingTextControlsVisible;
-
     private float _currentPlayerVolume = 1.0f;
 
-    private readonly Location _gpsByShop = new (28.594340, -81.381630);
+    // Destination GPS coordinates handling
+    private static readonly double LatFromVcon = Double.Parse(CurrentVcon.Attachments.First().Body[0]);
+    private static readonly double LonFromVcon = Double.Parse(CurrentVcon.Attachments.First().Body[1]);
+    
+    private readonly Location _currentDestinationCoordinates = new (LatFromVcon, LonFromVcon);
     
     private int _count;
     
     private MediaPlayer? _player;
+    private int _gpsLoopCount;
 
     [RelayCommand, SupportedOSPlatform("Android")]
     private async Task onViewLoaded(object sender)
     {
-        await InitializeLocationListener();
+        // ENABLE/DISABLE DEBUG CONTROLS HERE
+        DebugControlsVisible = false;
+        ScrollingTextControlsVisible = !DebugControlsVisible;
         
-        // ScrollingTextControlsVisible = true;
-        DebugControlsVisible = true;
+        await InitializeLocationListener();
+
+        // Start playing for demos
+        await playSound(new object());
         
         while (true)
         {
@@ -52,9 +71,25 @@ public partial class MainViewModel : ViewModelBase
     [SupportedOSPlatform("Android")]
     private async Task uiThreadWork()
     {
-        await UpdateLocation();
+        if (_gpsLoopCount++ > 20)
+        {
+            await UpdateLocation();
+
+            _gpsLoopCount = 0;
+        }
         
-        await Task.Delay(1000);
+        if (_currentPlayerVolume > 0)
+        {
+            if (!_player?.IsPlaying ?? true) _player?.Start();
+            
+            TopScrollValue -= 1;
+        }
+        else
+        {
+            if (_player?.IsPlaying ?? false) _player?.Pause();
+        }
+        
+        await Task.Delay(50);
     }
     
     private async Task InitializeLocationListener()
@@ -75,7 +110,7 @@ public partial class MainViewModel : ViewModelBase
             throw new NullReferenceException();
         }
 
-        var metersAway = Location.CalculateDistance(currentLocation, _gpsByShop, DistanceUnits.Kilometers) * 1000;
+        var metersAway = Location.CalculateDistance(currentLocation, _currentDestinationCoordinates, DistanceUnits.Kilometers) * 1000;
 
         _currentPlayerVolume = (float)Map((decimal)metersAway, 11, 1, 0, 0.8m);
 
@@ -83,8 +118,8 @@ public partial class MainViewModel : ViewModelBase
         if (_currentPlayerVolume > 1) _currentPlayerVolume = 1f;
         
         GpsInfo = $"""
-                    Shop Lat: {_gpsByShop.Latitude}, 
-                    Shop Long: {_gpsByShop.Longitude}
+                    Shop Lat: {_currentDestinationCoordinates.Latitude}, 
+                    Shop Long: {_currentDestinationCoordinates.Longitude}
 
                     Lat: {currentLocation.Latitude}, 
                     Long: {currentLocation.Longitude}
@@ -111,10 +146,10 @@ public partial class MainViewModel : ViewModelBase
     }
     
     [RelayCommand, SupportedOSPlatform("Android")]
-    private async Task playSoundTest(object sender)
+    private async Task playSound(object sender)
     {
         // Copy asset stream to a temp file
-        var uri = new Uri("avares://ApparitionsAndroidClient/Assets/Audio/test_sound.mp3");
+        var uri = new Uri("avares://ApparitionsAndroidClient/Assets/Audio/gary_grandfather_garage.mp3");
         await using var stream = AssetLoader.Open(uri);
 
         // Use Android's native cache dir instead of FileSystem.CacheDirectory
