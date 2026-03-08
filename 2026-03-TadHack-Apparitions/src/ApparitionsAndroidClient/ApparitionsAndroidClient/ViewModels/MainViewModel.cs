@@ -11,7 +11,6 @@ using Microsoft.Maui.Devices.Sensors;
 
 namespace ApparitionsAndroidClient.ViewModels;
 
-[SupportedOSPlatform("Android")]
 public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty]
@@ -27,7 +26,9 @@ public partial class MainViewModel : ViewModelBase
     private int _count;
     
     private MediaPlayer? _player;
+    private int _playTimeoutCounter;
 
+    [RelayCommand]
     private async Task onViewLoaded(object sender)
     {
         await InitializeLocationListener();
@@ -40,7 +41,6 @@ public partial class MainViewModel : ViewModelBase
         // ReSharper disable once FunctionNeverReturns because it's not supposed to
     }
 
-    [SupportedOSPlatform("Android")]
     private async Task uiThreadWork()
     {
         await UpdateLocation();
@@ -56,7 +56,7 @@ public partial class MainViewModel : ViewModelBase
         LocationListenerStatus = $"Location listening start success: {success.ToString()}";
     }
 
-    [RelayCommand]
+    [RelayCommand, SupportedOSPlatform("Android")]
     async Task UpdateLocation()
     {
         var currentLocation = await Geolocation.GetLastKnownLocationAsync();
@@ -101,7 +101,7 @@ public partial class MainViewModel : ViewModelBase
         return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
     }
     
-    [RelayCommand]
+    [RelayCommand, SupportedOSPlatform("Android")]
     private async Task playSoundTest(object sender)
     {
         // Copy asset stream to a temp file
@@ -132,11 +132,13 @@ public partial class MainViewModel : ViewModelBase
         _player.Start();
     }
 
-    [RelayCommand]
+    [RelayCommand, SupportedOSPlatform("Android")]
     private Task stopSoundTest(object sender)
     {
         try
         {
+            _playTimeoutCounter = 0;
+        
             _player?.Stop();
             _player?.Reset();
             _player?.Release();
