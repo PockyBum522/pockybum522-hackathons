@@ -18,7 +18,9 @@ public partial class MainViewModel : ViewModelBase
     
     [ObservableProperty]
     private string _locationListenerStatus = "GPS location listener not started";
-    
+
+    private float _currentPlayerVolume = 1.0f;
+
     private readonly Location _gpsByShop = new (28.594340, -81.381630);
     
     private int _count;
@@ -54,6 +56,7 @@ public partial class MainViewModel : ViewModelBase
         LocationListenerStatus = $"Location listening start success: {success.ToString()}";
     }
 
+    [RelayCommand, SupportedOSPlatform("Android")]
     async Task UpdateLocation()
     {
         var currentLocation = await Geolocation.GetLastKnownLocationAsync();
@@ -64,6 +67,11 @@ public partial class MainViewModel : ViewModelBase
         }
 
         var metersAway = Location.CalculateDistance(currentLocation, _gpsByShop, DistanceUnits.Kilometers) * 1000;
+
+        _currentPlayerVolume = (float)Map((decimal)metersAway, 11, 1, 0, 0.8m);
+
+        if (_currentPlayerVolume < 0) _currentPlayerVolume = 0;
+        if (_currentPlayerVolume > 1) _currentPlayerVolume = 1f;
         
         GpsInfo = $"""
                     Shop Lat: {_gpsByShop.Latitude}, 
@@ -72,12 +80,25 @@ public partial class MainViewModel : ViewModelBase
                     Lat: {currentLocation.Latitude}, 
                     Long: {currentLocation.Longitude}
 
-                    Calculated distance:
-                    {metersAway:F1} meters
+                    Calculated distance: {metersAway:F1} meters
 
-                    Count: 
-                    {_count++}
+                    Count: {_count++}
+                    
+                    Player IsPlaying: {_player?.IsPlaying}
+                    _currentPlayerVolume: {_currentPlayerVolume}
                     """;
+        
+        if (_player is null) return;
+
+        if (_player.IsPlaying)
+        {
+            _player.SetVolume(_currentPlayerVolume, _currentPlayerVolume);
+        }
+    }
+
+    private static decimal Map(decimal value, decimal fromSource, decimal toSource, decimal fromTarget, decimal toTarget)
+    {
+        return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
     }
     
     [RelayCommand, SupportedOSPlatform("Android")]
@@ -106,51 +127,9 @@ public partial class MainViewModel : ViewModelBase
         // ReSharper disable once MethodHasAsyncOverload because it's lies. It breaks things if you use the Async.
         _player.Prepare();
         
+        _player.SetVolume(0f, 0f);
+        
         _player.Start();
-
-        await loopPlayerVolumeTest();
-    }
-
-    [SupportedOSPlatform("Android")]
-    private async Task loopPlayerVolumeTest()
-    {
-        _playTimeoutCounter = 100;
-        while (_playTimeoutCounter-- > 0)
-        {
-            await slowlyRaisePlayerVolumeToFull();
-
-            await slowlyReducePlayerVolumeToZero();
-        }
-    }
-
-    [SupportedOSPlatform("Android")]
-    private async Task slowlyReducePlayerVolumeToZero()
-    {
-        if (_player is null) throw new NullReferenceException("Player was null");
-        
-        for (float i = 1; i > 0; i -= 0.01f)
-        {
-            if (_playTimeoutCounter == 0) break;
-                
-            await Task.Delay(20);
-        
-            _player.SetVolume(i, i);
-        }    
-    }
-
-    [SupportedOSPlatform("Android")]
-    private async Task slowlyRaisePlayerVolumeToFull()
-    {
-        if (_player is null) throw new NullReferenceException("Player was null");
-        
-        for (float i = 0; i < 1; i += 0.01f)
-        {
-            if (_playTimeoutCounter == 0) break;
-                    
-            await Task.Delay(20);
-        
-            _player.SetVolume(i, i);
-        }
     }
 
     [RelayCommand, SupportedOSPlatform("Android")]
