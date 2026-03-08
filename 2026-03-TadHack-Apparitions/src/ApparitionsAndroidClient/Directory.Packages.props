@@ -21,7 +21,6 @@
     <PackageVersion Include="MonoSound" Version="1.8.0.3" />
     <PackageVersion Include="NetCoreAudio" Version="2.0.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.5-beta1" />
-    <PackageVersion Include="SoundFlow" Version="1.4.0" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.15" />
     <PackageVersion Include="Xaml.Behaviors.Interactions" Version="11.3.9.5" />
   </ItemGroup>

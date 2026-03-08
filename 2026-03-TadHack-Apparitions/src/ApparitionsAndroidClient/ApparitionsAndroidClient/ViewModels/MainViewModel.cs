@@ -5,32 +5,50 @@ using ApparitionsAndroidClient.Utilities;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices.Sensors;
-using System.IO;
-using System.Runtime.Versioning;
-using Android.Media;
-using Avalonia.Platform;
-
 
 namespace ApparitionsAndroidClient.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private int _count;
+    private int _count = 0;
     
     [ObservableProperty]
     private string _greeting = "Welcome to Avalonia!";
-    
-    [ObservableProperty]
-    private string _updateTestText = "No updatey :(";
 
     private string _gpsLocation = "No location yet";
+    
+    [ObservableProperty]
+    private string _updateTest = "Will Update";
+
     private string _locationRequestSuccess = "No location yet";
     
-    private GpsCoordinates _currentLocation = new(0, 0);
-    private readonly GpsCoordinates _gpsByShop = new(28.594340, -81.381630);
-    private MediaPlayer? _player;
+    private Location _currentLocation = new (0, 0);
+    private Location _gpsByShop = new (28.594340, -81.381630);
+    
+    // public async Task<Location> GetCurrentLocation()
+    // {
+    //     try
+    //     {
+    //         var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(10));
+    //         var location = await Geolocation.Default.GetLocationAsync(request);
+    //
+    //         if (location != null)
+    //         {
+    //             Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}");
+    //             return location;
+    //         }
+    //     }
+    //     catch (FeatureNotSupportedException fnsEx) { /* Handle not supported */ }
+    //     catch (PermissionException pEx) { /* Handle permission denied */ }
+    //     catch (Exception ex) { /* Unable to get location */ }
+    //
+    //     return null;
+    // }
 
+    
+    
     [RelayCommand]
     private async Task onViewLoaded(object sender)
     {
@@ -38,106 +56,100 @@ public partial class MainViewModel : ViewModelBase
         
         while (true)
         {
-            Dispatcher.UIThread.Invoke(uiThreadWork);
-
-            await nonUiThreadWork();
+            
+            await Dispatcher.UIThread.Invoke(uiThreadWork);
         }
+        
+        
      
         // ReSharper disable once FunctionNeverReturns
     }
 
-    private void uiThreadWork()
+    private async Task uiThreadWork()
     {
-        Greeting = _gpsLocation;
+        // Greeting = _gpsLocation;
+        await Geolocation_LocationChanged();
+        await Task.Delay(1000);
     }
     
-    private async Task nonUiThreadWork()
+    // private async Task nonUiThreadWork()
+    // {
+    //     var rawLocation = await Geolocation.GetLocationAsync();
+    //     
+    //     if (rawLocation is null) throw new NullReferenceException("rawLocation is null");
+    //     
+    //     _currentLocation = new Location(rawLocation.Latitude, rawLocation.Longitude);
+    //     
+    //     
+    //     
+    //     _count++;
+    //     
+    //     await Task.Delay(2000);
+    // }
+    
+    private async Task InitializeLocationListener()
     {
-        var rawLocation = await Geolocation.GetLocationAsync();
+        // Geolocation.LocationChanged += Geolocation_LocationChanged;
         
-        if (rawLocation is null) throw new NullReferenceException("rawLocation is null");
+        // Using GeolocationAccuracy.Medium as a balance between accuracy and power consumption. Developers can adjust this value to High or Low based on their specific requirements.
+        var request = new GeolocationListeningRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(1));
+        var success = await Geolocation.StartListeningForegroundAsync(request);
+        var status = "Attempting to start listening";
+
+        UpdateTest = success.ToString();
+
+//          if (success)
+//          {
+//              _gpsLocation = $"""
+//                              Shop Lat: {_gpsByShop.Latitude}, 
+//                              Shop Long: {_gpsByShop.Longitude}
+//
+//                              Lat: {_currentLocation.Latitude}, 
+//                              Long: {_currentLocation.Longitude}
+//
+//                              Calculated distance:
+//                              {Location.CalculateDistance(_currentLocation, _gpsByShop, DistanceUnits.Kilometers)} km
+//
+//                              Count: 
+//                              {_count}
+//
+//                              Success on listening init:
+//                              {_locationRequestSuccess}
+//                              """;
+//              status =  "Success";
+//          }
+//          else
+//          {
+//              status = "Couldn't start listening.";
+//          }
+//          
+         // _locationRequestSuccess = status;
+    }
+
+    async Task Geolocation_LocationChanged()
+    {
+        var currentLocation = await Geolocation.GetLastKnownLocationAsync();
+
+        if (currentLocation is null)
+        {
+            throw new NullReferenceException();
+        }
         
-        _currentLocation = new GpsCoordinates(rawLocation.Latitude, rawLocation.Longitude);
-        
-        _gpsLocation = $"""
-                        Lat: {_currentLocation.Latitude}, 
-                        Long: {_currentLocation.Longitude}
+        Greeting = $"""
+                        Shop Lat: {_gpsByShop.Latitude}, 
+                        Shop Long: {_gpsByShop.Longitude}
+
+                        Lat: {currentLocation.Latitude}, 
+                        Long: {currentLocation.Longitude}
 
                         Calculated distance:
-                        {GpsCoordinateDistanceCalculator.GetDistance(_currentLocation, _gpsByShop, 'F')} feet
+                        {Location.CalculateDistance(currentLocation, _gpsByShop, DistanceUnits.Kilometers)} km
 
                         Count: 
-                        {_count}
+                        {_count++}
 
                         Success on listening init:
                         {_locationRequestSuccess}
                         """;
-        
-        _count++;
-        
-        await Task.Delay(2000);
-    }
-    
-    private async Task InitializeLocationListener()
-    {
-        //Geolocation.LocationChanged += Geolocation_LocationChanged;
-        
-        // Using GeolocationAccuracy.Medium as a balance between accuracy and power consumption. Developers can adjust this value to High or Low based on their specific requirements.
-        var request = new GeolocationListeningRequest(GeolocationAccuracy.Best);
-        var success = await Geolocation.StartListeningForegroundAsync(request);
-
-        string status = success
-            ? "Started listening for foreground location"
-            : "Couldn't start listening";
-        
-        _locationRequestSuccess = status;
-    }
-
-    [RelayCommand, SupportedOSPlatform("Android")]
-    private async Task updateTest(object sender)
-    {
-        // Copy asset stream to a temp file
-        var uri = new Uri("avares://ApparitionsAndroidClient/Assets/test_sound.mp3");
-        await using var stream = AssetLoader.Open(uri);
-
-        // Use Android's native cache dir instead of FileSystem.CacheDirectory
-        var cacheDir = Android.App.Application.Context.CacheDir!.AbsolutePath;
-        var tempFile = Path.Combine(cacheDir, "temp_audio.mp3");
-
-        await using (var fileStream = File.Create(tempFile))
-        {
-            await stream.CopyToAsync(fileStream);
-        }
-
-        _player?.Stop();
-        _player?.Reset();
-        _player?.Release();
-
-        _player = new MediaPlayer();
-        
-        await _player.SetDataSourceAsync(tempFile);
-        
-        // ReSharper disable once MethodHasAsyncOverload because it's lies. It breaks things if you use the Async.
-        _player.Prepare();
-        
-        _player.Start();
-
-        var counter = 100;
-        while (counter-- > 0)
-        {
-            for (float i = 0; i < 1; i += 0.01f)
-            {
-                await Task.Delay(20);
-        
-                _player.SetVolume(i, i);
-            }
-        
-            for (float i = 1; i > 0; i -= 0.01f)
-            {
-                await Task.Delay(20);
-        
-                _player.SetVolume(i, i);
-            }    
-        }
     }
 }

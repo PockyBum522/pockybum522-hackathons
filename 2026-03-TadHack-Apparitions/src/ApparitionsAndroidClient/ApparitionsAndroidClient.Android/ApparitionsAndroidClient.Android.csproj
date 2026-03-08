@@ -22,7 +22,6 @@
     <PackageReference Include="Avalonia.Android" />
     <PackageReference Include="Avalonia.Maui" />
     <PackageReference Include="Microsoft.Maui.Essentials" />
-    <PackageReference Include="SoundFlow" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" />
     <PackageReference Include="Xaml.Behaviors.Interactions" />
   </ItemGroup>
