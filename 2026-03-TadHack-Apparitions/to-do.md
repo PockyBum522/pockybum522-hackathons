@@ -23,17 +23,16 @@ MVP:
 
     [X] Text scrolling of what is being said 
 
+    [X] Take vCons in to build the stories    
     
   
 EP:
-
+    
     [ ] Specific filterable scenarios per location
 
     [ ] MCP and vCons to synthesize voices
 
     [ ] Camera overlay that can apply effects (to match atmosphere)
-
-    [ ] Take vCons in to build the stories
 
     [ ] Import vCons that have story built up in the vCons
 
