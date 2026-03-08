@@ -24,7 +24,8 @@ public partial class MainViewModel : ViewModelBase
     private int _count;
     
     private MediaPlayer? _player;
-    
+    private int _playTimeoutCounter;
+
     [RelayCommand]
     private async Task onViewLoaded(object sender)
     {
@@ -62,28 +63,28 @@ public partial class MainViewModel : ViewModelBase
             throw new NullReferenceException();
         }
 
-        var metersAway = Location.CalculateDistance(currentLocation, _gpsByShop, DistanceUnits.Kilometers) / 1000;
+        var metersAway = Location.CalculateDistance(currentLocation, _gpsByShop, DistanceUnits.Kilometers) * 1000;
         
         GpsInfo = $"""
-                        Shop Lat: {_gpsByShop.Latitude}, 
-                        Shop Long: {_gpsByShop.Longitude}
+                    Shop Lat: {_gpsByShop.Latitude}, 
+                    Shop Long: {_gpsByShop.Longitude}
 
-                        Lat: {currentLocation.Latitude}, 
-                        Long: {currentLocation.Longitude}
+                    Lat: {currentLocation.Latitude}, 
+                    Long: {currentLocation.Longitude}
 
-                        Calculated distance:
-                        {metersAway:F1} meters
+                    Calculated distance:
+                    {metersAway:F1} meters
 
-                        Count: 
-                        {_count++}
-                        """;
+                    Count: 
+                    {_count++}
+                    """;
     }
     
     [RelayCommand, SupportedOSPlatform("Android")]
     private async Task playSoundTest(object sender)
     {
         // Copy asset stream to a temp file
-        var uri = new Uri("avares://ApparitionsAndroidClient/Assets/test_sound.mp3");
+        var uri = new Uri("avares://ApparitionsAndroidClient/Assets/Audio/test_sound.mp3");
         await using var stream = AssetLoader.Open(uri);
 
         // Use Android's native cache dir instead of FileSystem.CacheDirectory
@@ -95,11 +96,10 @@ public partial class MainViewModel : ViewModelBase
             await stream.CopyToAsync(fileStream);
         }
 
-        _player?.Stop();
-        _player?.Reset();
-        _player?.Release();
-
-        _player = new MediaPlayer();
+        // Reset player
+        stopSoundTestCommand.Execute(null);
+        
+        if (_player is null) throw new NullReferenceException("Player was null");
         
         await _player.SetDataSourceAsync(tempFile);
         
@@ -108,22 +108,69 @@ public partial class MainViewModel : ViewModelBase
         
         _player.Start();
 
-        var counter = 100;
-        while (counter-- > 0)
+        await loopPlayerVolumeTest();
+    }
+
+    [SupportedOSPlatform("Android")]
+    private async Task loopPlayerVolumeTest()
+    {
+        _playTimeoutCounter = 100;
+        while (_playTimeoutCounter-- > 0)
         {
-            for (float i = 0; i < 1; i += 0.01f)
-            {
-                await Task.Delay(20);
+            await slowlyRaisePlayerVolumeToFull();
+
+            await slowlyReducePlayerVolumeToZero();
+        }
+    }
+
+    [SupportedOSPlatform("Android")]
+    private async Task slowlyReducePlayerVolumeToZero()
+    {
+        if (_player is null) throw new NullReferenceException("Player was null");
         
-                _player.SetVolume(i, i);
-            }
+        for (float i = 1; i > 0; i -= 0.01f)
+        {
+            if (_playTimeoutCounter == 0) break;
+                
+            await Task.Delay(20);
         
-            for (float i = 1; i > 0; i -= 0.01f)
-            {
-                await Task.Delay(20);
+            _player.SetVolume(i, i);
+        }    
+    }
+
+    [SupportedOSPlatform("Android")]
+    private async Task slowlyRaisePlayerVolumeToFull()
+    {
+        if (_player is null) throw new NullReferenceException("Player was null");
         
-                _player.SetVolume(i, i);
-            }    
+        for (float i = 0; i < 1; i += 0.01f)
+        {
+            if (_playTimeoutCounter == 0) break;
+                    
+            await Task.Delay(20);
+        
+            _player.SetVolume(i, i);
+        }
+    }
+
+    [RelayCommand, SupportedOSPlatform("Android")]
+    private Task stopSoundTest(object sender)
+    {
+        try
+        {
+            _playTimeoutCounter = 0;
+        
+            _player?.Stop();
+            _player?.Reset();
+            _player?.Release();
+
+            _player = new MediaPlayer();
+            
+            return Task.CompletedTask;
+        }
+        catch (Exception exception)
+        {
+            return Task.FromException(exception);
         }
     }
 }

@@ -24,7 +24,18 @@
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center"/>
         
-        <Button Content="Play Sound Test" Command="{Binding playSoundTestCommand}" />
+        <StackPanel Orientation="Horizontal" Margin="30,10">
+            
+            <Button Content="Play Sound Test"
+                    Margin="10,10"
+                    IsEnabled="True"
+                    Command="{Binding playSoundTestCommand}" />
+
+            <Button Content="Stop Sound Test" 
+                    Margin="10,10"
+                    Command="{Binding stopSoundTestCommand}" />
+
+        </StackPanel>
 
     </StackPanel>
     

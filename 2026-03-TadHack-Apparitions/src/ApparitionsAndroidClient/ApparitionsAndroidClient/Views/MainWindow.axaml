@@ -6,7 +6,7 @@
         xmlns:views="using:ApparitionsAndroidClient.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ApparitionsAndroidClient.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/Icons/avalonia-logo.ico"
         Title="ApparitionsAndroidClient">
         
         <views:MainView />
