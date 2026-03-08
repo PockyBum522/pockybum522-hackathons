@@ -129,14 +129,14 @@ public partial class MainViewModel : ViewModelBase
             {
                 await Task.Delay(20);
         
-                _player.SetVolume(i, i); // half volume
+                _player.SetVolume(i, i);
             }
         
             for (float i = 1; i > 0; i -= 0.01f)
             {
                 await Task.Delay(20);
         
-                _player.SetVolume(i, i); // half volume
+                _player.SetVolume(i, i);
             }    
         }
     }
