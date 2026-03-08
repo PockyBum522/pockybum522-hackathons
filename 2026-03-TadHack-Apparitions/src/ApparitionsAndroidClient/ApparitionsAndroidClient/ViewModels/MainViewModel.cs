@@ -26,7 +26,6 @@ public partial class MainViewModel : ViewModelBase
     private int _count;
     
     private MediaPlayer? _player;
-    private int _playTimeoutCounter;
 
     [RelayCommand]
     private async Task onViewLoaded(object sender)
@@ -137,8 +136,6 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            _playTimeoutCounter = 0;
-        
             _player?.Stop();
             _player?.Reset();
             _player?.Release();
