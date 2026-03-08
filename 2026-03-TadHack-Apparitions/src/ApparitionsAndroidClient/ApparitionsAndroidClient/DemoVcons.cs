@@ -4,7 +4,7 @@ namespace ApparitionsAndroidClient;
 
 public class DemoVcons
 {
-    public static VconRoot GrandfatherTreeByGarageVcon => InitializeGrandfatherVcon();
+    public static VconRoot GaryGrandfatherTreeByGarageVcon => InitializeGrandfatherVcon();
     public static VconRoot LarryVcon => InitializeLarryVcon();
 
     private static VconRoot InitializeGrandfatherVcon()
@@ -59,11 +59,12 @@ public class DemoVcons
 
         var locationAttachment = new Attachment();
 
-        locationAttachment.Type = "lat/lon";
+        locationAttachment.Type = "lat/lon/audio_filename";
             
         // By the shop
         locationAttachment.Body.Add("28.594340");
         locationAttachment.Body.Add("-81.381630");
+        locationAttachment.Body.Add("gary_grandfather_garage.mp3");
         
         root.Attachments.Add(locationAttachment);
 
@@ -90,14 +91,14 @@ public class DemoVcons
                          
                          He started telling me about his serial killer
                          grandfather and something about a tree but
-                         my eyes were glues to the knife he was pruning 
+                         my eyes were glued to the knife he was pruning 
                          the trees with. Who prunes a tree with a knife?
                          
                          Anyways, I tell him I have to pay him back next
                          week and he starts getting all murdery on me!
                          
                          Chased me down this street and everything, I 
-                         can't believe nobody didn't see but the po'lice
+                         can't believe nobody didn't see but the police
                          said they can't do anything.
                          
                          I'm gonna throw the $50 on his front 
@@ -113,11 +114,12 @@ public class DemoVcons
 
         var locationAttachment = new Attachment();
 
-        locationAttachment.Type = "lat/lon";
+        locationAttachment.Type = "lat/lon/audio_filename";
             
         // End of driveway, by street
         locationAttachment.Body.Add("28.594330");
         locationAttachment.Body.Add("-81.382050");
+        locationAttachment.Body.Add("larry_about_to_get_murdered.mp3");
         
         root.Attachments.Add(locationAttachment);
 

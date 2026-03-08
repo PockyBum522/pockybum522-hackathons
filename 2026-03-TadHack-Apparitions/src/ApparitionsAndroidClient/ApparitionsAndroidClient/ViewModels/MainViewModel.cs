@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
@@ -15,8 +16,9 @@ namespace ApparitionsAndroidClient.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private static readonly VconRoot CurrentVcon = DemoVcons.GrandfatherTreeByGarageVcon;
-    //private static readonly VconRoot CurrentVcon = DemoVcons.LarryVcon;
+    private static List<VconRoot> _eventSequence = [];
+    
+    private static VconRoot _currentVcon = new();
     
     [ObservableProperty]
     private bool _debugControlsVisible;             // See constructor to set these
@@ -24,24 +26,28 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private bool _scrollingTextControlsVisible;     // See constructor to set these
 
+    private bool _forceTextScrolling;
+
     [ObservableProperty]
     private string _gpsInfo = "No GPS fix acquired yet";
     
     [ObservableProperty]
     private string _locationListenerStatus = "GPS location listener not started";
 
-    [ObservableProperty] private string _scrollingText = CurrentVcon.Dialog.First().Body;
+    [ObservableProperty] private string _scrollingText = "Vcon not loaded";
         
     [ObservableProperty]
-    private int _topScrollValue = 940;
+    private int _topScrollValue = 920;
     
     private float _currentPlayerVolume = 1.0f;
 
     // Destination GPS coordinates handling
-    private static readonly double LatFromVcon = Double.Parse(CurrentVcon.Attachments.First().Body[0]);
-    private static readonly double LonFromVcon = Double.Parse(CurrentVcon.Attachments.First().Body[1]);
+    private static double _latFromVcon;
+    private static double _lonFromVcon;
     
-    private readonly Location _currentDestinationCoordinates = new (LatFromVcon, LonFromVcon);
+    private Location _currentDestinationCoordinates = new();
+    
+    private static string _audioFilename = "test_sound.mp3";
     
     private int _count;
     
@@ -51,10 +57,23 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand, SupportedOSPlatform("Android")]
     private async Task onViewLoaded(object sender)
     {
+        _eventSequence.Add(DemoVcons.GaryGrandfatherTreeByGarageVcon);
+        _eventSequence.Add(DemoVcons.LarryVcon);
+        
+        // Set the current Vcon to whichever event we want to test with
+        _currentVcon = _eventSequence[1];
+        
+        _forceTextScrolling = true;
+        
         // ENABLE/DISABLE DEBUG CONTROLS HERE
         DebugControlsVisible = false;
-        ScrollingTextControlsVisible = !DebugControlsVisible;
         
+        
+        // This one sets automatically, just change the above line
+        ScrollingTextControlsVisible = !DebugControlsVisible;
+
+        attachVconContentToUiControls();
+
         await InitializeLocationListener();
 
         // Start playing for demos
@@ -67,7 +86,20 @@ public partial class MainViewModel : ViewModelBase
         
         // ReSharper disable once FunctionNeverReturns because it's not supposed to
     }
-    
+
+    private void attachVconContentToUiControls()
+    {
+        // Attach vcon content to controls
+        ScrollingText = _currentVcon.Dialog.First().Body;
+        
+        _latFromVcon = Double.Parse(_currentVcon.Attachments.First().Body[0]);
+        _lonFromVcon = Double.Parse(_currentVcon.Attachments.First().Body[1]);
+
+        _currentDestinationCoordinates = new(_latFromVcon, _lonFromVcon);
+
+        _audioFilename = _currentVcon.Attachments.First().Body[2];
+    }
+
     [SupportedOSPlatform("Android")]
     private async Task uiThreadWork()
     {
@@ -77,6 +109,9 @@ public partial class MainViewModel : ViewModelBase
 
             _gpsLoopCount = 0;
         }
+
+        if (_forceTextScrolling)
+            _currentPlayerVolume = 1f;
         
         if (_currentPlayerVolume > 0)
         {
@@ -133,7 +168,10 @@ public partial class MainViewModel : ViewModelBase
                     """;
         
         if (_player is null) return;
-
+        
+        if (_forceTextScrolling)
+            _currentPlayerVolume = 1f;
+        
         if (_player.IsPlaying)
         {
             _player.SetVolume(_currentPlayerVolume, _currentPlayerVolume);
@@ -149,7 +187,7 @@ public partial class MainViewModel : ViewModelBase
     private async Task playSound(object sender)
     {
         // Copy asset stream to a temp file
-        var uri = new Uri("avares://ApparitionsAndroidClient/Assets/Audio/gary_grandfather_garage.mp3");
+        var uri = new Uri($"avares://ApparitionsAndroidClient/Assets/Audio/{_audioFilename}");
         await using var stream = AssetLoader.Open(uri);
 
         // Use Android's native cache dir instead of FileSystem.CacheDirectory
