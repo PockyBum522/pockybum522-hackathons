@@ -15,24 +15,21 @@ MVP:
 
     [X] Show calculated distance from waypoint in real time --- (David)
 
-    [ ] Add smoothing to location --- (David)
+    [X] Can play a sound upon trigger --- (Jared)
 
-    [ ] Can play a sound upon trigger --- (Jared)
+    [X] Can change volume of the sound upon trigger --- (Jared)
 
-    [ ] Can change volume of the sound upon trigger --- (Jared)
+    [X] Can increase/decrease/change audio being played based on real physical world location --- (Jared)
 
-    [ ] MCP and vCons to synthesize voices
+    [X] Text scrolling of what is being said 
 
-    [ ] Can increase/decrease/change audio being played based on real physical world location --- (Jared)
+    
+  
+EP:
 
     [ ] Specific filterable scenarios per location
 
-    [ ] Text scrolling of what is being said 
-
-    
-
-  
-EP:
+    [ ] MCP and vCons to synthesize voices
 
     [ ] Camera overlay that can apply effects (to match atmosphere)
 
