@@ -13,13 +13,19 @@
     </Design.DataContext>
 
     <StackPanel>
-        <TextBlock Text="{Binding Greeting, Mode=TwoWay}"
+                
+        <TextBlock Text="{Binding GpsInfo, Mode=TwoWay}"
+                   Margin="10,20"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"/>
+                   
+        <TextBlock Text="{Binding LocationListenerStatus, Mode=TwoWay}"
+                   Margin="10,20"
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center"/>
         
-        <TextBlock Text="{Binding UpdateTest, Mode=TwoWay}"
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"/>
+        <Button Content="Play Sound Test" Command="{Binding playSoundTestCommand}" />
+
     </StackPanel>
     
 </UserControl>
