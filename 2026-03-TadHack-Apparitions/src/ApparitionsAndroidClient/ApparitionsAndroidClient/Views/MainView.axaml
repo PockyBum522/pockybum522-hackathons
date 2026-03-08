@@ -16,6 +16,7 @@
         <TextBlock Text="{Binding Greeting, Mode=TwoWay}"
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center"/>
+        
         <TextBlock Text="{Binding UpdateTest, Mode=TwoWay}"
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center"/>
