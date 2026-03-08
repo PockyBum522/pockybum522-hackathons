@@ -1,7 +1,5 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
-using Android.Media;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Maui;

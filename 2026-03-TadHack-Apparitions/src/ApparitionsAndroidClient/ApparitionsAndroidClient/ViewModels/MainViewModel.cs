@@ -6,23 +6,17 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Devices.Sensors;
-using SoundFlow.Backends.MiniAudio;
-using SoundFlow.Components;
-using SoundFlow.Providers;
 using System.IO;
-using System.Linq;
-using Android.App;
+using System.Runtime.Versioning;
 using Android.Media;
 using Avalonia.Platform;
-using Microsoft.Maui.Storage;
-using SoundFlow.Structs;
 
 
 namespace ApparitionsAndroidClient.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private int _count = 0;
+    private int _count;
     
     [ObservableProperty]
     private string _greeting = "Welcome to Avalonia!";
@@ -34,8 +28,8 @@ public partial class MainViewModel : ViewModelBase
     private string _locationRequestSuccess = "No location yet";
     
     private GpsCoordinates _currentLocation = new(0, 0);
-    private GpsCoordinates _gpsByShop = new(28.594340, -81.381630);
-    private MediaPlayer _player = new MediaPlayer();
+    private readonly GpsCoordinates _gpsByShop = new(28.594340, -81.381630);
+    private MediaPlayer? _player;
 
     [RelayCommand]
     private async Task onViewLoaded(object sender)
@@ -98,28 +92,21 @@ public partial class MainViewModel : ViewModelBase
         
         _locationRequestSuccess = status;
     }
-    
-    void Geolocation_LocationChanged(object? sender, GeolocationLocationChangedEventArgs e)
-    {
-        _currentLocation = new GpsCoordinates(e.Location.Latitude, e.Location.Longitude);
-    }
-    
-    [RelayCommand]
+
+    [RelayCommand, SupportedOSPlatform("Android")]
     private async Task updateTest(object sender)
     {
-        var mediaPlayer = new MediaPlayer();
-        
         // Copy asset stream to a temp file
         var uri = new Uri("avares://ApparitionsAndroidClient/Assets/test_sound.mp3");
-        using var stream = AssetLoader.Open(uri);
+        await using var stream = AssetLoader.Open(uri);
 
         // Use Android's native cache dir instead of FileSystem.CacheDirectory
         var cacheDir = Android.App.Application.Context.CacheDir!.AbsolutePath;
         var tempFile = Path.Combine(cacheDir, "temp_audio.mp3");
 
-        using (var fileStream = File.Create(tempFile))
+        await using (var fileStream = File.Create(tempFile))
         {
-            stream.CopyTo(fileStream);
+            await stream.CopyToAsync(fileStream);
         }
 
         _player?.Stop();
@@ -128,11 +115,15 @@ public partial class MainViewModel : ViewModelBase
 
         _player = new MediaPlayer();
         
-        _player.SetDataSource(tempFile);
+        await _player.SetDataSourceAsync(tempFile);
+        
+        // ReSharper disable once MethodHasAsyncOverload because it's lies. It breaks things if you use the Async.
         _player.Prepare();
+        
         _player.Start();
 
-        while (true)
+        var counter = 100;
+        while (counter-- > 0)
         {
             for (float i = 0; i < 1; i += 0.01f)
             {
