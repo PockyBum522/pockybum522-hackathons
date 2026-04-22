@@ -10,7 +10,10 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Xna.Framework.Media;
+using MediaPlayer = Android.Media.MediaPlayer;
 
 namespace ApparitionsAndroidClient.ViewModels;
 

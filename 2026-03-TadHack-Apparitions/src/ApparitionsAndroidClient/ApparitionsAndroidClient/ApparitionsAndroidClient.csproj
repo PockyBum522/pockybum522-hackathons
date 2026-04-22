@@ -44,13 +44,13 @@
 
   <ItemGroup Condition="'$(USE_JARED_LAPTOP_PATHS)' != ''">
     <Reference Include="Java.Interop">
-      <HintPath>..\home\david\.dotnet\packs\Microsoft.Android.Ref.36\36.1.30\ref\net10.0\Java.Interop.dll</HintPath>
+      <HintPath>/home/jurrd3/.dotnet/packs/Microsoft.Android.Ref.36/36.1.30/ref/net10.0/Java.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Maui.Essentials">
-      <HintPath>..\home\david\.nuget\packages\microsoft.maui.essentials\11.0.0-preview.1.26107.1\lib\netstandard2.1\Microsoft.Maui.Essentials.dll</HintPath>
+      <HintPath>/home/jurrd3/.nuget/packages/microsoft.maui.essentials/11.0.0-preview.1.26107.1/lib/netstandard2.1/Microsoft.Maui.Essentials.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android">
-      <HintPath>..\home\david\.dotnet\packs\Microsoft.Android.Ref.36\36.1.30\ref\net10.0\Mono.Android.dll</HintPath>
+      <HintPath>/home/jurrd3/.dotnet/packs/Microsoft.Android.Ref.36/36.1.30/ref/net10.0/Mono.Android.dll</HintPath>
     </Reference>
   </ItemGroup>
 
