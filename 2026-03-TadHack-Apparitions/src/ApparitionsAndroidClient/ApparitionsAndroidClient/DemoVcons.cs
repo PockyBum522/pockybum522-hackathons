@@ -1,9 +1,24 @@
 using ApparitionsAndroidClient.Models;
+using Java.IO;
+using Newtonsoft.Json;
+using Org.Json;
 
 namespace ApparitionsAndroidClient;
 
 public class DemoVcons
 {
+    public static void InitializeScenario()
+    {
+        var root = new ScenarioFile();
+        
+        root.VCons.Add(InitializeGrandfatherVcon());
+        root.VCons.Add(InitializeLarryVcon());
+
+        var json = JsonConvert.SerializeObject(root);
+        
+        System.IO.File.WriteAllText("/home/jurrd3/repos/pockybum522-hackathons/2026-03-TadHack-Apparitions/src/ApparitionsAndroidClient/ApparitionsAndroidClient/Testing/scenario.json", json);
+    }
+    
     public static VconRoot GaryGrandfatherTreeByGarageVcon => InitializeGrandfatherVcon();
     public static VconRoot LarryVcon => InitializeLarryVcon();
 
