@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net10.0-android</TargetFrameworks>
+    <UseMaui>true</UseMaui>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Maui" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Include="Avalonia.Diagnostics">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Maui.Controls" />
+    <PackageReference Include="Microsoft.Maui.Essentials" />
+    <PackageReference Include="MonoSound" />
+    <PackageReference Include="NetCoreAudio" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Xaml.Behaviors.Interactions" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(USE_DAVID_LAPTOP_PATHS)' != ''">
+    <Reference Include="Java.Interop">
+      <HintPath>..\..\..\..\..\..\..\..\home\david\.dotnet\packs\Microsoft.Android.Ref.36\36.1.30\ref\net10.0\Java.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Maui.Essentials">
+      <HintPath>..\..\..\..\..\..\..\..\home\david\.nuget\packages\microsoft.maui.essentials\11.0.0-preview.1.26107.1\lib\netstandard2.1\Microsoft.Maui.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\..\..\..\home\david\.dotnet\packs\Microsoft.Android.Ref.36\36.1.30\ref\net10.0\Mono.Android.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(USE_JARED_LAPTOP_PATHS)' != ''">
+    <Reference Include="Java.Interop">
+      <HintPath>/home/jurrd3/.dotnet/packs/Microsoft.Android.Ref.36/36.1.30/ref/net10.0/Java.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Maui.Essentials">
+      <HintPath>/home/jurrd3/.nuget/packages/microsoft.maui.essentials/11.0.0-preview.1.26107.1/lib/netstandard2.1/Microsoft.Maui.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android">
+      <HintPath>/home/jurrd3/.dotnet/packs/Microsoft.Android.Ref.36/36.1.30/ref/net10.0/Mono.Android.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+<!--  <ItemGroup Condition="$([System.String]::Copy('$(TargetFramework)').Contains('-android'))">-->
+<!--    <Compile Include="ViewModels/MainViewModel.Android.cs" />-->
+<!--  </ItemGroup>-->
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0-android' and '$(TargetFramework)' != 'net10.0-android36.0'">
+    <Compile Remove="ViewModels\MainViewModel.Android.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Testing\" />
+  </ItemGroup>
+
+</Project>
