@@ -30,7 +30,6 @@ public partial class App : Application
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            throw new Exception("This app is not designed to run in a single view.");
             var mainViewModel = new MainViewModel();
 
             var mainView = new MainView();

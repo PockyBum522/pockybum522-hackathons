@@ -54,12 +54,12 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup Condition="$([System.String]::Copy('$(TargetFramework)').Contains('-android'))">
-    <Compile Include="ViewModels/MainViewModel.Android.cs" />
-  </ItemGroup>
+<!--  <ItemGroup Condition="$([System.String]::Copy('$(TargetFramework)').Contains('-android'))">-->
+<!--    <Compile Include="ViewModels/MainViewModel.Android.cs" />-->
+<!--  </ItemGroup>-->
 
-  <ItemGroup Condition="!$([System.String]::Copy('$(TargetFramework)').Contains('-android'))">
-    <Compile Remove="ViewModels/MainViewModel.Android.cs" />
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0-android' and '$(TargetFramework)' != 'net10.0-android36.0'">
+    <Compile Remove="ViewModels\MainViewModel.Android.cs" />
   </ItemGroup>
 
   <ItemGroup>
