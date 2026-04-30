@@ -26,6 +26,9 @@ public partial class MainViewModel : ViewModelBase
 {
 
     private readonly IAudioPlayerService _audioPlayerService;
+    private readonly ILocationService _locationService;
+    private readonly IPermissionService _permissionService;
+    private readonly IScenarioStorage _scenarioStorage; 
     
     [ObservableProperty]
     private bool _scrollingTextControlsVisible;     // See constructor to set these
