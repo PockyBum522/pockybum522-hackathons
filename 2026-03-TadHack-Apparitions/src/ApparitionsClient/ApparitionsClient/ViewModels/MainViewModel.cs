@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
+#if ANDROID
 using Android.Media;
+#endif
 using ApparitionsClient.Models;
 using ApparitionsClient.Services;
 using Avalonia.Platform;
@@ -14,7 +16,9 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Xna.Framework.Media;
+#if ANDROID
 using MediaPlayer = Android.Media.MediaPlayer;
+#endif
 
 namespace ApparitionsClient.ViewModels;
 
@@ -54,7 +58,7 @@ public partial class MainViewModel : ViewModelBase
     
     private int _count;
     
-    private MediaPlayer? _player;
+    // private MediaPlayer? _player;
     private int _gpsLoopCount;
 
     // To keep it simple for now the values will error out if the OS is anything but Android. iOS/Desktop/Browser support

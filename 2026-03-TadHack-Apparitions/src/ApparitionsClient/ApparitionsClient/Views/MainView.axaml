@@ -12,46 +12,46 @@
         <vm:MainViewModel />    <!-- This only sets the DataContext for the previewer in an IDE, to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="*" RowDefinitions="*">
-        
-        <!-- Debug controls -->
-        <StackPanel IsVisible="{Binding DebugControlsVisible }">
-                    
-            <TextBlock Text="{Binding GpsInfo, Mode=TwoWay}"
-                       Margin="10,20"
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                       
-            <TextBlock Text="{Binding LocationListenerStatus, Mode=TwoWay}"
-                       Margin="10,20"
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-            
-            <StackPanel Orientation="Horizontal" Margin="30,10">
-                
-                <Button Content="Play Sound Test"
-                        Margin="10,10"
-                        IsEnabled="True"
-                        Command="{Binding playSoundCommand}" />
-
-                <Button Content="Stop Sound Test" 
-                        Margin="10,10"
-                        Command="{Binding stopSoundTestCommand}" />
-
-            </StackPanel>
-
-        </StackPanel>
-        
-        <!-- Scrolling text -->
-        <Canvas IsVisible="{Binding ScrollingTextControlsVisible}">
-            
-            <TextBlock Text="{Binding ScrollingText }"
-                       Margin="10,0,0,0"
-                       FontStyle="Italic"
-                       FontSize="20"
-                       Canvas.Top="{Binding TopScrollValue}" />
-                
-        </Canvas>
-    </Grid>
+    <!-- <Grid ColumnDefinitions="*" RowDefinitions="*"> -->
+    <!--      -->
+    <!--     ~1~ Debug controls @1@ -->
+    <!--     <StackPanel IsVisible="{Binding DebugControlsVisible }"> -->
+    <!--                  -->
+    <!--         <TextBlock Text="{Binding GpsInfo, Mode=TwoWay}" -->
+    <!--                    Margin="10,20" -->
+    <!--                    HorizontalAlignment="Center"  -->
+    <!--                    VerticalAlignment="Center"/> -->
+    <!--                     -->
+    <!--         <TextBlock Text="{Binding LocationListenerStatus, Mode=TwoWay}" -->
+    <!--                    Margin="10,20" -->
+    <!--                    HorizontalAlignment="Center"  -->
+    <!--                    VerticalAlignment="Center"/> -->
+    <!--          -->
+    <!--         <StackPanel Orientation="Horizontal" Margin="30,10"> -->
+    <!--              -->
+    <!--             <Button Content="Play Sound Test" -->
+    <!--                     Margin="10,10" -->
+    <!--                     IsEnabled="True" -->
+    <!--                     Command="{Binding playSoundCommand}" /> -->
+    <!-- -->
+    <!--             <Button Content="Stop Sound Test"  -->
+    <!--                     Margin="10,10" -->
+    <!--                     Command="{Binding stopSoundTestCommand}" /> -->
+    <!-- -->
+    <!--         </StackPanel> -->
+    <!-- -->
+    <!--     </StackPanel> -->
+    <!--      -->
+    <!--     ~1~ Scrolling text @1@ -->
+    <!--     <Canvas IsVisible="{Binding ScrollingTextControlsVisible}"> -->
+    <!--          -->
+    <!--         <TextBlock Text="{Binding ScrollingText }" -->
+    <!--                    Margin="10,0,0,0" -->
+    <!--                    FontStyle="Italic" -->
+    <!--                    FontSize="20" -->
+    <!--                    Canvas.Top="{Binding TopScrollValue}" /> -->
+    <!--              -->
+    <!--     </Canvas> -->
+    <!-- </Grid> -->
     
 </UserControl>

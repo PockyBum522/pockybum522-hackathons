@@ -1,7 +1,5 @@
 using ApparitionsClient.Models;
-using Java.IO;
 using Newtonsoft.Json;
-using Org.Json;
 
 namespace ApparitionsClient;
 
