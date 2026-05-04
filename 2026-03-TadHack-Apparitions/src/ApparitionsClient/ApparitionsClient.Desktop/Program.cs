@@ -1,8 +1,11 @@
 using System;
-using ApparitionsAndroidClient;
+using ApparitionsClient;
+using ApparitionsClient.Services;
+using ApparitionsClient.Desktop.Services;
 using Avalonia;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ApparitionsAndroidClient.Desktop;
+namespace ApparitionsClient.Desktop;
 
 internal sealed class Program
 {
@@ -15,6 +18,15 @@ internal sealed class Program
 
     public static AppBuilder BuildAvaloniaApp()
     {
+        var services = new ServiceCollection();
+
+        services.AddApparitionsClientCore();
+        
+        services.AddSingleton<IAudioPlayerService, DesktopAudioPlayerService>();
+        services.AddSingleton<ILocationService, DesktopLocationService>();
+        services.AddSingleton<IPermissionService, DesktopPermissionService>();
+        services.AddSingleton<IScenarioStorage, DesktopScenarioStorage>();
+        
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()

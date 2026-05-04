@@ -1,6 +1,8 @@
+using ApparitionsClient.Services;
+
 namespace ApparitionsClient.Android.Services;
 
-public class AndroidPermissionService
+public class AndroidPermissionService : IPermissionService
 {
     
 }

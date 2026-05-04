@@ -2,7 +2,7 @@ using ApparitionsClient.Services;
 
 namespace ApparitionsClient.Desktop.Services;
 
-public class DesktopScenarioStorage : IScenarioStorage
+public class DesktopPermissionService : IPermissionService
 {
     
 }

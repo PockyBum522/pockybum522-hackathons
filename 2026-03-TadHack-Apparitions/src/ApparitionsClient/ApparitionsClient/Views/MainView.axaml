@@ -8,10 +8,6 @@
              x:DataType="vm:MainViewModel"
              Loaded="Control_OnLoaded" >
     
-    <Design.DataContext>
-        <vm:MainViewModel />    <!-- This only sets the DataContext for the previewer in an IDE, to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    </Design.DataContext>
-
     <!-- <Grid ColumnDefinitions="*" RowDefinitions="*"> -->
     <!--      -->
     <!--     ~1~ Debug controls @1@ -->

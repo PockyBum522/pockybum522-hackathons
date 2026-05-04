@@ -28,7 +28,22 @@ public partial class MainViewModel : ViewModelBase
     private readonly IAudioPlayerService _audioPlayerService;
     private readonly ILocationService _locationService;
     private readonly IPermissionService _permissionService;
-    private readonly IScenarioStorage _scenarioStorage; 
+    private readonly IScenarioStorage _scenarioStorage;
+    
+    public MainViewModel(
+        IAudioPlayerService audioPlayerService, 
+        ILocationService locationService, 
+        IPermissionService permissionService, 
+        IScenarioStorage scenarioStorage)
+    {
+        _audioPlayerService = audioPlayerService;
+        _locationService = locationService;
+        _permissionService = permissionService;
+        _scenarioStorage = scenarioStorage;
+        
+        _scrollingTextControlsVisible = true;
+        _scrollingText = "Vcon not loaded";
+    }
     
     [ObservableProperty]
     private bool _scrollingTextControlsVisible;     // See constructor to set these
@@ -41,7 +56,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private string _locationListenerStatus = "GPS location listener not started";
 
-    [ObservableProperty] private string _scrollingText = "Vcon not loaded";
+    [ObservableProperty] private string _scrollingText;
         
     [ObservableProperty]
     private int _topScrollValue = 920;

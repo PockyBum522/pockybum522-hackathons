@@ -6,11 +6,14 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using ApparitionsClient.ViewModels;
 using ApparitionsClient.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ApparitionsClient;
 
 public partial class App : Application
 {
+    public static IServiceProvider Services { get; set; } = null!;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -25,15 +28,16 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = Services.GetRequiredService<MainViewModel>()
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            var mainViewModel = new MainViewModel();
 
-            var mainView = new MainView();
-            mainView.DataContext = mainViewModel;
+            var mainView = new MainView()
+            {
+                DataContext = Services.GetRequiredService<MainViewModel>()
+            };
 
             singleViewPlatform.MainView = mainView;
         }
