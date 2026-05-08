@@ -1,14 +1,11 @@
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace ApparitionsClient.Services;
 
 public interface IAudioPlayerService
 {
-    bool IsPlaying { get; }
-    
-    float Volume { get; }
-
     Task LoadAsync(string audioFileName);
 
     Task PlayAsync();
