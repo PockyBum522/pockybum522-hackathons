@@ -4,11 +4,14 @@ using System;
 using System.IO;
 using Android.Media;
 using Avalonia.Platform;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ApparitionsClient.Android.Services;
 
 public class AndroidAudioPlayerService : IAudioPlayerService
 {
+    
+    
     private MediaPlayer? _player;
     private float _volume = 1.0f;
     
