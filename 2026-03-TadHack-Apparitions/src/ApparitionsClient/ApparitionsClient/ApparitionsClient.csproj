@@ -28,6 +28,7 @@
     <PackageReference Include="MonoSound" />
     <PackageReference Include="NetCoreAudio" />
     <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Stateless" />
     <PackageReference Include="Xaml.Behaviors.Interactions" />
   </ItemGroup>
 
