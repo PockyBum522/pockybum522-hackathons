@@ -1,0 +1,2 @@
+namespace ApparitionsClient.State.AudioPlayer;
+
