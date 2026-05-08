@@ -4,9 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
-#if ANDROID
-using Android.Media;
-#endif
 using ApparitionsClient.Models;
 using ApparitionsClient.Services;
 using Avalonia.Platform;
@@ -16,13 +13,10 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Xna.Framework.Media;
-#if ANDROID
-using MediaPlayer = Android.Media.MediaPlayer;
-#endif
 
 namespace ApparitionsClient.ViewModels;
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainViewModel : ObservableObject
 {
 
     private readonly IAudioPlayerService _audioPlayerService;
@@ -30,25 +24,8 @@ public partial class MainViewModel : ViewModelBase
     private readonly IPermissionService _permissionService;
     private readonly IScenarioStorage _scenarioStorage;
     
-    public MainViewModel(
-        IAudioPlayerService audioPlayerService, 
-        ILocationService locationService, 
-        IPermissionService permissionService, 
-        IScenarioStorage scenarioStorage)
-    {
-        _audioPlayerService = audioPlayerService;
-        _locationService = locationService;
-        _permissionService = permissionService;
-        _scenarioStorage = scenarioStorage;
-        
-        _scrollingTextControlsVisible = true;
-        _scrollingText = "Vcon not loaded";
-    }
-    
     [ObservableProperty]
-    private bool _scrollingTextControlsVisible;     // See constructor to set these
-
-    
+    private bool _scrollingTextControlsVisible = true;     // See constructor to set these
 
     [ObservableProperty]
     private string _gpsInfo = "No GPS fix acquired yet";
@@ -56,13 +33,25 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private string _locationListenerStatus = "GPS location listener not started";
 
-    [ObservableProperty] private string _scrollingText;
+    [ObservableProperty] private string _scrollingText = "Vcon not loaded";
         
     [ObservableProperty]
     private int _topScrollValue = 920;
     
     private float _currentPlayerVolume = 1.0f;
 
+    public MainViewModel(
+        IAudioPlayerService audioPlayerService, 
+        ILocationService locationService,
+        IPermissionService permissionService, 
+        IScenarioStorage scenarioStorage)
+    {
+        _audioPlayerService = audioPlayerService;
+        _locationService = locationService;
+        _permissionService = permissionService;
+        _scenarioStorage = scenarioStorage;
+    }
+    
     // Destination GPS coordinates handling
     private static double _latFromVcon;
     private static double _lonFromVcon;
@@ -81,7 +70,6 @@ public partial class MainViewModel : ViewModelBase
 
     // To keep it simple for now the values will error out if the OS is anything but Android. iOS/Desktop/Browser support
     // will be implemented later.
-    #if !ANDROID
         [RelayCommand]
         private Task onViewLoaded(object sender)
         {
@@ -113,11 +101,6 @@ public partial class MainViewModel : ViewModelBase
         {
             return Task.CompletedTask;
         }
-        
-    #endif
-    
-    
-    
 }
 
 /**
