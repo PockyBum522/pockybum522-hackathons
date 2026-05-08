@@ -4,11 +4,11 @@ using Stateless;
 
 namespace ApparitionsClient.StateMachines.AudioPlayer;
 
-public class AudioPlayerStateMachine
+public class AudioPlayerStateMachine : IAudioPlayerStateMachine
 {
     private readonly StateMachine<AudioPlayerState, AudioPlayerTrigger> _machine;
     
-    public AudioPlayerStateMachine(AudioPlayerState initialState = AudioPlayerState.Stopped)
+    public AudioPlayerStateMachine(AudioPlayerState initialState = AudioPlayerState.Uninitialized)
     {
         _machine = new StateMachine<AudioPlayerState, AudioPlayerTrigger>(initialState);
 
@@ -28,6 +28,13 @@ public class AudioPlayerStateMachine
     
     private void Configure()
     {
+        _machine.Configure(AudioPlayerState.Uninitialized)
+            .Permit(AudioPlayerTrigger.InitializeRequested, AudioPlayerState.Initialized)
+            .Permit(AudioPlayerTrigger.InitializeError, AudioPlayerState.Error);
+        
+        _machine.Configure(AudioPlayerState.Initialized)
+            .Permit(AudioPlayerTrigger.StopRequested, AudioPlayerState.Stopped);
+        
         _machine.Configure(AudioPlayerState.Stopped)
             .Permit(AudioPlayerTrigger.LoadRequested, AudioPlayerState.Loading);
         

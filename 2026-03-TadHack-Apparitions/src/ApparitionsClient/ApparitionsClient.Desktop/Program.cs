@@ -18,6 +18,8 @@ internal sealed class Program
 
     public static AppBuilder BuildAvaloniaApp()
     {
+        DemoVcons.InitializeScenario();
+        
         var services = new ServiceCollection();
 
         services.AddApparitionsClientCore();

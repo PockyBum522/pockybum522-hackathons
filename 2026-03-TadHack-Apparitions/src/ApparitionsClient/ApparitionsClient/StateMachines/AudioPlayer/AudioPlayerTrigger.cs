@@ -2,6 +2,9 @@ namespace ApparitionsClient.StateMachines.AudioPlayer;
 
 public enum AudioPlayerTrigger
 {
+    InitializeRequested,
+    InitializeSucceeded,
+    InitializeError,
     LoadRequested,
     LoadSucceeded,
     LoadError,

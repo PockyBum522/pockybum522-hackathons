@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using ApparitionsClient.Services;
 using ApparitionsClient.Android.Services;
+using ApparitionsClient.StateMachines.AudioPlayer;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Maui;
@@ -34,6 +35,7 @@ public class MainActivity : AvaloniaMainActivity<App>
         services.AddSingleton<ILocationService, AndroidLocationService>();
         services.AddSingleton<IPermissionService, AndroidPermissionService>();
         services.AddSingleton<IScenarioStorage, AndroidScenarioStorage>();
+        services.AddSingleton<IAudioPlayerStateMachine, AudioPlayerStateMachine>();
         
         return base.CustomizeAppBuilder(builder)
             .UseMaui<MauiApplication>(this)

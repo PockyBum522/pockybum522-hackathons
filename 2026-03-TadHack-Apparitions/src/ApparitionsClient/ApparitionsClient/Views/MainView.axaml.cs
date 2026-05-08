@@ -14,10 +14,11 @@ public partial class MainView : UserControl
 
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
     {
-        var myViewModel = (MainViewModel?)DataContext;
+        var mainViewModel = (MainViewModel?)DataContext;
 
-        if (myViewModel is null) throw new NullReferenceException("Mainviewmodel be screwed up yo");
+        if (mainViewModel is null) throw new NullReferenceException("Mainviewmodel be screwed up yo");
         
-        //myViewModel.onViewLoadedCommand.Execute(null);
+        mainViewModel.MainViewLoadedCommand.Execute(null);
+        
     }
 }

@@ -6,6 +6,7 @@ using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using ApparitionsClient.Models;
 using ApparitionsClient.Services;
+using ApparitionsClient.StateMachines.AudioPlayer;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -23,6 +24,7 @@ public partial class MainViewModel : ObservableObject
     private readonly ILocationService _locationService;
     private readonly IPermissionService _permissionService;
     private readonly IScenarioStorage _scenarioStorage;
+    private readonly IAudioPlayerStateMachine _audioPlayerStateMachine;
     
     [ObservableProperty]
     private bool _scrollingTextControlsVisible = true;     // See constructor to set these
@@ -44,12 +46,14 @@ public partial class MainViewModel : ObservableObject
         IAudioPlayerService audioPlayerService, 
         ILocationService locationService,
         IPermissionService permissionService, 
-        IScenarioStorage scenarioStorage)
+        IScenarioStorage scenarioStorage,
+        IAudioPlayerStateMachine audioPlayerStateMachine)
     {
         _audioPlayerService = audioPlayerService;
         _locationService = locationService;
         _permissionService = permissionService;
         _scenarioStorage = scenarioStorage;
+        _audioPlayerStateMachine = audioPlayerStateMachine;
     }
     
     // Destination GPS coordinates handling
@@ -70,37 +74,48 @@ public partial class MainViewModel : ObservableObject
 
     // To keep it simple for now the values will error out if the OS is anything but Android. iOS/Desktop/Browser support
     // will be implemented later.
-        [RelayCommand]
-        private Task onViewLoaded(object sender)
-        {
-            DebugControlsVisible = false;
-            ScrollingTextControlsVisible = true;
-            GpsInfo = "Android GSP/audio behavior is not available in the Desktop version.";
-            LocationListenerStatus = "Desktop version loaded.";
-            ScrollingText = "Desktop version loaded.";
-            
-            return Task.CompletedTask;
-        }
+    [RelayCommand]
+    private Task MainViewLoaded(object sender)
+    {
+        _audioPlayerStateMachine.Fire(AudioPlayerTrigger.InitializeRequested);
+        _audioPlayerStateMachine.Fire(AudioPlayerTrigger.StopRequested);
+        
+        DemoVcons.InitializeScenario();
+        
+        DebugControlsVisible = false;
+        ScrollingTextControlsVisible = true;
+        GpsInfo = "Android GSP/audio behavior is not available in the Desktop version.";
+        LocationListenerStatus = "Desktop version loaded.";
+        ScrollingText = "Desktop version loaded.";
+        
+        return Task.CompletedTask;
+    }
 
-        [RelayCommand]
-        private Task UpdateLocation()
-        {
-            GpsInfo = "Android GSP/audio behavior is not yet available in a non-Android version.";
-            return Task.CompletedTask;
-        }
+    [RelayCommand]
+    private Task UpdateLocation()
+    {
+        GpsInfo = "Android GSP/audio behavior is not yet available in a non-Android version.";
+        return Task.CompletedTask;
+    }
 
-        // Sound will not play on a non-Android version (for now)
-        [RelayCommand]
-        private Task playSound(object sender)
-        {
-            return Task.CompletedTask;
-        }
+    // Sound will not play on a non-Android version (for now)
+    [RelayCommand]
+    private Task PlaySound(object sender)
+    {
+        return Task.CompletedTask;
+    }
 
-        [RelayCommand]
-        private Task stopSoundTest(object sender)
-        {
-            return Task.CompletedTask;
-        }
+    [RelayCommand]
+    private Task StopSoundTest(object sender)
+    {
+        return Task.CompletedTask;
+    }
+    
+    [RelayCommand]
+    private Task LoadScenario(object sender)
+    {
+        return Task.CompletedTask;
+    }
 }
 
 /**

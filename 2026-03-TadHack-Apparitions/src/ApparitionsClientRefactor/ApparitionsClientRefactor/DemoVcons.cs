@@ -14,7 +14,7 @@ public class DemoVcons
 
         var json = JsonConvert.SerializeObject(root, Formatting.Indented);
         
-        System.IO.File.WriteAllText("/home/jurrd3/repos/pockybum522-hackathons/2026-03-TadHack-Apparitions/src/ApparitionsClient/ApparitionsClient/Testing/scenario.json", json);
+        System.IO.File.WriteAllText("/home/jurrd3/repos/pockybum522-hackathons/2026-03-TadHack-Apparitions/src/ApparitionsClientRefactor/ApparitionsClientRefactor/Testing/scenario.json", json);
     }
     
     public static VconRoot GaryGrandfatherTreeByGarageVcon => InitializeGrandfatherVcon();
