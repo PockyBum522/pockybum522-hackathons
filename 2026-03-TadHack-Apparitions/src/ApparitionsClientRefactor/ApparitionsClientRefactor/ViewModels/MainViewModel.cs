@@ -1,9 +1,18 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using ApparitionsClientRefactor.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ApparitionsClientRefactor.ViewModels;
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private string _greeting = "Welcome to Avalonia!";
+    private readonly IAudioPlayerService _audioPlayerService;
+    
+    public MainViewModel(
+        IAudioPlayerService audioPlayerService
+        )
+    {
+        _audioPlayerService = audioPlayerService;
+    }
+    
+    
 }
